@@ -51,5 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', '~> 3.2'
   spec.add_runtime_dependency 'i18n'
 
-  spec.post_install_message = %Q{\nThanks for installing phtools! Don't forget to get the ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/) installed on your system\n}
+  spec.post_install_message = %Q{***\n Thanks for installing phtools! Don't forget to get the ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/) installed on your system.\n***}
 end
