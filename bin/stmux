@@ -1,0 +1,24 @@
+CURRENT_SESSION=${PWD##*/}
+
+# Start up the tmux session with specific name
+tmux new-session -d -s $CURRENT_SESSION
+
+# VIM window
+tmux send-keys 'vim' 'C-m'
+tmux rename-window vim
+
+# Autotest window
+tmux new-window
+tmux rename-window guard
+tmux send-keys 'guard'
+
+# code window for running tests
+tmux new-window
+tmux rename-window pry
+tmux send-keys 'pry' 'C-m'
+
+# Select the first window
+tmux select-window -t 1
+
+# Attach the tmux session
+tmux attach -t $CURRENT_SESSION
