@@ -3,9 +3,9 @@
 # (c) ANB Andrew Bizyaev
 
 require 'phtools/version'
-require 'phtools/ruby_version.rb'
-require 'phtools/os_win.rb'
-require 'phtools/os_unix.rb'
+require 'phtools/utils/ruby_version.rb'
+require 'phtools/utils/os_win.rb'
+require 'phtools/utils/os_unix.rb'
 require 'phtools/error.rb'
 require 'phtools/ph_file.rb'
 require 'docopt'
@@ -15,13 +15,13 @@ module PhTools
   # Main class processing input stream
   class Runner
     def initialize(usage, file_type = [])
-      case PhTools.os
+      case Utils.os
       when :windows
         # workaround for win32
         ARGV.map! { |a| a.encode('utf-8', 'filesystem') }
-        @os = OSWin.new
+        @os = Utils::OSWin.new
       else
-        @os = OSUnix.new
+        @os = Utils::OSUnix.new
       end
       @tool_name = File.basename($PROGRAM_NAME)
       @options_cli = Docopt.docopt(usage, version: "v#{PhTools::VERSION}")

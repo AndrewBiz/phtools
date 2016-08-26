@@ -2,11 +2,11 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'phtools/os'
+require 'phtools/utils/os'
 
-module PhTools
+module Utils
   # OS platfor related logic
-  class OSWin < PhTools::OS
+  class OSWin < OS
 
     private
 

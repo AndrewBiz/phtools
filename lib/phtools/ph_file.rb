@@ -2,7 +2,7 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative 'error'
+require 'phtools/error'
 require 'date'
 require 'fileutils'
 
