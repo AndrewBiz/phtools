@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 2.9'
   spec.add_development_dependency 'rspec-its', '~> 1.0'
   spec.add_development_dependency 'cucumber', '~> 1.3'
-  spec.add_development_dependency 'aruba', '~> 0.6.0'
+  spec.add_development_dependency 'aruba', '~> 0.14'
   spec.add_development_dependency 'fuubar'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'pry'
