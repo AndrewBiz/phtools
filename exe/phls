@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+# (c) ANB Andrew Bizyaev
+
+module PhTools
+  tool_name = File.basename(__FILE__)
+  require "#{tool_name}"
+
+  file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
+  usage = <<DOCOPT
+***************************************************
+phtools - *Keep Your Photos In Order* (c) ANB
+***************************************************
+#{tool_name} scans given directories and
+generates list of files to standard output.
+In short it acts like a smart 'ls' command (or 'dir' in Windows).
+It is a good starting point for all other phtools to be used with pipes.
+phtools friendly files: #{file_type * ','}
+
+Example: #{tool_name} -r abc |ftclname => recursively scans 'abc' dir and
+sends all found phtools friendly files to ftclname command.
+
+Usage:
+  #{tool_name} [-D] [-r] [DIR_OR_FILE...]
+  #{tool_name} -h | --help
+  #{tool_name} -v | --version
+
+Options:
+  -D --debug      Turn on debugging (verbose) mode
+  -r --recursive  Recursively scan directories
+  -h --help       Show this screen.
+  -v --version    Show version.
+DOCOPT
+
+  PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
+end
