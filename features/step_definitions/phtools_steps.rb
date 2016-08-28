@@ -47,15 +47,15 @@ end
 #     step %{the stdout from "#{cmd}" should contain "#{item}"}
 #   end
 # end
-#
-# Then(/^the stdout should not contain any of:$/) do |table|
-#   # table is a Cucumber::Ast::Table
-#   outs = table.raw.flatten
-#   outs.each do |item|
-#     step %{the stdout should not contain "#{item}"}
-#   end
-# end
-#
+
+Then(/^the stdout should not contain any of:$/) do |table|
+  # table is a Cucumber::Ast::Table
+  outs = table.raw.flatten
+  outs.each do |item|
+    step %{the stdout should not contain "#{item}"}
+  end
+end
+
 # Then /^the stdout from "(.*?)" should match \/([^\/]*)\/$/ do |cmd, expected|
 #   assert_matching_output(expected, stdout_from(cmd))
 # end

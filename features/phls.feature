@@ -84,7 +84,7 @@ Feature: Generate a list of phtools-friendly-files
     And  the stdout should not contain "video_wrong.3gp"
 
   #@announce
-  Scenario: 3 The output shows files inside directories entered as paramenets
+  Scenario: 3 The output shows files only inside directories entered as paramenets
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f4.jpg       |
@@ -97,6 +97,9 @@ Feature: Generate a list of phtools-friendly-files
     | ./videos/v4.mp4       |
     | ./videos/v4.mpg       |
     | ./videos/v4.dv        |
+    And empty files named:
+    | foto_wrong.jpg  |
+    | video_wrong.jpg |
     When I successfully run `phls fotos videos`
     Then the stdout should contain each of:
     | fotos/f4.jpg  |
@@ -107,6 +110,9 @@ Feature: Generate a list of phtools-friendly-files
     | videos/v4.mp4 |
     | videos/v4.mpg |
     | videos/v4.dv  |
+    And the stdout should not contain any of:
+    | foto_wrong.jpg  |
+    | video_wrong.jpg |
 
   #@announce
   Scenario: 4 The output DOES NOT show usopported files inside directories entered as paramenets
@@ -121,7 +127,7 @@ Feature: Generate a list of phtools-friendly-files
     And  the stdout should not contain "videos/v5_wrong.vvv"
 
   #@announce
-  Scenario: 5 The output shows files inside directories and subdirectories
+  Scenario: 5 The output shows files inside directories and subdirectories if run recursive
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f6.jpg         |
