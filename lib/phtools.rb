@@ -24,7 +24,7 @@ Please run phtools in a terminal via CLI commands:
     phclname\t(#{Phclname::about}),
     phevent\t(#{Phevent::about}),
     phfixdate\t(#{Phfixdate::about}),
-    phfixmd\t(#{Phfixfmd::about}),
+    phfixfmd\t(#{Phfixfmd::about}),
     phls\t(#{Phls::about}),
     phmtags\t(#{Phmtags::about}),
     phrename \t(#{Phrename::about}),
