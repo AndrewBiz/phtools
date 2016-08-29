@@ -12,7 +12,7 @@ Feature: Generate a list of phtools-friendly-files
     And the stdout should not contain "phls\t(!UNDER CONSTRUCTION!)"
 
   #@announce
-  Scenario: 00 Default output with -h produces usage information
+  Scenario: Output with -h produces usage information
     When I successfully run `phls -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
@@ -26,12 +26,12 @@ Feature: Generate a list of phtools-friendly-files
     | -v                        |
 
   #@announce
-  Scenario: 01 Output with -v produces version information
+  Scenario: Output with -v produces version information
     When I successfully run `phls -v`
-    Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+/
+    Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
-  Scenario: 1 Default output produces supported-by-phtools file list
+  Scenario: Default output produces supported-by-phtools file list from current directory
     Given empty files named:
     | foto.jpeg       |
     | foto.jpg        |
@@ -75,7 +75,52 @@ Feature: Generate a list of phtools-friendly-files
     And the stdout should not contain "video_wrong.3gp"
 
   #@announce
-  Scenario: 2 The output DOES NOT show unsupported files EVEN if I intentionally enter it as a parameter
+  Scenario: Output produces file list filtered with given mask from current directory
+    Given empty files named:
+    | foto_yes_.jpeg  |
+    | foto.jpg        |
+    | foto_yes_.tif   |
+    | foto.tiff       |
+    | foto_yes_.orf   |
+    | foto.arw        |
+    | foto_yes_.png   |
+    | foto.dng        |
+    | foto_wrong.psd  |
+    | video.avi       |
+    | video_yes_.mp4  |
+    | video.mpg       |
+    | video_yes_.mts  |
+    | video.dv        |
+    | video.mov       |
+    | video_wrong.3gp |
+    | video.mkv       |
+    | video.m2t       |
+    | video.m2ts      |
+    When I successfully run `phls '*_yes*.*'`
+    Then the stdout should contain each of:
+    | foto_yes_.jpeg  |
+    | foto_yes_.tif   |
+    | foto_yes_.orf   |
+    | foto_yes_.png   |
+    | video_yes_.mp4  |
+    | video_yes_.mts  |
+    And the stdout should not contain any of:
+    | foto.jpg        |
+    | foto.tiff       |
+    | foto.arw        |
+    | foto.dng        |
+    | foto_wrong.psd  |
+    | video.avi       |
+    | video.mpg       |
+    | video.dv        |
+    | video.mov       |
+    | video_wrong.3gp |
+    | video.mkv       |
+    | video.m2t       |
+    | video.m2ts      |
+
+  #@announce
+  Scenario: The output DOES NOT show unsupported files EVEN if I intentionally enter it as a parameter
     Given empty files named:
     | foto_wrong.psd  |
     | video_wrong.3gp |
@@ -84,7 +129,7 @@ Feature: Generate a list of phtools-friendly-files
     And  the stdout should not contain "video_wrong.3gp"
 
   #@announce
-  Scenario: 3 The output shows files only inside directories entered as paramenets
+  Scenario: The output shows files only inside directories entered as paramenets
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f4.jpg       |
@@ -115,7 +160,7 @@ Feature: Generate a list of phtools-friendly-files
     | video_wrong.jpg |
 
   #@announce
-  Scenario: 4 The output DOES NOT show usopported files inside directories entered as paramenets
+  Scenario: The output DOES NOT show usopported files inside directories entered as paramenets
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f5_wrong.ppp  |
@@ -127,7 +172,7 @@ Feature: Generate a list of phtools-friendly-files
     And  the stdout should not contain "videos/v5_wrong.vvv"
 
   #@announce
-  Scenario: 5 The output shows files inside directories and subdirectories if run recursive
+  Scenario: The output shows files inside directories and subdirectories if run recursive
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f6.jpg         |
@@ -144,16 +189,70 @@ Feature: Generate a list of phtools-friendly-files
     | fotos/fotos2/fotos3/f6.png   |
 
   #@announce
-  Scenario: 6 Default output produces supported-by-phtools file list with CAPITALIZED extentions
+  Scenario: Output produces file list filtered with given masks from given directories
+    Given empty files named:
+    | foto_yes_.jpeg  |
+    | foto_yes_.tif   |
+    | foto.tiff       |
+    | foto.arw        |
+    And a directory named "fotos"
+    And empty files named:
+    | fotos/foto1_yes_.jpeg  |
+    | fotos/foto1_yes_.tif   |
+    | fotos/foto1.tiff       |
+    | fotos/foto1.arw        |
+    And a directory named "videos"
+    And empty files named:
+    | videos/video.avi       |
+    | videos/video_yes_.mp4  |
+    | videos/video.mpg       |
+    | videos/video_yes_.mts  |
+    When I successfully run `phls fotos videos '*_yes*'`
+    Then the stdout should contain each of:
+    | fotos/foto1_yes_.jpeg  |
+    | fotos/foto1_yes_.tif   |
+    | videos/video_yes_.mp4  |
+    | videos/video_yes_.mts  |
+    And the stdout should not contain any of:
+    | foto_yes_.jpeg  |
+    | foto_yes_.tif   |
+    | foto.tiff       |
+    | foto.arw        |
+    | fotos/foto1.tiff       |
+    | fotos/foto1.arw        |
+    | videos/video.avi       |
+    | videos/video.mpg       |
+
+  #@announce
+  Scenario: The output shows only files, no folders (even if folder name looks like a file)
+    Given a directory named "foto.jpg"
+    And a directory named "video.mov"
+    And empty files named:
+    | foto1.jpg         |
+    | foto2.jpg         |
+    | video1.mov        |
+    | video2.mov        |
+    When I successfully run `phls`
+    Then the stdout should contain each of:
+    | foto1.jpg         |
+    | foto2.jpg         |
+    | video1.mov        |
+    | video2.mov        |
+    And the stdout should not contain any of:
+    | foto.jpg  |
+    | video.mov |
+
+  #@announce
+  Scenario: Output produces supported-by-phtools file list keeping extentions unchanged (e.g. capitalized will remain capitalized)
     Given a directory named "capitalized"
     Given empty files named:
-    | foto_cap.JPG           |
     | ./capitalized/foto.TIF  |
     | ./capitalized/video.DV  |
     | ./capitalized/video.MOV |
-    When I successfully run `phls foto_cap.JPG capitalized`
+    | ./capitalized/video1.mov |
+    When I successfully run `phls capitalized`
     Then the stdout should contain each of:
-    | foto_cap. |
     | foto.TIF  |
     | video.DV  |
     | video.MOV |
+    | video1.mov |

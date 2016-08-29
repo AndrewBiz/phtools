@@ -11,17 +11,20 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-#{tool_name} scans given directories and
-generates list of files to standard output.
+#{tool_name} scans given directories and generates list of files to standard output.
 In short it acts like a smart 'ls' command (or 'dir' in Windows).
-It is a good starting point for all other phtools to be used with pipes.
-phtools friendly files: #{file_type * ','}
+Set DIRs to be scanned as a parameters. If no DIRs are set - current dir (.)
+will be scanned. Set FILEMASKs as a parameters - and only files matching the
+masks will be processed. If no FILEMASK is set *.* will be used by-default.
+To avoid unnessesary mask extraction by OS - put it in ''.
+Note, #{tool_name} works only with phtools-friendly file types: #{file_type * ','}
+#{tool_name} is a starting point for all other phtools to be connected via pipes.
 
-Example: #{tool_name} -r abc |ftclname => recursively scans 'abc' dir and
-sends all found phtools friendly files to ftclname command.
+Example: #{tool_name} abc '*aaa*' | phrename -a anb => scans 'abc' folder and
+sends all found phtools friendly files filtered with *aaa* to phrename command.
 
 Usage:
-  #{tool_name} [-D] [-r] [DIR_OR_FILE...]
+  #{tool_name} [-D] [-r] [DIR_OR_FILEMASK...]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 

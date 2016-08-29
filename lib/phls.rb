@@ -12,11 +12,16 @@ module PhTools
     end
 
     def run!
-      @options_cli['DIR_OR_FILE'] = ['.'] if @options_cli['DIR_OR_FILE'].empty?
-      @options_cli['DIR_OR_FILE'].each do |item|
-        if File.exist?(item)
-          File.directory?(item) ? output_dir(item) : output_file(item)
-        end
+      dirs_to_scan = []
+      filemasks = []
+      @options_cli['DIR_OR_FILEMASK'].each do |item|
+        File.directory?(item) ? dirs_to_scan << item : filemasks << item
+      end
+      dirs_to_scan = ['.'] if dirs_to_scan.empty?
+      filemasks = ['*.*'] if filemasks.empty?
+      dirs_to_scan.each do |dir|
+        fmask = File.join(dir, @options_cli['--recursive'] ? '**' : '', "{#{filemasks * ','}}")
+        Dir.glob(fmask, File::FNM_CASEFOLD).each { |f| output_file(f) if File.file?(f) }
       end
 
     rescue SignalException
@@ -29,17 +34,9 @@ module PhTools
 
     private
 
-    def output_dir(item)
-      fmask = File.join(item, @options_cli['--recursive'] ? '**' : '',
-                        "{#{@file_type.map { |i| "*.#{i}" } * ','}}")
-      files_to_process = Dir.glob(fmask, File::FNM_CASEFOLD |
-                                  File::FNM_DOTMATCH)
-      files_to_process.each { |f| output_file(f) }
-    end
-
     def output_file(file)
-      @os.output(File.join(File.dirname(file), File.basename(file))) if
-          @file_type.include?(File.extname(file).slice(1..-1).downcase)
+      ftype = File.extname(file).empty? ? '' : File.extname(file).slice(1..-1).downcase
+      @os.output(File.join(File.dirname(file), File.basename(file))) if @file_type.include?(ftype)
     end
   end
 end
