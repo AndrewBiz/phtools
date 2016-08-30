@@ -16,7 +16,7 @@ Fork or download from GitHub.
 ```
 bundle install
 ```
-Develop \ make changes to the code. Test:
+Develop, test:
 ```
 bundle exec rspec
 bundle exec cucumber
@@ -27,7 +27,7 @@ bundle exec guard
 ```
 
 ## PHTOOLS Use cases
-### Use Case 1. Collect photos\videos\raws from different sources in one place (for further processing\editing)
+### Use Case 1. Collect photos, videos, raw-photos from different sources in one place (for further processing)
 ####Given 
 I have copies of SD Cards with photos\videos taken with DSLR camera on my hard Disk in:
 ```
@@ -45,6 +45,15 @@ cd ~/Desktop/assets_staging
 phls -r /Volumes/HDD/path/to/SDCard1 /Volumes/HDD/path/to/SDCard2 | phmove -a
 ```
 ####Then 
-I get all photos moved to ~/Desktop/assets_staging
-And all videos are moved to ~/Desktop/assets_staging/VIDEO
-And all raw photo-files are moved to ~/Desktop/assets_staging/RAW
+I get all photos moved to:
+```
+~/Desktop/assets_staging
+```
+And all videos are moved to:
+```
+~/Desktop/assets_staging/VIDEO
+```
+And all raw photo-files are moved to:
+```
+~/Desktop/assets_staging/RAW
+```
