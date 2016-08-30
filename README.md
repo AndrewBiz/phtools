@@ -27,10 +27,10 @@ bundle exec guard
 ```
 
 ## PHTOOLS Use cases
-### Use Case 1. Collect photos, videos, raw-photos from different sources in one place (for further processing)
+### Use Case 1. Collect photos, videos, raw-photos from different sources into one place (for further processing)
 
 ####Given 
-I have copies of SD Cards with photos\videos taken with DSLR camera on my hard Disk in `/Volumes/HDD/path/to/SDCard1` and `/Volumes/HDD/path/to/SDCard2`.
+I have copies of SD Cards with photos, videos taken with DSLR camera on my Hard Disk in `~/path/to/copy/SDCard1` and in `~/path/to/copy/SDCard2`.
 
 And I have empty folder `~/Desktop/assets_staging` I would like to collect all the photo-files to.
 
@@ -38,7 +38,7 @@ And I have empty folder `~/Desktop/assets_staging` I would like to collect all t
 I run:
 ```sh
 cd ~/Desktop/assets_staging
-phls -r /Volumes/HDD/path/to/SDCard1 /Volumes/HDD/path/to/SDCard2 | phmove -a
+phls -r ~/path/to/copy/SDCard1 ~/path/to/copy/SDCard2 | phmove -a
 ```
 
 ####Then 
