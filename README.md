@@ -1,17 +1,50 @@
-# ANB's phtools
-
+[![Version     ](https://img.shields.io/gem/v/phtools.svg?style=flat)](https://rubygems.org/gems/phtools)
+# PHTOOLS by ANB
 A bundle of small CLI tools for arranging, renaming, tagging of the photo and video files. Helps keep photo-video assets in order.
 
-## Install for usage
-    get the latest ruby (>= 2.3) installed
-    install ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/)
-    gem install phtools
-## Install for development
-    Fork or download from GitHub
-    bundle install
-    Develop
-    Test changes: bundle exec rspec; bundle exec cucumber
-    ... or do testing automatically to get real Test Driven Development: bundle exec guard
+##Installation
+### Install for usage
+Get the latest [ruby](https://www.ruby-lang.org/) (>= 2.3) installed.
 
-## Use cases
+Install ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/)
+```
+gem install phtools
+```
+### Install for development
+Fork or download from GitHub.
 
+```
+bundle install
+```
+Develop \ make changes to the code. Test:
+```
+bundle exec rspec
+bundle exec cucumber
+```
+... or do testing automatically to get real Test Driven Development: 
+```
+bundle exec guard
+```
+
+## PHTOOLS Use cases
+### Use Case 1. Collect photos\videos\raws from different sources in one place (for further processing\editing)
+####Given 
+I have copies of SD Cards with photos\videos taken with DSLR camera on my hard Disk in:
+```
+/Volumes/HDD/path/to/SDCard1
+/Volumes/HDD/path/to/SDCard2
+```
+And I have empty folder I would like to collect all the photos to:
+```
+~/Desktop/assets_staging
+```
+####When 
+I run:
+```
+cd ~/Desktop/assets_staging
+phls -r /Volumes/HDD/path/to/SDCard1 /Volumes/HDD/path/to/SDCard2 | phmove -a
+```
+####Then 
+I get all photos moved to ~/Desktop/assets_staging
+And all videos are moved to ~/Desktop/assets_staging/VIDEO
+And all raw photo-files are moved to ~/Desktop/assets_staging/RAW
