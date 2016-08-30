@@ -27,9 +27,13 @@ module PhTools
       @options_cli = Docopt.docopt(usage, version: "v#{PhTools::VERSION}")
       @file_type = file_type
       PhTools.debug = true if @options_cli['--debug']
-      PhTools.puts_error "OPTIONS = #{@options_cli}" if PhTools.debug
 
       validate_options
+
+      if PhTools.debug
+        STDERR.puts "Instance Variables: "
+        STDERR.puts context
+      end
 
     rescue Docopt::Exit => e
       STDERR.puts e.message
@@ -78,6 +82,12 @@ module PhTools
     end
 
     def process_after
+    end
+
+    def context
+      self.instance_variables.map do |item|
+        { item => self.instance_variable_get(item) }
+      end
     end
   end
 end
