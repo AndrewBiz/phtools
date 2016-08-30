@@ -3,5 +3,6 @@
 - [x] phls: change -r to -R
 - [ ] phls: make it work with .folders (like ftls did)
 - [x] phmove: create phmove tool based on ftarrange code (see ftools repo)
-- [ ] phmove: make parameters to set photo, video, raw folder names
-- [ ] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to target directory (plain collection of files)
+- [ ] phmove: make target_folder as parameter not an option
+- [ ] phmove: make options to set video, raw folder names
+- [ ] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to root of target directory (plain collection of files)
