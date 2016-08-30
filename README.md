@@ -45,15 +45,6 @@ cd ~/Desktop/assets_staging
 phls -r /Volumes/HDD/path/to/SDCard1 /Volumes/HDD/path/to/SDCard2 | phmove -a
 ```
 ####Then 
-I get all photos moved to:
-```
-~/Desktop/assets_staging
-```
-And all videos are moved to:
-```
-~/Desktop/assets_staging/VIDEO
-```
-And all raw photo-files are moved to:
-```
-~/Desktop/assets_staging/RAW
-```
+I get all photos moved to `~/Desktop/assets_staging`
+And all videos are moved to `~/Desktop/assets_staging/VIDEO`
+And all raw photo-files are moved to `~/Desktop/assets_staging/RAW`
