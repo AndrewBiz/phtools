@@ -1,6 +1,7 @@
 - [x] core - runner.rb: print class instance variables in debug mode
 - [x] phls: use init method to initialize variables
 - [x] phls: change -r to -R
+- [ ] phls: make it work with .folders (like ftls did)
 - [x] phmove: create phmove tool based on ftarrange code (see ftools repo)
 - [ ] phmove: make parameters to set photo, video, raw folder names
 - [ ] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to target directory (plain collection of files)
