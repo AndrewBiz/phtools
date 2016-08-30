@@ -24,13 +24,13 @@ Example: #{tool_name} abc '*aaa*' | phrename -a anb => scans 'abc' folder and
 sends all found phtools friendly files filtered with *aaa* to phrename command.
 
 Usage:
-  #{tool_name} [-D] [-r] [DIR_OR_FILEMASK...]
+  #{tool_name} [-D] [-R] [DIR_OR_FILEMASK...]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
   -D --debug      Turn on debugging (verbose) mode
-  -r --recursive  Recursively scan directories
+  -R --recursive  Recursively scan directories
   -h --help       Show this screen.
   -v --version    Show version.
 DOCOPT
