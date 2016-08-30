@@ -33,7 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'cucumber', '~> 2.0'
   spec.add_development_dependency 'aruba', '~> 0.14'
   spec.add_development_dependency 'fuubar'
-  spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'guard-cucumber'
