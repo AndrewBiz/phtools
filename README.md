@@ -4,19 +4,18 @@ A bundle of small CLI tools for arranging, renaming, tagging of the photo and vi
 
 ##Installation
 ### Install for usage
-Get the latest [ruby](https://www.ruby-lang.org/) (>= 2.3) installed.
+1. Get the latest [ruby](https://www.ruby-lang.org/) (>= 2.3) installed.
+2. Install ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/)
+3. `gem install phtools`
 
-Install ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/)
-```
-gem install phtools
-```
 ### Install for development
-Fork or download from GitHub.
-
+1. Fork or download from GitHub.
+2. Install gems:
 ```sh
 bundle install
 ```
-Develop, test:
+3. Develop
+4. Test:
 ```sh
 bundle exec rspec
 bundle exec cucumber
