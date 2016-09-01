@@ -11,22 +11,22 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-#{tool_name} moves input file(s) into WORKING_FOLDER
-separating photo files, RAW photo files and VIDEO files in corresponding
-subfolders.
+#{tool_name} moves input file(s) into TARGET_FOLDER
+If --arrange option is set it separates photo files, RAW photo files and VIDEO files
+to corresponding subfolders.
 phtools friendly files: #{file_type * ','}
 
 Optimized to be used with other *phtools* via pipes.
-Example: phls | phrename -a anb | #{tool_name}
+Example: phls | phrename -a anb | #{tool_name} -a target/folder
 
 Usage:
-  #{tool_name} [-w WORKING_FOLDER] [-D]
+  #{tool_name} [-D] [-a] TARGET_FOLDER
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
-  -w FLD --working_folder=FLD  Folder the input files to be
-                               moved to [default: .]
+  -a --arrange  Move photos to TARGET_FOLDER, videos to TARGET_FOLDER/VIDEO
+                raw-files to TARGET_FOLDER/RAW
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
   -v --version  Show version.

@@ -8,7 +8,7 @@ Feature: Arrange files into the given folder
   #@announce
   Scenario: phtools knows about this tool
     When I successfully run `phtools`
-    Then the stdout should contain "phmove\t(moves input files into working folder)"
+    Then the stdout should contain "phmove\t(moves input files into target folder)"
     And the stdout should not contain "phmove\t(!UNDER CONSTRUCTION!)"
 
   #@announce
@@ -31,14 +31,14 @@ Feature: Arrange files into the given folder
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
-  Scenario: Fails if WORKING_FOLDER does not exist
+  Scenario: Fails if TARGET_FOLDER does not exist
     Given empty files named:
     | foto1.jpg |
     | foto2.arw |
     | video.mts |
     When I run the following commands:
     """bash
-    phls | phmove -w FOLDER
+    phls | phmove FOLDER
     """
     Then the exit status should not be 0
     And the stderr should contain "FOLDER does not exist"
@@ -55,7 +55,7 @@ Feature: Arrange files into the given folder
     | FOLDER/VIDEO/video.mts |
 
   #@announce
-  Scenario: Fails if WORKING_FOLDER is not a folder
+  Scenario: Fails if TARGET_FOLDER is not a folder
     Given empty files named:
     | foto1.jpg |
     | foto2.arw |
@@ -63,7 +63,7 @@ Feature: Arrange files into the given folder
     | FOLDER |
     When I run the following commands:
     """bash
-    phls | phmove -w FOLDER
+    phls | phmove FOLDER
     """
     Then the exit status should not be 0
     And the stderr should contain "FOLDER is not a directory"
@@ -79,8 +79,8 @@ Feature: Arrange files into the given folder
     | FOLDER/RAW/foto2.arw |
     | FOLDER/VIDEO/video.mts |
 
-    #@announce:
-  Scenario: Collects and arranges files in WORKING_FOLDER
+  #@announce:
+  Scenario: Moves files to TARGET_FOLDER
     Given a directory named "FOLDER"
     And empty files named:
     | foto1.jpg |
@@ -88,7 +88,30 @@ Feature: Arrange files into the given folder
     | video.mts |
     When I run the following commands:
     """bash
-    phls | phmove -w FOLDER
+    phls | phmove FOLDER
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | foto1.jpg |
+    | foto2.arw |
+    | video.mts |
+    And a directory named "FOLDER/RAW" should not exist
+    And a directory named "FOLDER/VIDEO" should not exist
+    And the following files should exist:
+    | FOLDER/foto1.jpg |
+    | FOLDER/foto2.arw |
+    | FOLDER/video.mts |
+
+  #@announce:
+  Scenario: Moves and arranges files in TARGET_FOLDER
+    Given a directory named "FOLDER"
+    And empty files named:
+    | foto1.jpg |
+    | foto2.arw |
+    | video.mts |
+    When I run the following commands:
+    """bash
+    phls | phmove -a FOLDER
     """
     Then the exit status should be 0
     And the stdout should contain each of:
@@ -104,7 +127,7 @@ Feature: Arrange files into the given folder
     | FOLDER/VIDEO/video.mts |
 
     #@announce:
-  Scenario: Keeps the RAW and VIDEO subfolders if they are already exist
+  Scenario: Keeps the RAW and VIDEO subfolders if they already exist
     Given a directory named "FOLDER"
     And a directory named "FOLDER/RAW"
     And a directory named "FOLDER/VIDEO"
@@ -116,7 +139,7 @@ Feature: Arrange files into the given folder
     | FOLDER/VIDEO/video2keep.mts |
     When I run the following commands:
     """bash
-    phls | phmove -w FOLDER
+    phls | phmove -a FOLDER
     """
     Then the exit status should be 0
     And the stdout should contain each of:
