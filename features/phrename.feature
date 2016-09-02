@@ -1,19 +1,19 @@
 # language: en
-Feature: Generate a list of phtools-friendly-files
-  In order to simplify chosing the foto\video files for further process
+Feature: Rename photo and video files
+  In order to have all my photo and video files (taken with my digital camera)
+  get well readable and informative filenames
   As a photographer
-  I want to get the list of foto\video files in a form of a plain text
-  (one filename by line)
+  I want to get the given files to be renamed to the standard phtools name template
 
   #@announce
   Scenario: phtools knows about this tool
     When I successfully run `phtools`
-    Then the stdout should contain "phls\t(generates list of phtools friendly files)"
-    And the stdout should not contain "phls\t(!UNDER CONSTRUCTION!)"
+    Then the stdout should contain "phrename\t(renames input files to phtools standard)"
+    And the stdout should not contain "phrename\t(!UNDER CONSTRUCTION!)"
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phls -h`
+    When I successfully run `phrename -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -27,232 +27,105 @@ Feature: Generate a list of phtools-friendly-files
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phls -v`
+    When I successfully run `phrename -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
-  Scenario: Default output produces supported-by-phtools file list from current directory
-    Given empty files named:
-    | foto.jpeg       |
-    | foto.jpg        |
-    | foto.tif        |
-    | foto.tiff       |
-    | foto.orf        |
-    | foto.arw        |
-    | foto.png        |
-    | foto.dng        |
-    | foto_wrong.psd  |
-    | video.avi       |
-    | video.mp4       |
-    | video.mpg       |
-    | video.mts       |
-    | video.dv        |
-    | video.mov       |
-    | video_wrong.3gp |
-    | video.mkv       |
-    | video.m2t       |
-    | video.m2ts      |
-    When I successfully run `phls`
+  Scenario: Originally named files are renamed to phtools standard
+    Given a directory named "rename1"
+    And example files from "features/media/sony_jpg" copied to "rename1" named:
+   | DSC03403.JPG |
+   | DSC03313.JPG |
+   | DSC03499.JPG |
+   | DSC03802.JPG |
+   | DSC04032.JPG |
+
+    When I cd to "rename1"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb
+    """
+    Then the exit status should be 0
+
     Then the stdout should contain each of:
-    | foto.jpeg |
-    | foto.jpg  |
-    | foto.tif  |
-    | foto.tiff |
-    | foto.orf  |
-    | foto.arw  |
-    | foto.png  |
-    | foto.dng  |
-    | video.avi |
-    | video.mp4 |
-    | video.mpg |
-    | video.dv  |
-    | video.mts |
-    | video.mov |
-    | video.mkv |
-    | video.m2t |
-    | video.m2ts|
-    And the stdout should not contain "foto_wrong.psd"
-    And the stdout should not contain "video_wrong.3gp"
+    | 20130103-103254_ANB DSC03313.JPG |
+    | 20130103-153908_ANB DSC03403.JPG |
+    | 20130104-120745_ANB DSC03499.JPG |
+    | 20130105-150446_ANB DSC03802.JPG |
+    | 20130107-115201_ANB DSC04032.JPG |
+    And the following files should exist:
+    | ./20130103-103254_ANB DSC03313.JPG |
+    | ./20130103-153908_ANB DSC03403.JPG |
+    | ./20130104-120745_ANB DSC03499.JPG |
+    | ./20130105-150446_ANB DSC03802.JPG |
+    | ./20130107-115201_ANB DSC04032.JPG |
+    And the following files should not exist:
+    | ./DSC03313.JPG |
+    | ./DSC03403.JPG |
+    | ./DSC03499.JPG |
+    | ./DSC03802.JPG |
+    | ./DSC04032.JPG |
 
   #@announce
-  Scenario: Output produces file list filtered with given mask from current directory
-    Given empty files named:
-    | foto_yes_.jpeg  |
-    | foto.jpg        |
-    | foto_yes_.tif   |
-    | foto.tiff       |
-    | foto_yes_.orf   |
-    | foto.arw        |
-    | foto_yes_.png   |
-    | foto.dng        |
-    | foto_wrong.psd  |
-    | video.avi       |
-    | video_yes_.mp4  |
-    | video.mpg       |
-    | video_yes_.mts  |
-    | video.dv        |
-    | video.mov       |
-    | video_wrong.3gp |
-    | video.mkv       |
-    | video.m2t       |
-    | video.m2ts      |
-    When I successfully run `phls '*_yes*.*'`
+  Scenario: File is renamed using ModifyDate tag
+    Given a directory named "rename2"
+    And example files from "features/media/sony_jpg" copied to "rename2" named:
+   | DSC03313.JPG |
+
+    When I cd to "rename2"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb -t ModifyDate
+    """
+    Then the exit status should be 0
+
     Then the stdout should contain each of:
-    | foto_yes_.jpeg  |
-    | foto_yes_.tif   |
-    | foto_yes_.orf   |
-    | foto_yes_.png   |
-    | video_yes_.mp4  |
-    | video_yes_.mts  |
-    And the stdout should not contain any of:
-    | foto.jpg        |
-    | foto.tiff       |
-    | foto.arw        |
-    | foto.dng        |
-    | foto_wrong.psd  |
-    | video.avi       |
-    | video.mpg       |
-    | video.dv        |
-    | video.mov       |
-    | video_wrong.3gp |
-    | video.mkv       |
-    | video.m2t       |
-    | video.m2ts      |
+    | 20131114-225114_ANB DSC03313.JPG |
+    And the following files should exist:
+    | ./20131114-225114_ANB DSC03313.JPG |
+    And the following files should not exist:
+    | ./DSC03313.JPG |
+    And the following files should not exist:
+    | ./20130103-103254_ANB DSC03313.JPG |
 
   #@announce
-  Scenario: The output DOES NOT show unsupported files EVEN if I intentionally enter it as a parameter
-    Given empty files named:
-    | foto_wrong.psd  |
-    | video_wrong.3gp |
-    When I successfully run `phls foto_wrong.psd video_wrong.3gp`
-    Then the stdout should not contain "foto_wrong.psd"
-    And  the stdout should not contain "video_wrong.3gp"
+  Scenario: cmd reports error if tag does not exist
+    Given a directory named "rename2"
+    And example files from "features/media/sony_jpg" copied to "rename2" named:
+   | DSC03313.JPG |
+
+    When I cd to "rename2"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb -t XXXDateTime
+    """
+    Then the exit status should be 0
+
+    And the stderr should contain "tag XXXDateTime is not found"
+    And the following files should exist:
+    | ./DSC03313.JPG |
+    And the following files should not exist:
+    | ./20131114-225114_ANB DSC03313.JPG |
+    And the following files should not exist:
+    | ./20130103-103254_ANB DSC03313.JPG |
 
   #@announce
-  Scenario: The output shows files only inside directories entered as paramenets
-    Given a directory named "fotos"
-    And empty files named:
-    | ./fotos/f4.jpg       |
-    | ./fotos/f4.tiff      |
-    | ./fotos/f4.orf       |
-    | ./fotos/f4.arw       |
-    And a directory named "videos"
-    And empty files named:
-    | ./videos/v4.avi       |
-    | ./videos/v4.mp4       |
-    | ./videos/v4.mpg       |
-    | ./videos/v4.dv        |
-    And empty files named:
-    | foto_wrong.jpg  |
-    | video_wrong.jpg |
-    When I successfully run `phls fotos videos`
-    Then the stdout should contain each of:
-    | fotos/f4.jpg  |
-    | fotos/f4.tiff |
-    | fotos/f4.orf  |
-    | fotos/f4.arw  |
-    | videos/v4.avi |
-    | videos/v4.mp4 |
-    | videos/v4.mpg |
-    | videos/v4.dv  |
-    And the stdout should not contain any of:
-    | foto_wrong.jpg  |
-    | video_wrong.jpg |
+  Scenario: cmd reports error if tag is not DateTime type
+    Given a directory named "rename2"
+    And example files from "features/media/sony_jpg" copied to "rename2" named:
+   | DSC03313.JPG |
 
-  #@announce
-  Scenario: The output DOES NOT show usopported files inside directories entered as paramenets
-    Given a directory named "fotos"
-    And empty files named:
-    | ./fotos/f5_wrong.ppp  |
-    And a directory named "videos"
-    And empty files named:
-    | ./videos/v5_wrong.vvv  |
-    When I successfully run `phls fotos videos`
-    Then the stdout should not contain "fotos/f5_wrong.ppp"
-    And  the stdout should not contain "videos/v5_wrong.vvv"
+    When I cd to "rename2"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb -t Make
+    """
+    Then the exit status should be 0
 
-  #@announce
-  Scenario: The output shows files inside directories and subdirectories if run recursive
-    Given a directory named "fotos"
-    And empty files named:
-    | ./fotos/f6.jpg         |
-    And a directory named "fotos/fotos2"
-    And empty files named:
-    | ./fotos/fotos2/f6.tif  |
-    And a directory named "fotos/fotos2/fotos3"
-    And empty files named:
-    | ./fotos/fotos2/fotos3/f6.png |
-    When I successfully run `phls --recursive fotos`
-    Then the stdout should contain each of:
-    | fotos/f6.jpg                 |
-    | fotos/fotos2/f6.tif          |
-    | fotos/fotos2/fotos3/f6.png   |
-
-  #@announce
-  Scenario: Output produces file list filtered with given masks from given directories
-    Given empty files named:
-    | foto_yes_.jpeg  |
-    | foto_yes_.tif   |
-    | foto.tiff       |
-    | foto.arw        |
-    And a directory named "fotos"
-    And empty files named:
-    | fotos/foto1_yes_.jpeg  |
-    | fotos/foto1_yes_.tif   |
-    | fotos/foto1.tiff       |
-    | fotos/foto1.arw        |
-    And a directory named "videos"
-    And empty files named:
-    | videos/video.avi       |
-    | videos/video_yes_.mp4  |
-    | videos/video.mpg       |
-    | videos/video_yes_.mts  |
-    When I successfully run `phls fotos videos '*_yes*'`
-    Then the stdout should contain each of:
-    | fotos/foto1_yes_.jpeg  |
-    | fotos/foto1_yes_.tif   |
-    | videos/video_yes_.mp4  |
-    | videos/video_yes_.mts  |
-    And the stdout should not contain any of:
-    | foto_yes_.jpeg  |
-    | foto_yes_.tif   |
-    | foto.tiff       |
-    | foto.arw        |
-    | fotos/foto1.tiff       |
-    | fotos/foto1.arw        |
-    | videos/video.avi       |
-    | videos/video.mpg       |
-
-  #@announce
-  Scenario: The output shows only files, no folders (even if folder name looks like a file)
-    Given a directory named "foto.jpg"
-    And a directory named "video.mov"
-    And empty files named:
-    | foto1.jpg         |
-    | foto2.jpg         |
-    | video1.mov        |
-    | video2.mov        |
-    When I successfully run `phls`
-    Then the stdout should contain each of:
-    | foto1.jpg         |
-    | foto2.jpg         |
-    | video1.mov        |
-    | video2.mov        |
-    And the stdout should not contain any of:
-    | foto.jpg  |
-    | video.mov |
-
-  #@announce
-  Scenario: Output produces supported-by-phtools file list keeping extentions unchanged (e.g. capitalized will remain capitalized)
-    Given a directory named "capitalized"
-    Given empty files named:
-    | ./capitalized/foto.TIF  |
-    | ./capitalized/video.DV  |
-    | ./capitalized/video.MOV |
-    | ./capitalized/video1.mov |
-    When I successfully run `phls capitalized`
-    Then the stdout should contain each of:
-    | foto.TIF  |
-    | video.DV  |
-    | video.MOV |
-    | video1.mov |
+    And the stderr should contain "tag Make is not a DateTime type"
+    And the following files should exist:
+    | ./DSC03313.JPG |
+    And the following files should not exist:
+    | ./20131114-225114_ANB DSC03313.JPG |
+    And the following files should not exist:
+    | ./20130103-103254_ANB DSC03313.JPG |

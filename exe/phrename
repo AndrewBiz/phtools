@@ -11,22 +11,35 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-#{tool_name} moves input file(s) into TARGET_FOLDER
-If --arrange option is set it separates photo files, RAW photo files and VIDEO files
-to corresponding subfolders.
-phtools friendly files: #{file_type * ','}
+#{tool_name} renames the input files based on EXIF
+DateTimeOriginal (or CreateDate) tag and author NICKNAME provided.
+The target file name format is YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
+  YYYYmmdd-HHMMSS - Date-Time of photo creation (DateTimeOriginal tag),
+  AAA - the author nickname,
+  ORIGINAL.EXT - the photo name given by digital camera.
+Input file should be one of the types: #{file_type * ','}
+Example: input file DSC03455.JPG will be renamed to 20130108-124145_ANB DSC03455.JPG
+#{tool_name} is optimized to be used with other *phtools* via pipes, e.g.:
+  phls | #{tool_name} -a anb
 
-Optimized to be used with other *phtools* via pipes.
-Example: phls | phrename -a anb | #{tool_name} -a target/folder
+This program uses external utility ExifTool by Phil Harvey
+(http://www.sno.phy.queensu.ca/~phil/exiftool/). Make sure you have exiftool installed.
 
 Usage:
-  #{tool_name} [-D] [-a] TARGET_FOLDER
+  #{tool_name} -a NICKNAME [-D] [-t TAG]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
-  -a --arrange  Move photos to TARGET_FOLDER, videos to TARGET_FOLDER/VIDEO
-                raw-files to TARGET_FOLDER/RAW
+  -a NICKNAME --author=NICKNAME  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
+                                 have no spaces and other non-word chars,
+                                 have no digits,
+                                 have only ASCII chars (e.g. ANB)
+  -t TAG --tag_date=TAG          Set the TAG name containing Date_Time creation
+                                 info. The TAG value will be used instead of
+                                 standard DateTimeOriginal tag.
+                                 All existing tags and tag names you can get
+                                 using command `phls filename|phmtags -f`
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
   -v --version  Show version.

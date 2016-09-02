@@ -51,8 +51,8 @@ module PhTools
       ARGF.each_line do |line|
         filename = line.chomp
         begin
-          FTFile.validate_file!(filename, @file_type)
-          ftfile = FTFile.new(filename)
+          PhFile.validate_file!(filename, @file_type)
+          ftfile = PhFile.new(filename)
           @os.output process_file(ftfile)
         rescue PhTools::Error => e
           PhTools.puts_error "ERROR: '#{filename}' - #{e.message}", e

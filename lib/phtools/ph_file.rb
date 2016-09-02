@@ -16,7 +16,7 @@ module PhTools
   FILE_TYPE_AUDIO = %w{wav}
 
   # phtools file name operations
-  class FTFile
+  class PhFile
     include Comparable
 
     # filename constants
