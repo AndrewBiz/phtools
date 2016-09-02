@@ -8,7 +8,7 @@ Feature: Arrange files into the given folder
   #@announce
   Scenario: phtools knows about this tool
     When I successfully run `phtools`
-    Then the stdout should contain "phmove\t(moves input files into target folder)"
+    Then the stdout should contain "phmove\t(moves input files to target folder)"
     And the stdout should not contain "phmove\t(!UNDER CONSTRUCTION!)"
 
   #@announce

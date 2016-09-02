@@ -7,7 +7,7 @@ require 'phtools/runner'
 module PhTools
   class Phmove < Runner
     def self.about
-      "moves input files into target folder"
+      "moves input files to target folder"
     end
     private
 
