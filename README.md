@@ -46,7 +46,7 @@ And I have empty folder `~/Desktop/assets_staging` I would like to collect all t
 #### When
 I run:
 ```sh
-phls -R ~/path/to/copy/SDCard1 ~/path/to/copy/SDCard2 | phmove -a ~/Desktop/assets_staging
+phls -R ~/Desktop/SDCard1 ~/Desktop/SDCard2 | phmove -a ~/Desktop/assets_staging
 ```
 
 #### Then
