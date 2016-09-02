@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+# (c) ANB Andrew Bizyaev
+
+module PhTools
+  tool_name = File.basename(__FILE__)
+  require "#{tool_name}"
+
+  file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
+  usage = <<DOCOPT
+***************************************************
+phtools - *Keep Your Photos In Order* (c) ANB
+***************************************************
+#{tool_name} moves input file(s) into TARGET_FOLDER
+If --arrange option is set it separates photo files, RAW photo files and VIDEO files
+to corresponding subfolders.
+phtools friendly files: #{file_type * ','}
+
+Optimized to be used with other *phtools* via pipes.
+Example: phls | phrename -a anb | #{tool_name} -a target/folder
+
+Usage:
+  #{tool_name} [-D] [-a] TARGET_FOLDER
+  #{tool_name} -h | --help
+  #{tool_name} -v | --version
+
+Options:
+  -a --arrange  Move photos to TARGET_FOLDER, videos to TARGET_FOLDER/VIDEO
+                raw-files to TARGET_FOLDER/RAW
+  -D --debug    Turn on debugging (verbose) mode
+  -h --help     Show this screen.
+  -v --version  Show version.
+DOCOPT
+
+  PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
+end
