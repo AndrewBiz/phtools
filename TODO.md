@@ -5,5 +5,5 @@
 - [x] phmove: create phmove tool based on ftarrange code (see ftools repo)
 - [x] phmove: make target_folder as parameter not an option
 - [x] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to root of target directory (plain collection of files)
-- [ ] phmove: delete unused empty RAW and VIDEO folders
+- [x] phmove: delete unused empty RAW and VIDEO folders
 - [ ] phmove: make options to set video, raw folder names

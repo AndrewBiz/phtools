@@ -155,3 +155,23 @@ Feature: Arrange files into the given folder
     | FOLDER/VIDEO/video.mts |
     | FOLDER/RAW/foto2keep.arw |
     | FOLDER/VIDEO/video2keep.mts |
+
+  #@announce:
+  Scenario: Deletes unused RAW and VIDEO folders
+    Given a directory named "FOLDER"
+    And empty files named:
+    | foto1.jpg |
+    | foto2.tiff |
+    When I run the following commands:
+    """bash
+    phls | phmove -a FOLDER
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | foto1.jpg |
+    | foto2.tiff |
+    And a directory named "FOLDER/RAW" should not exist
+    And a directory named "FOLDER/VIDEO" should not exist
+    And the following files should exist:
+    | FOLDER/foto1.jpg |
+    | FOLDER/foto2.tiff |

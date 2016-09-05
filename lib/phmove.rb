@@ -9,6 +9,7 @@ module PhTools
     def self.about
       "moves input files to target folder"
     end
+
     private
 
     def validate_options
@@ -27,8 +28,10 @@ module PhTools
       fail PhTools::Error, "#{@target_folder} does not exist" unless File.exist?(@target_folder)
       fail PhTools::Error, "#{@target_folder} is not a directory" unless File.directory?(@target_folder)
       begin
-        Dir.mkdir @raw_folder unless Dir.exist?(@raw_folder)
-        Dir.mkdir @video_folder unless Dir.exist?(@video_folder)
+        if @arrange
+          Dir.mkdir @raw_folder unless Dir.exist?(@raw_folder)
+          Dir.mkdir @video_folder unless Dir.exist?(@video_folder)
+        end
       rescue
         raise PhTools::Error, "Unable to make dir inside '#{@target_folder}'"
       end
@@ -53,5 +56,17 @@ module PhTools
     rescue SystemCallError => e
       raise PhTools::Error, 'file moving - ' + e.message
     end
+
+    def process_after
+      if @arrange
+        Dir.delete @raw_folder if (Dir.exist?(@raw_folder) and
+                                   Utils.dir_empty?(@raw_folder))
+        Dir.delete @video_folder if (Dir.exist?(@video_folder) and
+                                     Utils.dir_empty?(@video_folder))
+      end
+    rescue
+        raise PhTools::Error, "Unable to delete dir"
+    end
+
   end
 end
