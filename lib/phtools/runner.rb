@@ -2,10 +2,9 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'phtools/version'
 require 'phtools/utils/ruby_version.rb'
-require 'phtools/utils/os_win.rb'
-require 'phtools/utils/os_unix.rb'
+require 'phtools/version'
+require 'phtools/utils'
 require 'phtools/error.rb'
 require 'phtools/ph_file.rb'
 require 'docopt'

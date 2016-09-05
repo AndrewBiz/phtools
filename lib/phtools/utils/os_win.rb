@@ -2,7 +2,7 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'phtools/utils/os'
+require_relative 'os'
 
 module Utils
   # OS platfor related logic
