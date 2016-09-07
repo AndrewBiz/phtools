@@ -5,7 +5,7 @@ A bundle of small CLI tools for arranging, renaming, tagging of the photo and vi
 ## Rationale
 PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 * own tons of photo-video files and want to keep it in order
-* really don't like the way how digital cameras name the files: P1193691.JPG, IMP_1409.JPG, _DSC1459.ARW etc.
+* really don't like the way how digital cameras name the files: P1193691.JPG, IMP_1409.JPG, DSC1459.ARW etc.
 * for photo storage prefer usage of traditional File System (folder structure) instead of "black box" databases of media managers (like iPhoto, Photoshop etc.)
 * would like to have date-time-original info in the name of the file
 * expects that sorting folder content "by name" will arrange photo-video assets in chronological order
@@ -56,11 +56,31 @@ And all videos are moved to `~/Desktop/assets_staging/VIDEO`.
 
 And all raw photo-files are moved to `~/Desktop/assets_staging/RAW`.
 
+### Use Case 2. Mass rename photos in accordance with PHTOOLS standard (and don't forget to backup before)
+
+#### Given
+I have dozens of photo-files in my working folder `~/Desktop/assets_staging`.
+
+And my friend Alex it the author of the photos (nikname ALX).
+
+#### When
+I run:
+```sh
+cd ~/Desktop/assets_staging
+phls | phbackup | phrename -a alx
+```
+
+#### Then
+I get all photos in `~/Desktop/assets_staging` renamed according to PHTOOLS standard.
+
+And I have all original photo-files are backed-up to `~/Desktop/assets_staging/backup`.
+
+
 ## PHTOOLS concepts
 ### PHTOOLS Standard file name
 PHTOOLS standard file name looks like this: **`YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT`**, where
 
-**YYYYmmdd-HHMMSS** - photo creation datestamp (year-month-day-hours-minutes-seconds). By default PHTOOLS use the value of EXIF tag `DateTimeOriginal` or `CreateDate` for this purpose. 
+**YYYYmmdd-HHMMSS** - photo creation datestamp (year-month-day-hours-minutes-seconds). By default PHTOOLS use the value of EXIF tag `DateTimeOriginal` or `CreateDate` for this purpose.
 
 **AAA** - author nikname. 3 character long, only latin alphabet supported.
 
@@ -68,4 +88,3 @@ PHTOOLS standard file name looks like this: **`YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT`
 
 For example, the digital camera photo file `P1193691.JPG`, taken by AndrewBiz (aka ANB), after PHTOOLS processing will look like:
 `20160902-174939_ANB P1193691.JPG`
-

@@ -1,19 +1,18 @@
 # language: en
-Feature: Arrange files into the given folder
-  In order to simplify the further processing of the media files coming
-  from different sources (flash cards, smartphones etc.)
+Feature: Backup files
+  In order to be at the safe side
   As a photographer
-  I want to get all the given files to be moved in scecified target folder
+  I want to get the given files to be backed up
 
   #@announce
   Scenario: phtools knows about this tool
     When I successfully run `phtools`
-    Then the stdout should contain "phmove\t(moves input files to target folder)"
-    And the stdout should not contain "phmove\t(!UNDER CONSTRUCTION!)"
+    Then the stdout should contain "phbackup\t(copies input files to backup folder)"
+    And the stdout should not contain "phbackup\t(!UNDER CONSTRUCTION!)"
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phmove -h`
+    When I successfully run `phbackup -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -27,151 +26,41 @@ Feature: Arrange files into the given folder
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phmove -v`
+    When I successfully run `phbackup -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
-  Scenario: Fails if TARGET_FOLDER does not exist
+  Scenario: Default backup is made into ./backup dir
     Given empty files named:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
+    | foto2backup.jpg |
+    | foto2backup.wav |
     When I run the following commands:
     """bash
-    phls | phmove FOLDER
+    phls | phbackup
     """
-    Then the exit status should not be 0
-    And the stderr should contain "FOLDER does not exist"
-    And the stdout should not contain any of:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    And a directory named "FOLDER" should not exist
-    And a directory named "FOLDER/RAW" should not exist
-    And a directory named "FOLDER/VIDEO" should not exist
-    And the following files should not exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/RAW/foto2.arw |
-    | FOLDER/VIDEO/video.mts |
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | foto2backup.jpg |
+    | foto2backup.wav |
+    And a directory named "backup" should exist
+    And the following files should exist:
+    | backup/foto2backup.jpg |
+    | backup/foto2backup.wav |
 
   #@announce
-  Scenario: Fails if TARGET_FOLDER is not a folder
+  Scenario: backup is made into given dir
     Given empty files named:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    | FOLDER |
+    | foto2newbackup.jpg |
+    | foto2newbackup.wav |
     When I run the following commands:
     """bash
-    phls | phmove FOLDER
-    """
-    Then the exit status should not be 0
-    And the stderr should contain "FOLDER is not a directory"
-    And the stdout should not contain any of:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    And a directory named "FOLDER" should not exist
-    And a directory named "FOLDER/RAW" should not exist
-    And a directory named "FOLDER/VIDEO" should not exist
-    And the following files should not exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/RAW/foto2.arw |
-    | FOLDER/VIDEO/video.mts |
-
-  #@announce:
-  Scenario: Moves files to TARGET_FOLDER
-    Given a directory named "FOLDER"
-    And empty files named:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    When I run the following commands:
-    """bash
-    phls | phmove FOLDER
+    phls | phbackup -b newbackup
     """
     Then the exit status should be 0
-    And the stdout should contain each of:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    And a directory named "FOLDER/RAW" should not exist
-    And a directory named "FOLDER/VIDEO" should not exist
+    Then the stdout should contain each of:
+    | foto2newbackup.jpg |
+    | foto2newbackup.wav |
+    And a directory named "newbackup" should exist
     And the following files should exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/foto2.arw |
-    | FOLDER/video.mts |
-
-  #@announce:
-  Scenario: Moves and arranges files in TARGET_FOLDER
-    Given a directory named "FOLDER"
-    And empty files named:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    When I run the following commands:
-    """bash
-    phls | phmove -a FOLDER
-    """
-    Then the exit status should be 0
-    And the stdout should contain each of:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    And a directory named "FOLDER" should exist
-    And a directory named "FOLDER/RAW" should exist
-    And a directory named "FOLDER/VIDEO" should exist
-    And the following files should exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/RAW/foto2.arw |
-    | FOLDER/VIDEO/video.mts |
-
-    #@announce:
-  Scenario: Keeps the RAW and VIDEO subfolders if they already exist
-    Given a directory named "FOLDER"
-    And a directory named "FOLDER/RAW"
-    And a directory named "FOLDER/VIDEO"
-    And empty files named:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    | FOLDER/RAW/foto2keep.arw |
-    | FOLDER/VIDEO/video2keep.mts |
-    When I run the following commands:
-    """bash
-    phls | phmove -a FOLDER
-    """
-    Then the exit status should be 0
-    And the stdout should contain each of:
-    | foto1.jpg |
-    | foto2.arw |
-    | video.mts |
-    And a directory named "FOLDER" should exist
-    And a directory named "FOLDER/RAW" should exist
-    And a directory named "FOLDER/VIDEO" should exist
-    And the following files should exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/RAW/foto2.arw |
-    | FOLDER/VIDEO/video.mts |
-    | FOLDER/RAW/foto2keep.arw |
-    | FOLDER/VIDEO/video2keep.mts |
-
-  #@announce:
-  Scenario: Deletes unused RAW and VIDEO folders
-    Given a directory named "FOLDER"
-    And empty files named:
-    | foto1.jpg |
-    | foto2.tiff |
-    When I run the following commands:
-    """bash
-    phls | phmove -a FOLDER
-    """
-    Then the exit status should be 0
-    And the stdout should contain each of:
-    | foto1.jpg |
-    | foto2.tiff |
-    And a directory named "FOLDER/RAW" should not exist
-    And a directory named "FOLDER/VIDEO" should not exist
-    And the following files should exist:
-    | FOLDER/foto1.jpg |
-    | FOLDER/foto2.tiff |
+    | newbackup/foto2newbackup.jpg |
+    | newbackup/foto2newbackup.wav |
