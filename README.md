@@ -5,7 +5,7 @@ A bundle of small CLI tools for arranging, renaming, tagging of the photo and vi
 ## Rationale
 PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 * own tons of photo-video files and want to keep it in order
-* really don't like the way how digital cameras name the files: P1193691.JPG, IMP_1409.JPG, DSC1459.ARW etc.
+* really don't like the way how digital cameras name the files: P1193691.JPG, IMP_1409.JPG, \_DSC1459.ARW etc.
 * for photo storage prefer usage of traditional File System (folder structure) instead of "black box" databases of media managers (like iPhoto, Photoshop etc.)
 * would like to have date-time-original info in the name of the file
 * expects that sorting folder content "by name" will arrange photo-video assets in chronological order
