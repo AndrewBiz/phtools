@@ -23,23 +23,23 @@ Example: input file DSC03455.JPG will be renamed to 20130108-124145_ANB DSC03455
   phls | #{tool_name} -a anb
 
 This program uses external utility ExifTool by Phil Harvey
-(http://www.sno.phy.queensu.ca/~phil/exiftool/). Make sure you have exiftool installed.
+(http://www.sno.phy.queensu.ca/~phil/exiftool/).
 
 Usage:
-  #{tool_name} -a NICKNAME [-D] [-t TAG]
+  #{tool_name} -a NICK [-D] [-t TAG]
+  #{tool_name} -c [-D]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
-  -a NICKNAME --author=NICKNAME  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
-                                 have no spaces and other non-word chars,
-                                 have no digits,
-                                 have only ASCII chars (e.g. ANB)
-  -t TAG --tag_date=TAG          Set the TAG name containing Date_Time creation
-                                 info. The TAG value will be used instead of
-                                 standard DateTimeOriginal tag.
-                                 All existing tags and tag names you can get
-                                 using command `phls filename|phmtags -f`
+  -a NICK --author=NICK  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
+                         supports only latin ASCII chars (e.g. ANB).
+                         No digits, no spaces, no other non-word chars allowed.
+  -t TAG --tag_date=TAG  Set the TAG name containing Date_Time creation
+                         info. The TAG value will be used instead of
+                         standard DateTimeOriginal tag. All existing tags you
+                         can get using command `phls filename|phmtags -f`
+  -c --clean    Rename file(s) back to original name(s)
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
   -v --version  Show version.

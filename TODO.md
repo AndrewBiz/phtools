@@ -7,5 +7,5 @@
 - [x] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to root of target directory (plain collection of files)
 - [x] phmove: delete unused empty RAW and VIDEO folders
 - [ ] phmove: make options to set video, raw folder names
-- [ ] phrename: add -c --clean option (based on ftclname functionality)
-- [ ] phrename: add -t --time_shift option (based on ftfixdate functionality)
+- [x] phrename: add -c --clean option (based on ftclname functionality)
+- [ ] phrename: add -s --shift_time option (based on ftfixdate functionality)

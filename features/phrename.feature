@@ -13,7 +13,7 @@ Feature: Rename photo and video files
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phrename -h`
+    When I run `phrename -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -27,7 +27,7 @@ Feature: Rename photo and video files
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phrename -v`
+    When I run `phrename -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
@@ -129,3 +129,112 @@ Feature: Rename photo and video files
     | ./20131114-225114_ANB DSC03313.JPG |
     And the following files should not exist:
     | ./20130103-103254_ANB DSC03313.JPG |
+
+  #@announce
+  Scenario: Standard named files can be renamed back to original names
+    Given empty files named:
+    | 20130101-005311_ANB DSC00001.JPG    |
+    | 20130102-005311_ANBA DSC00002.JPG   |
+    | 20130103-005311_ANBAN DSC00003.JPG  |
+    | 20130104-005311_ANBANB DSC00004.JPG |
+    When I run the following commands:
+    """bash
+    phls | phrename --clean
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | DSC00001.JPG |
+    | DSC00002.JPG |
+    | DSC00003.JPG |
+    | DSC00004.JPG |
+    And the stdout should not contain any of:
+    | 20130101-005311 |
+    | ANB             |
+    | ANBA            |
+    | ANBAN           |
+    | ANBANB          |
+    And the following files should exist:
+    | DSC00001.JPG |
+    | DSC00002.JPG |
+    | DSC00003.JPG |
+    | DSC00004.JPG |
+
+  #@announce
+  Scenario: Non-Standard named files are renamed back to origin as well
+    Given empty files named:
+    | 20130101-105311_ANB[12345678-dfdfdfdf]{flags}DSC10001.JPG |
+    | 20130102-105311_ANB[12345678-erererer]DSC10002.JPG        |
+    | 20130103-105311_ANB_DSC10003.JPG                          |
+    | 20130104-105311_ANB-DSC10004.JPG                          |
+    | 20130105-1053_ANB_DSC10005.JPG                            |
+    | 20130106-1053-ANB_DSC10006.JPG                            |
+    | 20130107-1053_ANB DSC10007.JPG                            |
+    | 20130108-1053_DSC10008.JPG                                |
+    | 20130109-1053 DSC10009.JPG                                |
+    | 20130110_DSC10010.JPG                                     |
+    | 20130111 DSC10011.JPG                                     |
+    | 2013_DSC10012.JPG                                         |
+    | 2013-DSC10013.JPG                                         |
+    | 2013 DSC10014.JPG                                         |
+    | CLEAN NAME.JPG                                            |
+    | CLEAN_NAME.JPG                                            |
+    | CLEAN-NAME.JPG                                            |
+    | CLEANNAME.JPG                                             |
+    When I run the following commands:
+    """bash
+    phls | phrename --clean
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | DSC10001.JPG   |
+    | DSC10002.JPG   |
+    | DSC10003.JPG   |
+    | DSC10004.JPG   |
+    | DSC10005.JPG   |
+    | DSC10006.JPG   |
+    | DSC10007.JPG   |
+    | DSC10008.JPG   |
+    | DSC10009.JPG   |
+    | DSC10010.JPG   |
+    | DSC10011.JPG   |
+    | DSC10012.JPG   |
+    | DSC10013.JPG   |
+    | DSC10014.JPG   |
+    | CLEAN NAME.JPG |
+    | CLEAN_NAME.JPG |
+    | CLEAN-NAME.JPG |
+    | CLEANNAME.JPG  |
+    And the stdout should not contain any of:
+    | 20130101-105311_ANB[12345678-dfdfdfdf]{flags} |
+    | 20130102-105311_ANB[12345678-erererer]        |
+    | 20130103-105311_ANB_                          |
+    | 20130104-105311_ANB-                          |
+    | 20130105-1053_ANB_                            |
+    | 20130106-1053-ANB_                            |
+    | 20130107-1053_ANB                             |
+    | 20130108-1053_                                |
+    | 20130109-1053                                 |
+    | 20130110_                                     |
+    | 20130111                                      |
+    | 2013_                                         |
+    | 2013-                                         |
+    | 2013                                          |
+    And the following files should exist:
+    | DSC10001.JPG   |
+    | DSC10002.JPG   |
+    | DSC10003.JPG   |
+    | DSC10004.JPG   |
+    | DSC10005.JPG   |
+    | DSC10006.JPG   |
+    | DSC10007.JPG   |
+    | DSC10008.JPG   |
+    | DSC10009.JPG   |
+    | DSC10010.JPG   |
+    | DSC10011.JPG   |
+    | DSC10012.JPG   |
+    | DSC10013.JPG   |
+    | DSC10014.JPG   |
+    | CLEAN NAME.JPG |
+    | CLEAN_NAME.JPG |
+    | CLEAN-NAME.JPG |
+    | CLEANNAME.JPG  |
