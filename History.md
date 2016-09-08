@@ -1,5 +1,11 @@
 # RELEASED
 
+## [v0.6.0](https://github.com/andrewbiz/phtools/compare/v0.4.0...v0.6.0)
+* phmove: does not keep unused empty VIDEO and RAW folders
+* phrename: --clean option renames files back to original state
+* Added phbackup
+
+
 ## [v0.4.0](https://github.com/andrewbiz/phtools/compare/v0.3.0.pre.alpha...v0.4.0)
 * Added description to README.md
 * Changed phls - option -R instead of -r (ls compatibility)
