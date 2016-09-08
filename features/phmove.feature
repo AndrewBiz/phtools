@@ -13,7 +13,7 @@ Feature: Arrange files into the given folder
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phmove -h`
+    When I run `phmove -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -27,7 +27,7 @@ Feature: Arrange files into the given folder
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phmove -v`
+    When I run `phmove -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce

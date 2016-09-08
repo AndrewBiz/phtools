@@ -13,7 +13,7 @@ Feature: Generate a list of phtools-friendly-files
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phls -h`
+    When I run `phls -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -27,7 +27,7 @@ Feature: Generate a list of phtools-friendly-files
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phls -v`
+    When I run `phls -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce

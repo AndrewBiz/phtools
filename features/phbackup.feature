@@ -12,7 +12,7 @@ Feature: Backup files
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I successfully run `phbackup -h`
+    When I run `phbackup -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -26,7 +26,7 @@ Feature: Backup files
 
   #@announce
   Scenario: Output with -v produces version information
-    When I successfully run `phbackup -v`
+    When I run `phbackup -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce

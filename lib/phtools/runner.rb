@@ -36,7 +36,7 @@ module PhTools
 
     rescue Docopt::Exit => e
       STDERR.puts e.message
-      exit 0
+      exit 1
     rescue => e
       PhTools.puts_error "FATAL: #{e.message}", e
       exit 1
