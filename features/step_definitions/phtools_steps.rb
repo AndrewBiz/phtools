@@ -18,11 +18,11 @@ Given(/^example file "(.*?)" copied to "(.*?)"$/) do |arg1, arg2|
   FileUtils.cp(arg1, file_out)
 end
 
-# Given(/^example file "(.*?)" copied to file "(.*?)"$/) do |arg1, arg2|
-#   file_out = File.join(current_dir, arg2)
-#   FileUtils.cp(arg1, file_out)
-# end
-#
+Given(/^example file "(.*?)" copied to file "(.*?)"$/) do |arg1, arg2|
+  file_out = File.join(expand_path('.'), arg2)
+  FileUtils.cp(arg1, file_out)
+end
+
 Given(/^example files from "(.*?)" copied to "(.*?)" named:$/) do |arg1, arg2, table|
   # table is a Cucumber::Ast::Table
   files = table.raw.flatten
