@@ -29,17 +29,17 @@ module PhTools
 
       validate_options
 
-      if PhTools.debug
-        STDERR.puts "Instance Variables: "
-        STDERR.puts context
-      end
-
     rescue Docopt::Exit => e
       STDERR.puts e.message
       exit 1
     rescue => e
       PhTools.puts_error "FATAL: #{e.message}", e
       exit 1
+    ensure
+      if PhTools.debug
+        STDERR.puts "Runner Instance Variables: "
+        STDERR.puts context
+      end
     end
 
     def run!
