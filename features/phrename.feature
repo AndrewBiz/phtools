@@ -238,3 +238,32 @@ Feature: Rename photo and video files
     | CLEAN_NAME.JPG |
     | CLEAN-NAME.JPG |
     | CLEANNAME.JPG  |
+
+  #@announce
+  Scenario: In SHIFT-TIME mode the jpg file is renamed with new date-time
+    Given a directory named "changetime"
+    And example file "features/media/renamed/20130103-103254_ANB DSC03313_notagset.JPG" copied to file "changetime/20130103-103254_ANB DSC03313.JPG"
+
+    When I cd to "changetime"
+    When I run the following commands:
+    """bash
+    phls | phrename --shift_time 100
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+      | 20130103-103434_ANB DSC03313.JPG |
+    And the following files should exist:
+      | 20130103-103434_ANB DSC03313.JPG |
+
+  #@announce
+  Scenario: In SHIFT-TIME mode the jpg file produces error if the name is not standard
+    Given a directory named "changetime"
+    And example file "features/media/renamed/20130103-103254_ANB DSC03313_notagset.JPG" copied to file "changetime/DSC03313.JPG"
+
+    When I cd to "changetime"
+    When I run the following commands:
+    """bash
+    phls | phrename --shift_time 100
+    """
+    Then the exit status should be 0
+    And the stderr should contain "ERROR: './DSC03313.JPG' - file renaming - incorrect file name"

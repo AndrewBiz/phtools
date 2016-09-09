@@ -8,4 +8,4 @@
 - [x] phmove: delete unused empty RAW and VIDEO folders
 - [ ] phmove: make options to set video, raw folder names
 - [x] phrename: add -c --clean option (based on ftclname functionality)
-- [ ] phrename: add -s --shift_time option (based on ftfixdate functionality)
+- [x] phrename: add -s --shift_time option (based on ftfixdate functionality)

@@ -28,6 +28,7 @@ This program uses external utility ExifTool by Phil Harvey
 Usage:
   #{tool_name} -a NICK [-D] [-t TAG]
   #{tool_name} -c [-D]
+  #{tool_name} -s DELTA [-D]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
@@ -35,11 +36,20 @@ Options:
   -a NICK --author=NICK  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
                          supports only latin ASCII chars (e.g. ANB).
                          No digits, no spaces, no other non-word chars allowed.
+
   -t TAG --tag_date=TAG  Set the TAG name containing Date_Time creation
                          info. The TAG value will be used instead of
                          standard DateTimeOriginal tag. All existing tags you
                          can get using command `phls filename|phmtags -f`
-  -c --clean    Rename file(s) back to original name(s)
+
+  -c --clean             Rename file(s) back to original name(s)
+
+  -s DELTA --shift_time=DELTA  DELTA (in seconds) will be added to Date-Time value
+                         of the filename. If DELTA is positive the photo
+                         will become yonger: e.g. 20140720-100005, DELTA = 65
+                         result = 20140720-100110. In DELTA is negative the photo
+                         will get DELTA seconds older.
+
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
   -v --version  Show version.

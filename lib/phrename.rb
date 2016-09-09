@@ -2,6 +2,7 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
+require 'date'
 require 'phtools/runner'
 require 'phtools/mini_exiftool-2.3.0anb'
 
@@ -22,6 +23,10 @@ module PhTools
         @user_tag_date = @options_cli['--tag_date'] || ''
       elsif @options_cli['--clean']
         @mode = :clean
+      elsif @options_cli['--shift_time']
+        @mode = :shift_time
+        @shift_seconds = @options_cli['--shift_time'].to_i
+        fail PhTools::Error, '--shift_time value is not correct' if @shift_seconds.zero?
       end
     end
 
@@ -45,6 +50,10 @@ module PhTools
 
       when :clean
         phfile_out.cleanse!
+
+      when :shift_time
+        fail PhTools::Error, 'incorrect file name' unless phfile_out.basename_is_standard?
+        phfile_out.standardize!(date_time: phfile_out.date_time + @shift_seconds*(1.0/86400))
       end
 
       FileUtils.mv(phfile.filename, phfile_out.filename) unless phfile == phfile_out
