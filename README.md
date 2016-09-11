@@ -124,6 +124,24 @@ And all _ANB_ photos are kept unchanged.
 
 _Note. `phrename` is smart enough to let the user to run it several times on one file. Every time `phrename -a` invoked it overwrites information added by previuos `phrename` run._ 
 
+==========
+
+#### USE CASE 2.4 Adjust date-time in the filename
+#### Given
+I have several video files taken by iPhone in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard.
+
+And I've found out that iPhone gives the wrong value to CreateDate tag (in my case the error is minus 2 hours to real time of creation). Because of that 'phrename' gives the wrong _YYYYmmdd-HHMMSS_ timestamp in the filename. I want to get the correct date-time info in the names of video files. 
+
+#### When
+I run:
+```sh
+cd ~/Desktop/assets_staging
+phls '*.mov'| phrename --shift_time 7200
+```
+
+#### Then
+I get all _mov_ files in `~/Desktop/assets_staging` renamed with correct _YYYYmmdd-HHMMSS_ timestamp (+ 7200 second = + 2 hours than it was before).
+
 **********
 
 ## PHTOOLS concepts
