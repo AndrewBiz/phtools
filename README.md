@@ -35,13 +35,16 @@ bundle exec cucumber
 bundle exec guard
 ```
 
-## PHTOOLS Use cases
-### Use Case 1. Collect photos, videos, raw-photos from different sources into one place (for further processing)
+**********
 
+## PHTOOLS Use cases
+### USE CASE 1. Collect photos, videos, raw-photos from different sources into one place (for further processing)
 #### Given
 I have copies of SD Cards with photos, videos taken with DSLR camera on my Hard Disk in `~/Desktop/SDCard1` and in `~/Desktop/SDCard2`.
 
-And I have empty folder `~/Desktop/assets_staging` I would like to collect all the photo-files to.
+And I have empty folder `~/Desktop/assets_staging` (lets call it _working folder_).
+
+And I want all the photo-video files from SD copies (including ones placed deep inside the folder structure of the SD card) to be moved to the _working folder_.
 
 #### When
 I run:
@@ -56,8 +59,10 @@ And all videos are moved to `~/Desktop/assets_staging/VIDEO`.
 
 And all raw photo-files are moved to `~/Desktop/assets_staging/RAW`.
 
-### Use Case 2. Mass rename photos in accordance with PHTOOLS standard (and don't forget to backup before)
+==========
 
+### USE CASE 2. Renaming files in accordance with PHTOOLS standard
+#### USE CASE 2.1 Mass rename photos in accordance with PHTOOLS standard (and don't forget to backup before)
 #### Given
 I have dozens of photo-files in my working folder `~/Desktop/assets_staging`.
 
@@ -75,6 +80,25 @@ I get all photos in `~/Desktop/assets_staging` renamed according to PHTOOLS stan
 
 And I have all original photo-files are backed-up to `~/Desktop/assets_staging/backup`.
 
+==========
+
+#### USE CASE 2.2 Rename photos back to it's original names
+#### Given
+I have several photo files in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard.
+
+And I want to get all the files renamed back to it's original names (given by DSLR camera)
+
+#### When
+I run:
+```sh
+cd ~/Desktop/assets_staging
+phls | phrename --clean
+```
+
+#### Then
+I get all photos in `~/Desktop/assets_staging` renamed to it's original names.
+
+**********
 
 ## PHTOOLS concepts
 ### PHTOOLS Standard file name
