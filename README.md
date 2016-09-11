@@ -13,6 +13,8 @@ PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 * appreciate the use of internal metadata (EXIF, XMP etc.) beleiving it is the best way to keep context info of the picture
 * are Ok with the use of Command Line tools
 
+**********
+
 ## Installation
 ### Install for usage
 1. Get the latest [ruby](https://www.ruby-lang.org/) (>= 2.3) installed.
@@ -38,6 +40,7 @@ bundle exec guard
 **********
 
 ## PHTOOLS Use cases
+
 ### USE CASE 1. Collect photos, videos, raw-photos from different sources into one place (for further processing)
 #### Given
 I have copies of SD Cards with photos, videos taken with DSLR camera on my Hard Disk in `~/Desktop/SDCard1` and in `~/Desktop/SDCard2`.
@@ -62,6 +65,7 @@ And all raw photo-files are moved to `~/Desktop/assets_staging/RAW`.
 ==========
 
 ### USE CASE 2. Renaming files in accordance with PHTOOLS standard
+
 #### USE CASE 2.1 Mass rename photos in accordance with PHTOOLS standard (and don't forget to backup before)
 #### Given
 I have dozens of photo-files in my working folder `~/Desktop/assets_staging`.
@@ -97,6 +101,28 @@ phls | phrename --clean
 
 #### Then
 I get all photos in `~/Desktop/assets_staging` renamed to it's original names.
+
+==========
+
+#### USE CASE 2.3 Change author nickname in the filenames
+#### Given
+I have several photo files in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard. Some photos were made by ANB, some photos were made by Alex (nick _ALE_) 
+
+And I want to change the author NICKNAME _ALE_ to _ALX_.
+
+#### When
+I run:
+```sh
+cd ~/Desktop/assets_staging
+phls '*ALE*'| phrename -a alx
+```
+
+#### Then
+I get all _ALE_ photos in `~/Desktop/assets_staging` renamed to _ALX_ nickname.
+
+And all _ANB_ photos are kept unchanged.
+
+_Note. `phrename` is smart enough to let the user to run it several times on one file. Every time `phrename -a` invoked it overwrites information added by previuos `phrename` run._ 
 
 **********
 
