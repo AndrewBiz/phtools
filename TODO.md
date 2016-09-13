@@ -9,3 +9,7 @@
 - [ ] phmove: make options to set video, raw folder names
 - [x] phrename: add -c --clean option (based on ftclname functionality)
 - [x] phrename: add -s --shift_time option (based on ftfixdate functionality)
+- [ ] phrename: by-default read tags for creation DateTime in this order: DateTimeOriginal, DateCreated, CreateDate, DigitalCreationDate, FileModifyDate (eqv to File::mtime). 1st non-zero value will be taken as a master photo creation timestamp. It means no longer names like '00000101-000000_ANB IMG_0183.PNG' will appear.
+- [ ] phrename: make it safe and smart. Once the file was renamed to PHTOOL standard, next run of phrename should not change the DateTime info unless options -t or -s are explicitly set. If user wants to reset file name using exif tag - 1st clean it `phrename --clean`, then rename `phrename -a anb` OR run `phrename -t DateTimeOriginal`
+- [ ] get rid of nesty
+- [ ] swith to fresh MiniExiftool gem
