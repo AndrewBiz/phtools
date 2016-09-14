@@ -49,7 +49,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'nesty', '~> 1.0'
   spec.add_runtime_dependency 'docopt', '~> 0.5'
-  # spec.add_runtime_dependency 'mini_exiftool', '~> 2.4'
+  spec.add_runtime_dependency 'mini_exiftool', '~> 2.8'
   spec.add_runtime_dependency 'activesupport', '~> 3.2'
   spec.add_runtime_dependency 'i18n'
 

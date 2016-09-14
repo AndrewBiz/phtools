@@ -3,8 +3,8 @@
 # (c) ANB Andrew Bizyaev
 
 require 'date'
+require 'mini_exiftool'
 require 'phtools/runner'
-require 'phtools/mini_exiftool-2.3.0anb'
 
 module PhTools
   class Phrename < Runner
