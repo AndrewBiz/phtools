@@ -2,9 +2,6 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'nesty'
-
-# Foto tools
 module PhTools
   @debug = false
   def self.debug=(val)
@@ -15,19 +12,24 @@ module PhTools
     @debug
   end
 
+  def self.drill_down_error(e, level, prefix)
+    return if e.nil?
+    STDERR.puts "#{prefix}: CAUSE#{level}: #{e.class} - #{e.message}"
+    e.backtrace.each do |b|
+      STDERR.puts "#{prefix}: CAUSE#{level} BACKTRACE: #{b}"
+    end
+    drill_down_error(e.cause, level+1, prefix)
+  end
+
   def self.puts_error(msg, e = nil)
     prefix = File.basename($PROGRAM_NAME, '.rb')
     STDERR.puts "#{prefix}: #{msg}"
-    if @debug && !e.nil?
-      if e.respond_to?(:cause) && !e.cause.nil?
-        STDERR.puts "#{prefix}: CAUSE: #{e.cause} - #{e.cause.message}"
-      end
-      e.backtrace.each do |b|
-        STDERR.puts "#{prefix}: BACKTRACE: #{b}"
-      end
-    end
+    drill_down_error(e, 0, prefix) if @debug
   end
 
-  class Error < Nesty::NestedStandardError; end
-  class ExiftoolTagger < Error; end
+  class Error < StandardError
+  end
+
+  class ExiftoolTagger < Error
+  end
 end

@@ -47,7 +47,6 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'rb-notifu', '>= 0'
   end
 
-  spec.add_runtime_dependency 'nesty', '~> 1.0'
   spec.add_runtime_dependency 'docopt', '~> 0.5'
   spec.add_runtime_dependency 'mini_exiftool', '~> 2.8'
   spec.add_runtime_dependency 'activesupport', '~> 3.2'
