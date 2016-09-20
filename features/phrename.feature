@@ -31,7 +31,7 @@ Feature: Rename photo and video files
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   #@announce
-  Scenario: Originally named files are renamed to phtools standard
+  Scenario: Originally named files are renamed to phtools standard name
     Given a directory named "rename1"
     And example files from "features/media/sony_jpg" copied to "rename1" named:
    | DSC03403.JPG |
@@ -65,6 +65,53 @@ Feature: Rename photo and video files
     | ./DSC03499.JPG |
     | ./DSC03802.JPG |
     | ./DSC04032.JPG |
+
+  #@announce
+  Scenario: Originally named files are renamed to phtools standard name using as a timestamp the 1st non-zero value of one of the tags (in priority order): EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime -> FileModifyDate
+
+    Given a directory named "rename2"
+    And example files from "features/media/dates" copied to "rename2" named:
+    | 1exif_datetimeoriginal.JPG    |
+    | 2iptc_datecreated.JPG         |
+    | 3xmp_datecreated.JPG          |
+    | 4exif_createdate.JPG          |
+    | 5xmp_createdate.JPG           |
+    | 6iptc_digitalcreationdate.JPG |
+    | 7filemodifydate.JPG           |
+
+    When I cd to "rename2"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | 20010101-010101_ANB 1exif_datetimeoriginal.JPG    |
+    | 20020202-020202_ANB 2iptc_datecreated.JPG         |
+    | 20030303-030303_ANB 3xmp_datecreated.JPG          |
+    | 20040404-040404_ANB 4exif_createdate.JPG          |
+    | 20050505-050505_ANB 5xmp_createdate.JPG           |
+    | 20060606-060606_ANB 6iptc_digitalcreationdate.JPG |
+    | 20070707-070707_ANB 7filemodifydate.JPG           |
+
+    And the following files should exist:
+    | 20010101-010101_ANB 1exif_datetimeoriginal.JPG    |
+    | 20020202-020202_ANB 2iptc_datecreated.JPG         |
+    | 20030303-030303_ANB 3xmp_datecreated.JPG          |
+    | 20040404-040404_ANB 4exif_createdate.JPG          |
+    | 20050505-050505_ANB 5xmp_createdate.JPG           |
+    | 20060606-060606_ANB 6iptc_digitalcreationdate.JPG |
+    | 20070707-070707_ANB 7filemodifydate.JPG           |
+
+    And the following files should not exist:
+    | 1exif_datetimeoriginal.JPG    |
+    | 2iptc_datecreated.JPG         |
+    | 3xmp_datecreated.JPG          |
+    | 4exif_createdate.JPG          |
+    | 5xmp_createdate.JPG           |
+    | 6iptc_digitalcreationdate.JPG |
+    | 7filemodifydate.JPG           |
 
   #@announce
   Scenario: File is renamed using ModifyDate tag

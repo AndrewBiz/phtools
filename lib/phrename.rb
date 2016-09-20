@@ -35,18 +35,60 @@ module PhTools
       case @mode
       when :rename
         begin
-          tag = MiniExiftool.new(phfile.filename, timestamps: DateTime)
+          tags = MiniExiftool.new(phfile.filename,
+                                  replace_invalid_chars: true,
+                                  composite: true,
+                                  timestamps: DateTime)
         rescue
           raise PhTools::Error, 'EXIF tags reading'
         end
         if @user_tag_date.empty?
-          dto = tag.date_time_original || tag.create_date || PhFile::ZERO_DATE
+          # searching for DateTime stamp value in the tags using priority:
+          # EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime -> FileModifyDate
+          if !tags.date_time_original.nil? && tags.date_time_original.kind_of?(DateTime)
+            # EXIF:DateTimeOriginal or IPTC:DateCreated + IPTC:TimeCreated
+            dto = tags.date_time_original
+            tag_used = "DateTimeOriginal"
+
+          elsif !tags.date_created.nil? && tags.date_created.kind_of?(DateTime)
+            # XMP:DateCreated
+            dto = tags.date_created
+            tag_used = "DateCreated"
+
+          elsif !tags.create_date.nil? && tags.create_date.kind_of?(DateTime)
+            # EXIF:CreateDate or XMP:CreateDate
+            dto = tags.create_date
+            tag_used = "CreateDate"
+
+          elsif !tags.digital_creation_date.nil? &&
+                !tags.digital_creation_time.nil? &&
+                tags.digital_creation_date.kind_of?(String) &&
+                tags.digital_creation_time.kind_of?(String)
+            # IPTC:DigitalCreationDate + IPTC:DigitalCreationTime
+            dcdt = tags.digital_creation_date + " " + tags.digital_creation_time
+            begin
+              s = dcdt.sub(/^(\d+):(\d+):/, '\1-\2-')
+              dto = DateTime.parse(s)
+            rescue ArgumentError
+              dto = PhFile::ZERO_DATE
+            end
+            tag_used = "DigitalCreationDate + DigitalCreationTime"
+
+          else
+            # FileModifyDate
+            dto = File.mtime(phfile.filename).to_datetime
+            tag_used = "FileModifyDate"
+          end
+
         else
-          fail PhTools::Error, "tag #{@user_tag_date} is not found" unless tag[@user_tag_date]
-          fail PhTools::Error, "tag #{@user_tag_date} is not a DateTime type" unless               tag[@user_tag_date].kind_of?(DateTime)
-          dto = tag[@user_tag_date] || PhFile::ZERO_DATE
+          # tag is set by the user
+          fail PhTools::Error, "tag #{@user_tag_date} is not found in a file" unless tags[@user_tag_date]
+          fail PhTools::Error, "tag #{@user_tag_date} is not a DateTime type" unless tags[@user_tag_date].kind_of?(DateTime)
+          dto = tags[@user_tag_date] || PhFile::ZERO_DATE
+          tag_used = "#{@user_tag_date}"
         end
         phfile_out.standardize!(date_time: dto, author: @author)
+        PhTools.puts_error "INFO: '#{phfile_out.filename}' - using '#{tag_used}' tag(s)"
 
       when :clean
         phfile_out.cleanse!
@@ -56,7 +98,7 @@ module PhTools
         phfile_out.standardize!(date_time: phfile_out.date_time + @shift_seconds*(1.0/86400))
       end
 
-      FileUtils.mv(phfile.filename, phfile_out.filename) unless phfile == phfile_out
+      FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out
       phfile_out
 
     rescue => e
