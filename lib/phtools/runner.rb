@@ -51,8 +51,8 @@ module PhTools
         filename = line.chomp
         begin
           PhFile.validate_file!(filename, @file_type)
-          ftfile = PhFile.new(filename)
-          @os.output process_file(ftfile)
+          phfile = PhFile.new(filename)
+          @os.output process_file(phfile)
         rescue PhTools::Error => e
           PhTools.puts_error "ERROR: '#{filename}' - #{e.message}", e
         end
