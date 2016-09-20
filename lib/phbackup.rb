@@ -36,7 +36,7 @@ module PhTools
     def process_file(phfile)
       backup_path = File.join(@backup_dir,
                               phfile.basename + phfile.extname)
-      FileUtils.cp(phfile.filename, backup_path, verbose: PhTools.debug)
+      FileUtils.cp(phfile.filename, backup_path, preserve: true, verbose: PhTools.debug)
       phfile
     rescue
       raise PhTools::Error, "file copying to #{@backup_dir}"
