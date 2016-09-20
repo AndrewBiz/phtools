@@ -15,12 +15,12 @@ end
 Given(/^example file "(.*?)" copied to "(.*?)"$/) do |arg1, arg2|
   basename = File.basename(arg1)
   file_out = File.join(expand_path('.'), arg2, basename)
-  FileUtils.cp(arg1, file_out)
+  FileUtils.cp(arg1, file_out, preserve: true)
 end
 
 Given(/^example file "(.*?)" copied to file "(.*?)"$/) do |arg1, arg2|
   file_out = File.join(expand_path('.'), arg2)
-  FileUtils.cp(arg1, file_out)
+  FileUtils.cp(arg1, file_out, preserve: true)
 end
 
 Given(/^example files from "(.*?)" copied to "(.*?)" named:$/) do |arg1, arg2, table|
