@@ -88,7 +88,7 @@ module PhTools
           tag_used = "#{@user_tag_date}"
         end
         phfile_out.standardize!(date_time: dto, author: @author)
-        PhTools.puts_error "INFO: '#{phfile_out.filename}' - using '#{tag_used}' tag(s)"
+        PhTools.puts_error "INFO: '#{phfile.filename}' - using '#{tag_used}' tag(s)"
 
       when :clean
         phfile_out.cleanse!
