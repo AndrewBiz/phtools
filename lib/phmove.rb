@@ -51,7 +51,7 @@ module PhTools
         phfile_out.dirname = @target_folder
       end
 
-      FileUtils.mv(phfile.filename, phfile_out.filename) unless phfile == phfile_out
+      FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out
       phfile_out
     rescue SystemCallError => e
       raise PhTools::Error, 'file moving - ' + e.message
