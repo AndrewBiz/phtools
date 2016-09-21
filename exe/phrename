@@ -11,24 +11,32 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-#{tool_name} renames the input files based on EXIF
-DateTimeOriginal (or CreateDate) tag and author NICKNAME provided.
-The target file name format is YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
-  YYYYmmdd-HHMMSS - Date-Time of photo creation (DateTimeOriginal tag),
+#{tool_name} renames the input files to Standard Phtools Name:
+  YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
+  YYYYmmdd-HHMMSS - Date-Time of photo creation,
   AAA - the author nickname,
   ORIGINAL.EXT - the photo name given by digital camera.
-Input file should be one of the types: #{file_type * ','}
+By default Date-Time information will be taken from EXIF area as the 1st non-zero
+value of the tags (shown in the order the program scans values):
+  EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated ->
+  -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime ->
+  -> FileModifyDate
 Example: input file DSC03455.JPG will be renamed to 20130108-124145_ANB DSC03455.JPG
-#{tool_name} is optimized to be used with other *phtools* via pipes, e.g.:
-  phls | #{tool_name} -a anb
 
-This program uses external utility ExifTool by Phil Harvey
+Input file should be one of the supported types: #{file_type * ','}.
+#{tool_name} acts as a 'filter' meaning it expects the input files to be passed
+to STDIN and after the job is done it produces STDOUT with the list of renamed
+files. In other words this command is intended to be used with other programs
+connected via pipes, e.g.:
+  phls | #{tool_name} -a anb | phmove ~/targed/folder
+
+This program uses external utility ExifTool created by Phil Harvey
 (http://www.sno.phy.queensu.ca/~phil/exiftool/).
 
 Usage:
-  #{tool_name} -a NICK [-D] [-t TAG]
-  #{tool_name} -c [-D]
+  #{tool_name} -a NICK [-t TAG] [-D]
   #{tool_name} -s DELTA [-D]
+  #{tool_name} -c [-D]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
@@ -37,18 +45,19 @@ Options:
                          supports only latin ASCII chars (e.g. ANB).
                          No digits, no spaces, no other non-word chars allowed.
 
-  -t TAG --tag_date=TAG  Set the TAG name containing Date_Time creation
-                         info. The TAG value will be used instead of
-                         standard DateTimeOriginal tag. All existing tags you
-                         can get using command `phls filename|phmtags -f`
-
-  -c --clean             Rename file(s) back to original name(s)
+  -t TAG --tag_date=TAG  Force program to use TAG as a Date-Time creation
+                         info instead of standard phtools tags.
+                         You can retreive all existing tags using command:
+                         `phls filename|phmtags -f` OR
+                         `exiftool -s filename`
 
   -s DELTA --shift_time=DELTA  DELTA (in seconds) will be added to Date-Time value
-                         of the filename. If DELTA is positive the photo
+                         kept in the name. If DELTA is positive the photo
                          will become yonger: e.g. 20140720-100005, DELTA = 65
                          result = 20140720-100110. If DELTA is negative the photo
                          will get DELTA seconds older.
+
+  -c --clean             Rename file back to it's original name
 
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
