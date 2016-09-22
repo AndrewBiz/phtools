@@ -11,12 +11,12 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-#{tool_name} renames the input files to Standard Phtools Name:
+#{tool_name} renames the input file to Standard Name:
   YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
   YYYYmmdd-HHMMSS - Date-Time of photo creation,
   AAA - the author nickname,
   ORIGINAL.EXT - the photo name given by digital camera.
-By default Date-Time information will be taken from EXIF area as the 1st non-zero
+By default date-time information will be taken from EXIF area as the 1st non-zero
 value of the tags (shown in the order the program scans values):
   EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated ->
   -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime ->
@@ -29,6 +29,12 @@ to STDIN and after the job is done it produces STDOUT with the list of renamed
 files. In other words this command is intended to be used with other programs
 connected via pipes, e.g.:
   phls | #{tool_name} -a anb | phmove ~/targed/folder
+
+The program is designed to be safe to re-run on the same file several times
+- every re-run produces the same result (idempotent behaviour).
+Once the file was renamed to Standard Name, the date-time kept in the name
+is considered as a master date-time of the photo creation and will not be
+changed by re-running #{tool_name} unless user explicitly sets '-t' or '-s' option.
 
 This program uses external utility ExifTool created by Phil Harvey
 (http://www.sno.phy.queensu.ca/~phil/exiftool/).

@@ -1,4 +1,4 @@
 
 module PhTools
-  VERSION = '0.7.7-alpha'
+  VERSION = '0.7.7'
 end

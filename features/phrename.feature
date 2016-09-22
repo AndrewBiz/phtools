@@ -313,7 +313,7 @@ Feature: Rename photo and video files
     phls | phrename --shift_time 100
     """
     Then the exit status should be 0
-    And the stderr should contain "ERROR: './DSC03313.JPG' - file renaming - incorrect file name"
+    And the stderr should contain "ERROR: './DSC03313.JPG' - file renaming - non-standard file name"
 
   #@announce
   Scenario: Re-runing phrename on the files previously renamed to Standard phtools Name will not change the Date-Time information kept in the file name
@@ -345,3 +345,34 @@ Feature: Rename photo and video files
     | 20010101-010101_ANB file1.JPG |
     | 20020202-020202_ANB file2.JPG |
     | 20030303-030303_ANB file3.JPG |
+
+  #@announce
+  Scenario: Re-runing phrename on the files previously renamed to Standard phtools Name with -t option will change the Date-Time information kept in the file name
+
+    Given a directory named "rename4"
+    And example files from "features/media/dates_renamed" copied to "rename4" named:
+    | 20010101-010101_XXX file1.JPG |
+    | 20021212-020202_ANB file2.JPG |
+    | 20030303-132333_YYY file3.JPG |
+
+    When I cd to "rename4"
+    When I run the following commands:
+    """bash
+    phls | phrename -a anb --tag_date CreateDate
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | 20040404-040404_ANB file1.JPG |
+    | 20040404-040404_ANB file2.JPG |
+    | 20040404-040404_ANB file3.JPG |
+
+    And the following files should exist:
+    | 20040404-040404_ANB file1.JPG |
+    | 20040404-040404_ANB file2.JPG |
+    | 20040404-040404_ANB file3.JPG |
+
+    And the following files should not exist:
+    | 20010101-010101_ANB file1.JPG |
+    | 20021212-020202_ANB file2.JPG |
+    | 20030303-132333_ANB file3.JPG |
