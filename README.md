@@ -106,7 +106,7 @@ I get all photos in `~/Desktop/assets_staging` renamed to it's original names.
 
 #### USE CASE 2.3 Change author nickname in the filenames
 #### Given
-I have several photo files in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard. Some photos were made by ANB, some photos were made by Alex (nick _ALE_) 
+I have several photo files in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard. Some photos were made by ANB, some photos were made by Alex (nick _ALE_)
 
 And I want to change the author NICKNAME _ALE_ to _ALX_.
 
@@ -122,7 +122,7 @@ I get all _ALE_ photos in `~/Desktop/assets_staging` renamed to _ALX_ nickname.
 
 And all _ANB_ photos are kept unchanged.
 
-_Note. `phrename` is smart enough to let the user to run it several times on one file. Every time `phrename -a` invoked it overwrites information added by previuos `phrename` run._ 
+_Note. `phrename` is smart enough to let the user to re-run it several times on one file. Every time `phrename -a` re-runs it only overwrites author nickname (if it is different) keeping date-time-in-the-name unchanged._
 
 ==========
 
@@ -130,7 +130,7 @@ _Note. `phrename` is smart enough to let the user to run it several times on one
 #### Given
 I have several video files taken by iPhone in my working folder `~/Desktop/assets_staging` renamed to PHTOOLS standard.
 
-And I've found out that iPhone gives the wrong value to CreateDate tag (in my case the error is minus 2 hours to real time of creation). Because of that 'phrename' gives the wrong _YYYYmmdd-HHMMSS_ timestamp in the filename. I want to get the correct date-time info in the names of video files. 
+And I've found out that iPhone gives the wrong value to CreateDate tag (in my case the error is minus 2 hours to real time of creation). Because of that 'phrename' gives the wrong _YYYYmmdd-HHMMSS_ timestamp in the filename. I want to get the correct date-time info in the names of video files.
 
 #### When
 I run:
