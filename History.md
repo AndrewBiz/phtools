@@ -1,5 +1,7 @@
 # RELEASED
 
+## [v0.7.7](https://github.com/andrewbiz/phtools/compare/v0.6.0...v0.7.7)
+
 ## [v0.6.0](https://github.com/andrewbiz/phtools/compare/v0.4.0...v0.6.0)
 * phmove: does not keep unused empty VIDEO and RAW folders
 * phrename: --clean option renames files back to original state
