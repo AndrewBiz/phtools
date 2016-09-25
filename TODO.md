@@ -14,3 +14,12 @@
 - [ ] phrename: make new usage mode: `phrename -t TAG`. Useful if user wants to re-set date-time using TAG keeping author-nickname unchanged
 - [x] get rid of nesty
 - [x] switch to fresh MiniExiftool gem
+- [ ] create phgettags (based on ftmtags)
+- [ ] create phfixfmd - fix FileModifyDate = date-time-in-name
+- [ ] create phfixdto - fix MWG:DateTimeOriginal = date-time-in-name
+- [ ] phfixdto: make -N --no_run option = no running exiftool script, only preparation
+- [ ] create phevent  (based on ftevent)
+- [ ] phevent: -T --template - gets empty template for event.yaml
+- [ ] create phsettags (based on fttagset)
+- [ ] phsettags: make -N --no_run option = no running exiftool script, only preparation
+- [ ] phsettags: -T --template - gets empty templates for authors.yaml and places.yaml
