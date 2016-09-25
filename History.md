@@ -1,5 +1,7 @@
 # RELEASED
 
+## [v0.8.0](https://github.com/andrewbiz/phtools/compare/v0.7.7...v0.8.0)
+
 ## [v0.7.7](https://github.com/andrewbiz/phtools/compare/v0.6.0...v0.7.7)
 * phrename: added --shift_time option
 * phrename is idempotent (safe to be re-run several times on one file)
