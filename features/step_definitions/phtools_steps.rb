@@ -63,17 +63,13 @@ Then(/^the stdout should not contain any of:$/) do |table|
   end
 end
 
-# Then /^the stdout from "(.*?)" should match \/([^\/]*)\/$/ do |cmd, expected|
-#   assert_matching_output(expected, stdout_from(cmd))
-# end
-#
-# Then(/^the stdout from "(.*?)" should match each of:$/) do |cmd, table|
-#   outs = table.raw.flatten
-#   outs.each do |item|
-#     step %{the stdout from "#{cmd}" should match #{item}}
-#   end
-#   # assert_matching_output(expected, stdout_from(cmd))
-# end
+Then(/^the output should match each of:$/) do |table|
+  outs = table.raw.flatten
+  outs.each do |item|
+    step %{the output should match #{item}}
+  end
+  # assert_matching_output(expected, stdout_from(cmd))
+end
 #
 # Then(/^the stdout from "(.*?)" should not contain any of:$/) do |cmd, table|
 #   # table is a Cucumber::Ast::Table

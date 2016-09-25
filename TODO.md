@@ -26,7 +26,7 @@
 - [ ] create phgettags (based on ftmtags)
 
 ### phfixfmd
-- [ ] create phfixfmd - fix FileModifyDate to get equal to date-time-in-the-name
+- [x] create phfixfmd - fix FileModifyDate to get equal to date-time-in-the-name
 
 ### phfixdto
 - [ ] create phfixdto - fix MWG:DateTimeOriginal = date-time-in-name
