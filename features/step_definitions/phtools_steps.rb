@@ -4,6 +4,8 @@
 #
 # require 'fileutils'
 
+require 'date'
+
 Given(/^empty files named:$/) do |table|
   # table is a Cucumber::Ast::Table
   files = table.raw.flatten
@@ -30,6 +32,11 @@ Given(/^example files from "(.*?)" copied to "(.*?)" named:$/) do |arg1, arg2, t
     file_in = File.join(arg1, file)
     step %{example file "#{file_in}" copied to "#{arg2}"}
   end
+end
+
+Given(/^example file "([^"]*)" with file\-modify\-date set to "([^"]*)"$/) do |arg1, arg2|
+  fmd = Time.parse(arg2)
+  File.utime(fmd, fmd, File.join(expand_path('.'), arg1))
 end
 
 Then(/^the stdout should contain each of:$/) do |table|

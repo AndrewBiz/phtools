@@ -78,6 +78,7 @@ Feature: Rename photo and video files
     | 5xmp_createdate.JPG           |
     | 6iptc_digitalcreationdate.JPG |
     | 7filemodifydate.JPG           |
+    And example file "rename2/7filemodifydate.JPG" with file-modify-date set to "2007-07-07 07:07:07"
 
     When I cd to "rename2"
     When I run the following commands:
