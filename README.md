@@ -148,7 +148,7 @@ I get all _mov_ files in `~/Desktop/assets_staging` renamed with correct _YYYYmm
 ### PHTOOLS Standard file name
 PHTOOLS standard file name looks like this: **`YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT`**, where
 
-**YYYYmmdd-HHMMSS** - photo creation datestamp (year-month-day-hours-minutes-seconds). By default PHTOOLS use the value of EXIF tag `DateTimeOriginal` or `CreateDate` for this purpose.
+**YYYYmmdd-HHMMSS** - photo creation datestamp (year-month-day-hours-minutes-seconds). By default PHTOOLS use the value of EXIF tag groups `DateTimeOriginal` or `CreateDate` for this purpose _(for more details see phrename help: `phrename -h`)_.
 
 **AAA** - author nikname. 3 character long, only latin alphabet supported.
 
