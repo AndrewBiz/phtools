@@ -7,7 +7,7 @@ require 'phtools/runner'
 module PhTools
   class Phfixfmd < Runner
     def self.about
-      "!UNDER CONSTRUCTION!"
+      "fixes FileModifyDate to be equal to date-time-in-the-name"
     end
   end
 end
