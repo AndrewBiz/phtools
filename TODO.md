@@ -1,25 +1,42 @@
+### PHTOOLS Core
 - [x] core - runner.rb: print class instance variables in debug mode
+- [x] get rid of nesty
+- [x] switch to fresh MiniExiftool gem
+
+### phls
 - [x] phls: use init method to initialize variables
 - [x] phls: change -r to -R
 - [ ] phls: make it work with .folders (like ftls did)
+
+### phmove
 - [x] phmove: create phmove tool based on ftarrange code (see ftools repo)
 - [x] phmove: make target_folder as parameter not an option
 - [x] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to root of target directory (plain collection of files)
 - [x] phmove: delete unused empty RAW and VIDEO folders
 - [ ] phmove: make options to set video, raw folder names
+
+### phrename
 - [x] phrename: add -c --clean option (based on ftclname functionality)
 - [x] phrename: add -s --shift_time option (based on ftfixdate functionality)
 - [x] phrename: by-default read tags for DateTime in this order: DateTimeOriginal, DateCreated, CreateDate, DigitalCreationDate, FileModifyDate (eqv to File::mtime). 1st non-zero value will be taken as a master photo creation timestamp. It means no longer names like '00000101-000000_ANB IMG_0183.PNG' will appear.
 - [x] phrename: make it safe and smart. Once the file was renamed to PHTOOL standard, re-run of phrename should not change the date-time info unless options -t or -s are used. If user wants to reset file name using exif tag - 1st clean it `phrename --clean`, then rename `phrename -a anb`
 - [ ] phrename: make new usage mode: `phrename -t TAG`. Useful if user wants to re-set date-time using TAG keeping author-nickname unchanged
-- [x] get rid of nesty
-- [x] switch to fresh MiniExiftool gem
+
+### phgettags
 - [ ] create phgettags (based on ftmtags)
+
+### phfixfmd
 - [ ] create phfixfmd - fix FileModifyDate = date-time-in-name
+
+### phfixdto
 - [ ] create phfixdto - fix MWG:DateTimeOriginal = date-time-in-name
 - [ ] phfixdto: make -N --no_run option = no running exiftool script, only preparation
+
+### phevent
 - [ ] create phevent  (based on ftevent)
 - [ ] phevent: -T --template - gets empty template for event.yaml
+
+### phsettags
 - [ ] create phsettags (based on fttagset)
 - [ ] phsettags: make -N --no_run option = no running exiftool script, only preparation
 - [ ] phsettags: -T --template - gets empty templates for authors.yaml and places.yaml
