@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.name       = 'phtools'
   spec.version    = PhTools::VERSION
-  spec.date       = '2016-08-23'
+  # spec.date       = '2016-08-23'
   spec.authors    = ["Andrew Bizyaev"]
   spec.email      = ["andrew.bizyaev@gmail.com"]
   spec.license    = 'MIT'
