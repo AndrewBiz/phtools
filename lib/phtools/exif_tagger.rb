@@ -2,7 +2,6 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'active_support/core_ext/string/inflections'
 require 'phtools/exif_tagger/error'
 require 'phtools/exif_tagger/tags'
 require 'phtools/exif_tagger/creators_dir'
