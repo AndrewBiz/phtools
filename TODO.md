@@ -23,7 +23,7 @@
 - [ ] phrename: make new usage mode: `phrename -t TAG`. Useful if user wants to re-set date-time using TAG keeping author-nickname unchanged
 
 ### phgettags
-- [ ] create phgettags (based on ftmtags)
+- [x] create phgettags (based on ftmtags)
 
 ### phfixfmd
 - [x] create phfixfmd - fix FileModifyDate to get equal to date-time-in-the-name

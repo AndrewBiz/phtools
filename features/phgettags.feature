@@ -6,12 +6,12 @@ Feature: Get EXIF/IPC/whatever tags of the media file
   #@announce
   Scenario: phtools knows about this tool
     When I successfully run `phtools`
-    Then the stdout should contain "phfixfmd\t(fixes FileModifyDate to be equal to date-time-in-the-name)"
-    And the stdout should not contain "phfixfmd\t(!UNDER CONSTRUCTION!)"
+    Then the stdout should contain "phgettags\t(extracts the tags stored inside the file)"
+    And the stdout should not contain "phgettags\t(!UNDER CONSTRUCTION!)"
 
   #@announce
   Scenario: Output with -h produces usage information
-    When I run `phfixfmd -h`
+    When I run `phgettags -h`
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
@@ -24,33 +24,107 @@ Feature: Get EXIF/IPC/whatever tags of the media file
 
   #@announce
   Scenario: Output with -v produces version information
-    When I run `phfixfmd -v`
+    When I run `phgettags -v`
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
-  # #@announce
-  # Scenario: Runing phfixfmd on the files previously renamed to Standard phtools Name will change FileModifyDate equal to date-time-in-the-name
-  #
-  #   Given a directory named "rename1"
-  #   And example files from "features/media/dates_renamed" copied to "rename1" named:
-  #   | 20010101-010101_XXX file1.JPG |
-  #   And example file "rename1/20010101-010101_XXX file1.JPG" with file-modify-date set to "2016-09-25 22:03:24"
-  #
-  #   When I cd to "rename1"
-  #   When I run the following commands:
-  #   """bash
-  #   phls | phfixfmd
-  #   """
-  #   Then the exit status should be 0
-  #
-  #   Then the stdout should contain each of:
-  #   | 20010101-010101_XXX file1.JPG |
-  #
-  #   And the following files should exist:
-  #   | 20010101-010101_XXX file1.JPG |
-  #
-  #   When I run the following commands:
-  #   """bash
-  #   exiftool -s -FileModifyDate '20010101-010101_XXX file1.JPG'
-  #   """
-  #   Then the output should match each of:
-  #     |/^FileModifyDate( *):( *)2001:01:01 01:01:01/|
+  #@announce
+  Scenario: For photo file is shows phtools related tags
+    Given a directory named "tags1"
+    And example files from "features/media/sony_jpg" copied to "tags1" named:
+    | DSC03403.JPG |
+
+    When I cd to "tags1"
+    When I run the following commands:
+    """bash
+    phls | phgettags
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | FileModifyDate |
+    | City |
+    | LocationShownCity |
+    | CodedCharacterSet |
+    | CollectionName |
+    | CollectionURI |
+    | Copyright |
+    | CopyrightNotice |
+    | Rights |
+    | Country-PrimaryLocationName |
+    | Country |
+    | LocationShownCountryName |
+    | LocationShownCountryCode |
+    | CreateDate |
+    | SubSecTimeDigitized |
+    | DigitalCreationDate |
+    | DigitalCreationTime |
+    | Artist |
+    | By-line |
+    | Creator |
+    | DateTimeOriginal |
+    | SubSecTimeOriginal |
+    | DateCreated |
+    | TimeCreated |
+    | GPSPosition |
+    | GPSLatitude |
+    | GPSLatitudeRef |
+    | GPSLongitude |
+    | GPSLongitudeRef |
+    | GPSAltitude |
+    | GPSAltitudeRef |
+    | ImageUniqueID |
+    | Keywords |
+    | Subject |
+    | Sub-location |
+    | Location |
+    | LocationShownSublocation |
+    | ModifyDate |
+    | Province-State |
+    | State |
+    | LocationShownProvinceState |
+    | LocationShownWorldRegion |
+
+  #@announce
+  Scenario: In full_dump mode it shows all existing tags
+    Given a directory named "tags2"
+    And example files from "features/media/sony_jpg" copied to "tags2" named:
+    | DSC03403.JPG |
+
+    When I cd to "tags2"
+    When I run the following commands:
+    """bash
+    phls | phgettags --full_dump
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | ExifToolVersion          |
+    | FileSize                 |
+    | FileModifyDate           |
+    | FileAccessDate           |
+    | FileInodeChangeDate      |
+    | FilePermissions          |
+    | FileType                 |
+    | FileTypeExtension        |
+    | MIMEType                 |
+    | JFIFVersion              |
+    | ExifByteOrder            |
+    | ImageDescription         |
+    | Make                     |
+    | Model                    |
+    | XResolution              |
+    | YResolution              |
+    | ResolutionUnit           |
+    | Software                 |
+    | ModifyDate               |
+    | Artist                   |
+    | YCbCrPositioning         |
+    | ExposureTime             |
+    | FNumber                  |
+    | ExposureProgram          |
+    | ISO                      |
+    | SensitivityType          |
+    | RecommendedExposureIndex |
+    | ExifVersion              |
+    | DateTimeOriginal         |
+    | CreateDate               |

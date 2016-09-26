@@ -24,14 +24,15 @@ This program uses external utility ExifTool created by Phil Harvey
 (http://www.sno.phy.queensu.ca/~phil/exiftool/).
 
 Usage:
-  #{tool_name} [-D]
+  #{tool_name} [-f] [-D]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
-  -D --debug    Turn on debugging (verbose) mode
-  -h --help     Show this screen.
-  -v --version  Show version.
+  -f --full_dump  Print all tags
+  -D --debug      Turn on debugging (verbose) mode
+  -h --help       Show this screen.
+  -v --version    Show version.
 DOCOPT
 
   PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
