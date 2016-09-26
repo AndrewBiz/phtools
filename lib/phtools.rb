@@ -8,7 +8,7 @@ require 'phfixdate'
 require 'phfixfmd'
 require 'phls'
 require 'phmove'
-require 'phmtags'
+require 'phgettags'
 require 'phrename'
 require 'phtagset'
 
@@ -25,7 +25,7 @@ Please run phtools in a terminal via CLI commands:
     phevent\t(#{Phevent::about}),
     phfixdate\t(#{Phfixdate::about}),
     phfixfmd\t(#{Phfixfmd::about}),
-    phmtags\t(#{Phmtags::about}),
+    phgettags\t(#{Phgettags::about}),
     phtagset\t(#{Phtagset::about}).
 For more information run these commands with -h option.
 General info about phtools usage see at https://github.com/AndrewBiz/phtools.git

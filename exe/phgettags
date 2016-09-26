@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+# (c) ANB Andrew Bizyaev
+
+module PhTools
+  tool_name = File.basename(__FILE__)
+  require "#{tool_name}"
+
+  file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
+  usage = <<DOCOPT
+***************************************************
+phtools - *Keep Your Photos In Order* (c) ANB
+***************************************************
+  #{tool_name} extracts the list of tags stored inside the given file.
+
+  #{tool_name} acts as a 'sink' program meaning it expects the input files
+to be passed to STDIN, does its job on the input files and produces no useful
+(for other pipe-optimized programs) output.
+In other words this command is intended to be used with
+other programs connected via input pipes, e.g.:
+  phls | #{tool_name}
+
+This program uses external utility ExifTool created by Phil Harvey
+(http://www.sno.phy.queensu.ca/~phil/exiftool/).
+
+Usage:
+  #{tool_name} [-D]
+  #{tool_name} -h | --help
+  #{tool_name} -v | --version
+
+Options:
+  -D --debug    Turn on debugging (verbose) mode
+  -h --help     Show this screen.
+  -v --version  Show version.
+DOCOPT
+
+  PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
+end
