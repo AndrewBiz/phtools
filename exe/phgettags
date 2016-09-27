@@ -16,8 +16,8 @@ phtools - *Keep Your Photos In Order* (c) ANB
   #{tool_name} acts as a 'sink' program meaning it expects the input files
 to be passed to STDIN, does its job on the input files and produces no useful
 (for other pipe-optimized programs) output.
-In other words this command is intended to be used with
-other programs connected via input pipes, e.g.:
+In other words this command is intended to be used with other programs
+connected via input pipes as a last command in the pipe chain, e.g.:
   phls | #{tool_name}
 
 This program uses external utility ExifTool created by Phil Harvey
