@@ -3,7 +3,7 @@
 # (c) ANB Andrew Bizyaev
 
 require 'active_support/core_ext/string/inflections'
-Dir.glob(File.join(__dir__, 'tag', '*.rb')).each { |f| require_relative f }
+Dir.glob(File.join(__dir__, 'tags', '*.rb')).each { |f| require_relative f }
 
 # ExifTagger helper methods
 module ExifTagger
