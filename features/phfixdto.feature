@@ -56,3 +56,68 @@ Feature: Set (update) EXIF DateTimeOriginal in media files
     Then the output should match each of:
       |/^DateTimeOriginal( *):( *)2016:09:27 22:45:00/|
       |/^CreateDate( *):( *)2016:09:27 22:45:00/|
+
+  #@announce
+  Scenario: jpg file produces error if the name is not standard
+    Given I still work on this feature
+    # Given a directory named "2settag1"
+    # And example file "features/media/renamed/20130103-103254_ANB DSC03313_notagset.JPG" copied to file "2settag1/DSC03313.JPG"
+    #
+  #   When I cd to "changetime"
+  #   When I run the following commands:
+  #   """bash
+  #   phls | phrename --shift_time 100
+  #   """
+  #   Then the exit status should be 0
+  #   And the stderr should contain "ERROR: './DSC03313.JPG' - file renaming - non-standard file name"
+
+  # #@announce
+  # Scenario: The jpg file produces ERROR if the name is not Standard
+  #   Given a directory named "2settag"
+  #   And example file "features/media/iphone/IMG_0887_no_dto_cd.jpg" copied to file "2settag/IMG_0887.JPG"
+  #
+  #   When I cd to "2settag"
+  #   And I successfully run `fttags 'IMG_0887.JPG'`
+  #
+  #   Then the stdout from "fttags 'IMG_0887.JPG'" should not contain any of:
+  #     |DateTimeOriginal|
+  #     |CreateDate|
+  #
+  #   When I successfully run `ftls_ftfixdate -s -10`
+  #
+  #   Then the stderr from "ftls_ftfixdate -s -10" should contain "IMG_0887.JPG"
+  #   And the stderr from "ftls_ftfixdate -s -10" should contain "ERROR: './IMG_0887.JPG' - DateTimeOriginal is not set"
+  #
+  #   When I successfully run `fttags 'IMG_0887.JPG'`
+  #   Then the stdout from "fttags 'IMG_0887.JPG'" should not contain any of:
+  #     |DateTimeOriginal|
+  #     |CreateDate|
+
+  #@announce
+  Scenario: The command does not touch CreateDate if it was not set originally
+    Given I still work on this feature
+  #   Given a directory named "2settag"
+  #   And example file "features/media/iphone/IMG_0887_no_cd.jpg" copied to file "2settag/IMG_0887.JPG"
+  #
+  #   When I cd to "2settag"
+  #   And I successfully run `fttags 'IMG_0887.JPG'`
+  #
+  #   Then the stdout from "fttags 'IMG_0887.JPG'" should match each of:
+  #     |/^DateTimeOriginal( *):( *)2014-07-18 10:00:00/|
+  #   And the stdout from "fttags 'IMG_0887.JPG'" should not contain any of:
+  #     |CreateDate|
+  #
+  #   When I successfully run `ftls_ftfixdate -s 10`
+  #
+  #   Then the stderr from "ftls_ftfixdate -s 10" should contain "IMG_0887.JPG"
+  #   And the stderr from "ftls_ftfixdate -s 10" should not contain "ERROR"
+  #
+  #   When I successfully run `fttags 'IMG_0887.JPG'`
+  #   Then the stdout from "fttags 'IMG_0887.JPG'" should not contain any of:
+  #     |CreateDate|
+  #   Then the stdout from "fttags 'IMG_0887.JPG'" should match each of:
+  #     |/^DateTimeOriginal( *):( *)2014-07-18 10:00:10/|
+
+  #@announce
+  Scenario: The command does not update file in No-Run mode
+    Given I still work on this feature
