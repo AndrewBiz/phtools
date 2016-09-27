@@ -7,7 +7,7 @@ require 'date'
 # Exif tagger
 module ExifTagger
   # batch EXIF tags setter
-  class Writer
+  class TagWriter
     DEFAULT_OPTIONS = %w(-v0 -FileModifyDate<DateTimeOriginal -overwrite_original -ignoreMinorErrors)
     attr_reader :script_name, :added_files_count
 

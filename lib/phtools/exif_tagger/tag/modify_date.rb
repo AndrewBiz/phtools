@@ -2,7 +2,7 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative 'tag_date'
+require_relative '_tag_date'
 
 module ExifTagger
   module Tag
