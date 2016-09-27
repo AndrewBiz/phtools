@@ -29,29 +29,30 @@ Feature: Set (update) EXIF DateTimeOriginal in media files
     Then the output should match /v[0-9]+\.[0-9]+\.[0-9]+(-[a-z,0-9]+)?/
 
   # #@announce
-  # Scenario: Runing phfixdto on the files previously renamed to Standard phtools Name will change FileModifyDate equal to date-time-in-the-name
-  #
-  #   Given a directory named "rename1"
-  #   And example files from "features/media/dates_renamed" copied to "rename1" named:
-  #   | 20010101-010101_XXX file1.JPG |
-  #   And example file "rename1/20010101-010101_XXX file1.JPG" with file-modify-date set to "2016-09-25 22:03:24"
-  #
-  #   When I cd to "rename1"
-  #   When I run the following commands:
-  #   """bash
-  #   phls | phfixdto
-  #   """
-  #   Then the exit status should be 0
-  #
-  #   Then the stdout should contain each of:
-  #   | 20010101-010101_XXX file1.JPG |
-  #
-  #   And the following files should exist:
-  #   | 20010101-010101_XXX file1.JPG |
-  #
-  #   When I run the following commands:
-  #   """bash
-  #   exiftool -s -FileModifyDate '20010101-010101_XXX file1.JPG'
-  #   """
-  #   Then the output should match each of:
-  #     |/^FileModifyDate( *):( *)2001:01:01 01:01:01/|
+  Scenario: Runing phfixdto on the file previously renamed to Standard phtools Name will change DateTimeOriginal and CreateDate tags to date-time-in-the-name
+
+    Given a directory named "2settag"
+    And example file "features/media/renamed/20130103-103254_ANB DSC03313_notagset.JPG" copied to file "2settag/20160927-224500_ANB DSC03313.JPG"
+
+    When I cd to "2settag"
+    And I run the following commands:
+    """bash
+    exiftool -s -DateTimeOriginal -CreateDate '20160927-224500_ANB DSC03313.JPG'
+    """
+    Then the output should match each of:
+      |/^DateTimeOriginal( *):( *)2013:01:03 10:32:54/|
+      |/^CreateDate( *):( *)2013:01:03 10:32:54/|
+
+    When I run the following commands:
+    """bash
+    phls | phfixdto
+    """
+    Then the exit status should be 0
+
+    When I run the following commands:
+    """bash
+    exiftool -s -DateTimeOriginal -CreateDate '20160927-224500_ANB DSC03313.JPG'
+    """
+    Then the output should match each of:
+      |/^DateTimeOriginal( *):( *)2016:09:27 22:45:00/|
+      |/^CreateDate( *):( *)2016:09:27 22:45:00/|
