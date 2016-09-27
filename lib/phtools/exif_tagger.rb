@@ -5,3 +5,4 @@
 require 'phtools/exif_tagger/error'
 require 'phtools/exif_tagger/tags'
 require 'phtools/exif_tagger/tag_collection'
+require 'phtools/exif_tagger/tag_writer'
