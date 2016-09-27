@@ -14,8 +14,7 @@ module PhTools
     private
 
     def process_file(phfile)
-      fail PhTools::Error, 'wrong date-time in the name' unless
-        phfile.date_time_ok?
+      fail PhTools::Error, 'wrong date-time-in-the-name' unless phfile.date_time_ok?
       begin
         File.utime(Time.now, phfile.date_time_to_time, phfile.filename)
       rescue
