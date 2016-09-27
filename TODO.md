@@ -29,7 +29,7 @@
 - [x] create phfixfmd - fix FileModifyDate to get equal to date-time-in-the-name
 
 ### phfixdto
-- [ ] create phfixdto - fix MWG:DateTimeOriginal = date-time-in-name
+- [ ] create phfixdto - fix MWG:DateTimeOriginal (DTO) := date-time-in-name
 - [ ] phfixdto: make -N --no_run option = no running exiftool script, only preparation
 
 ### phevent

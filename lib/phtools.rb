@@ -4,7 +4,7 @@
 require 'phtools/version'
 require 'phbackup'
 require 'phevent'
-require 'phfixdate'
+require 'phfixdto'
 require 'phfixfmd'
 require 'phls'
 require 'phmove'
@@ -23,7 +23,7 @@ Please run phtools in a terminal via CLI commands:
     phbackup\t(#{Phbackup::about}),
     phrename\t(#{Phrename::about}),
     phevent\t(#{Phevent::about}),
-    phfixdate\t(#{Phfixdate::about}),
+    phfixdto\t(#{Phfixdto::about}),
     phfixfmd\t(#{Phfixfmd::about}),
     phgettags\t(#{Phgettags::about}),
     phtagset\t(#{Phtagset::about}).

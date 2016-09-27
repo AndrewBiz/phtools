@@ -5,9 +5,9 @@
 require 'phtools/runner'
 
 module PhTools
-  class Phfixdate < Runner
+  class Phfixdto < Runner
     def self.about
-      "!UNDER CONSTRUCTION!"
+      "fixes DateTimeOriginal tag to be equal to date-time-in-the-name"
     end
   end
 end
