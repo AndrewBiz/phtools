@@ -17,7 +17,6 @@ Feature: Generate a list of phtools-friendly-files
     Then the stderr should contain each of:
     | phtools - *Keep Your Photos In Order*|
     | (c) ANB                   |
-    | Example:                  |
     | Usage:                    |
     | Options:                  |
     | -D --debug                |
