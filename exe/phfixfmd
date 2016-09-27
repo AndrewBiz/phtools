@@ -11,7 +11,7 @@ module PhTools
 ***************************************************
 phtools - *Keep Your Photos In Order* (c) ANB
 ***************************************************
-  #{tool_name} changes an input file modify-date according to the date encoded
+  #{tool_name} changes an input file's modify-date according to the date encoded
 in the filename (date-time-in-the-name). Therefore the file should be renamed
 to phtools Standard Name before using this command (use phrename for this).
   #{tool_name} acts as a 'filter' program meaning it expects the input files
