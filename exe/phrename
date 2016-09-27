@@ -54,7 +54,7 @@ Options:
   -t TAG --tag_date=TAG  Force program to use TAG as a Date-Time creation
                          info instead of standard phtools tags.
                          You can retreive all existing tags using command:
-                         `phls filename|phmtags -f` OR
+                         `phls filename|phgettags -f` OR
                          `exiftool -s filename`
 
   -s DELTA --shift_time=DELTA  DELTA (in seconds) will be added to Date-Time value
