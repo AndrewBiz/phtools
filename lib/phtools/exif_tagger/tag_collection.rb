@@ -9,16 +9,15 @@ module ExifTagger
 
     def initialize(init_values = nil)
       @collection = []
-      unless init_values.nil?
-        case
-        when init_values.kind_of?(Hash)
-          init_values.each do |k, v|
-            self[k] = v
-          end
-        when init_values.kind_of?(ExifTagger::TagCollection)
-          init_values.each do |item|
-            self[item.tag_id] = item.value
-          end
+      return if init_values.nil?
+      case
+      when init_values.is_a?(Hash)
+        init_values.each do |k, v|
+          self[k] = v
+        end
+      when init_values.is_a?(ExifTagger::TagCollection)
+        init_values.each do |item|
+          self[item.tag_id] = item.value
         end
       end
     end
@@ -34,10 +33,9 @@ module ExifTagger
     end
 
     def []=(tag, value)
-      unless value.nil?
-        delete(tag)
-        @collection << produce_tag(tag, value.dup)
-      end
+      return if value.nil?
+      delete(tag)
+      @collection << produce_tag(tag, value.dup)
     end
 
     def [](tag)
@@ -67,7 +65,9 @@ module ExifTagger
     end
 
     def check_for_warnings(original_values: {})
-      @collection.each { |i| i.check_for_warnings(original_values: original_values) }
+      @collection.each do |i|
+        i.check_for_warnings(original_values: original_values)
+      end
     end
 
     def error_message
