@@ -6,6 +6,10 @@
 
 require 'date'
 
+Given(/^I still work on this feature$/) do
+  raise "This feature needs to be done"
+end
+
 Given(/^empty files named:$/) do |table|
   # table is a Cucumber::Ast::Table
   files = table.raw.flatten
