@@ -61,7 +61,7 @@ module ExifTagger
       else
         @output.puts "*** Nothing to update, skip running #{command} ..."
       end
-    rescue => e
+    rescue
       raise WriteTag, "running #{command}"
     end
 
