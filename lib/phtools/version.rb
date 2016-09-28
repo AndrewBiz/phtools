@@ -1,4 +1,4 @@
 
 module PhTools
-  VERSION = '0.9.1-alpha4'
+  VERSION = '0.10.0'.freeze
 end

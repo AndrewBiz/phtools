@@ -25,11 +25,14 @@ connected via input pipes as a last command in the pipe chain, e.g.:
   phls | phrename - a anb | #{tool_name}
 
 Usage:
-  #{tool_name} [-D]
+  #{tool_name} [-N] [-D]
   #{tool_name} -h | --help
   #{tool_name} -v | --version
 
 Options:
+  -N --no_run   Dry-run mode means no run exiftool command, only generate script
+                file 'exif_tagger_dto.txt'. User can check the script and
+                manually run the command: `exiftool -@ exif_tagger_dto.txt`
   -D --debug    Turn on debugging (verbose) mode
   -h --help     Show this screen.
   -v --version  Show version.

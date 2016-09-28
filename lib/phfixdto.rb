@@ -7,10 +7,10 @@ require 'phtools/runner'
 require 'phtools/exif_tagger'
 
 module PhTools
+  # phfixdto logic
   class Phfixdto < Runner
-
     def self.about
-      "fixes DateTimeOriginal tag to be equal to date-time-in-the-name"
+      'fixes DateTimeOriginal tag to be equal to date-time-in-the-name'
     end
 
     private
@@ -27,27 +27,27 @@ module PhTools
 
       STDERR.puts %(  ...#{phfile}...)
       begin
-        tags_original = MiniExiftool.new(phfile.filename,
-                                         replace_invalid_chars: true,
-                                         composite: true,
-                                         timestamps: DateTime)
+        @tags_original = MiniExiftool.new(phfile.filename,
+                                          replace_invalid_chars: true,
+                                          composite: true,
+                                          timestamps: DateTime)
       rescue
         raise PhTools::Error, "EXIF tags reading - #{e.message}"
       end
 
-      tags_to_write = ExifTagger::TagCollection.new()
+      @tags_to_write = ExifTagger::TagCollection.new
 
-      tags_to_write[:date_time_original] = phfile.date_time_to_time
-      tags_to_write.item(:date_time_original).force_write = true
+      @tags_to_write[:date_time_original] = phfile.date_time_to_time
+      @tags_to_write.item(:date_time_original).force_write = true
 
-      unless tags_original[:create_date].nil?
-        tags_to_write[:create_date] = phfile.date_time_to_time
-        tags_to_write.item(:create_date).force_write = true
+      unless @tags_original[:create_date].nil?
+        @tags_to_write[:create_date] = phfile.date_time_to_time
+        @tags_to_write.item(:create_date).force_write = true
       end
-      tags_to_write.check_for_warnings(original_values: tags_original)
-      fail PhTools::Error, tags_to_write.error_message unless tags_to_write.valid?
+      @tags_to_write.check_for_warnings(original_values: @tags_original)
+      fail PhTools::Error, @tags_to_write.error_message unless @tags_to_write.valid?
 
-      @writer.add_to_script(phfile: phfile, tags: tags_to_write)
+      @writer.add_to_script(phfile: phfile, tags: @tags_to_write)
 
       return ''
 
@@ -56,7 +56,7 @@ module PhTools
     end
 
     def process_after
-      @writer.run!
+      @writer.run! unless @options_cli['--no_run']
     end
   end
 end

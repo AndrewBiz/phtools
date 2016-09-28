@@ -30,8 +30,7 @@
 
 ### phfixdto
 - [x] create phfixdto - fix MWG:DateTimeOriginal (DTO) := date-time-in-name
-- [ ] phfixdto: make -N --no_run option = no running exiftool script, only preparation
-- [ ] phfixdto: make all output via puts_error method
+- [x] phfixdto: make -N --no_run option = no running exiftool script, only preparation
 - [ ] phfixdto: smartly check if CreateDate set (including MWG subfields). If any - then update CreateDate
 
 ### phevent
