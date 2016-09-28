@@ -1,5 +1,9 @@
 # RELEASED
 
+## [v0.10.0](https://github.com/andrewbiz/phtools/compare/v0.8.0...v0.10.0)
+* phgettags added to the bundle
+* phfixdto added to the bundle
+
 ## [v0.8.0](https://github.com/andrewbiz/phtools/compare/v0.7.7...v0.8.0)
 * phfixfmd added to the bundle
 
