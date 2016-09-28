@@ -7,14 +7,14 @@
 require 'date'
 
 Given(/^I still work on this feature$/) do
-  raise "This feature needs to be done"
+  raise 'This feature needs to be done'
 end
 
 Given(/^empty files named:$/) do |table|
   # table is a Cucumber::Ast::Table
   files = table.raw.flatten
   files.each do |file|
-    step %{an empty file named "#{file}"}
+    step %(an empty file named "#{file}")
   end
 end
 
@@ -34,7 +34,7 @@ Given(/^example files from "(.*?)" copied to "(.*?)" named:$/) do |arg1, arg2, t
   files = table.raw.flatten
   files.each do |file|
     file_in = File.join(arg1, file)
-    step %{example file "#{file_in}" copied to "#{arg2}"}
+    step %(example file "#{file_in}" copied to "#{arg2}")
   end
 end
 
@@ -47,7 +47,7 @@ Then(/^the stdout should contain each of:$/) do |table|
   # table is a Cucumber::Ast::Table
   outs = table.raw.flatten
   outs.each do |item|
-    step %{the stdout should contain "#{item}"}
+    step %(the stdout should contain "#{item}")
   end
 end
 
@@ -63,18 +63,17 @@ Then(/^the stdout should not contain any of:$/) do |table|
   # table is a Cucumber::Ast::Table
   outs = table.raw.flatten
   outs.each do |item|
-    step %{the stdout should not contain "#{item}"}
+    step %(the stdout should not contain "#{item}")
   end
 end
 
 Then(/^the output should match each of:$/) do |table|
   outs = table.raw.flatten
   outs.each do |item|
-    step %{the output should match #{item}}
+    step %(the output should match #{item})
   end
-  # assert_matching_output(expected, stdout_from(cmd))
 end
-#
+
 # Then(/^the stdout from "(.*?)" should not contain any of:$/) do |cmd, table|
 #   # table is a Cucumber::Ast::Table
 #   outs = table.raw.flatten
@@ -82,14 +81,15 @@ end
 #     step %{the stdout from "#{cmd}" should not contain "#{item}"}
 #   end
 # end
-#
+
 Then(/^the stderr should contain each of:$/) do |table|
   # table is a Cucumber::Ast::Table
   outs = table.raw.flatten
   outs.each do |item|
-    step %{the stderr should contain "#{item}"}
+    step %(the stderr should contain "#{item}")
   end
 end
+
 # Then(/^the stderr should not contain any of:$/) do |table|
 #   # table is a Cucumber::Ast::Table
 #   outs = table.raw.flatten
