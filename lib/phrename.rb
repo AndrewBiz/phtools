@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -9,7 +10,7 @@ require 'phtools/runner'
 module PhTools
   class Phrename < Runner
     def self.about
-      "renames input files to phtools standard"
+      'renames input files to phtools standard'
     end
 
     private
@@ -35,11 +36,11 @@ module PhTools
       info_msg = ''
       case @mode
       when :rename
-        if phfile_out.basename_is_standard? and @user_tag_date.empty?
+        if phfile_out.basename_is_standard? && @user_tag_date.empty?
           # change only author, keeping date-time safe
           phfile_out.standardize!(author: @author)
-          info_msg = "'#{phfile.basename+phfile.extname}' already standard name. Keeping date-time part unchanged"
-        else #full rename
+          info_msg = "'#{phfile.basename + phfile.extname}' already standard name. Keeping date-time part unchanged"
+        else # full rename
           begin
             tags = MiniExiftool.new(phfile.filename,
                                     replace_invalid_chars: true,
@@ -94,7 +95,7 @@ module PhTools
             tag_used = "#{@user_tag_date}"
           end
           phfile_out.standardize!(date_time: dto, author: @author)
-          info_msg = "'#{phfile.basename+phfile.extname}' using tag '#{tag_used}' for date-time"
+          info_msg = "'#{phfile.basename + phfile.extname}' using tag '#{tag_used}' for date-time"
         end
 
       when :clean
@@ -102,7 +103,7 @@ module PhTools
 
       when :shift_time
         fail PhTools::Error, 'non-standard file name' unless phfile_out.basename_is_standard?
-        phfile_out.standardize!(date_time: phfile_out.date_time + @shift_seconds*(1.0/86400))
+        phfile_out.standardize!(date_time: phfile_out.date_time + @shift_seconds * (1.0 / 86_400))
       end
 
       FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out

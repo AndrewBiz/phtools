@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -18,7 +19,7 @@ module PhTools
     e.backtrace.each do |b|
       STDERR.puts "#{prefix}: CAUSE#{level} BACKTRACE: #{b}"
     end
-    drill_down_error(e.cause, level+1, prefix)
+    drill_down_error(e.cause, level + 1, prefix)
   end
 
   def self.puts_error(msg, e = nil)

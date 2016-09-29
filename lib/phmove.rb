@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -7,7 +8,7 @@ require 'phtools/runner'
 module PhTools
   class Phmove < Runner
     def self.about
-      "moves input files to target folder"
+      'moves input files to target folder'
     end
 
     private
@@ -58,15 +59,11 @@ module PhTools
     end
 
     def process_after
-      if @arrange
-        Dir.delete @raw_folder if (Dir.exist?(@raw_folder) and
-                                   Utils.dir_empty?(@raw_folder))
-        Dir.delete @video_folder if (Dir.exist?(@video_folder) and
-                                     Utils.dir_empty?(@video_folder))
-      end
+      return unless @arrange
+      Dir.delete @raw_folder if Dir.exist?(@raw_folder) && Utils.dir_empty?(@raw_folder)
+      Dir.delete @video_folder if Dir.exist?(@video_folder) && Utils.dir_empty?(@video_folder)
     rescue
-        raise PhTools::Error, "Unable to delete dir"
+      raise PhTools::Error, 'Unable to delete dir'
     end
-
   end
 end

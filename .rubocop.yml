@@ -1,0 +1,41 @@
+# This is the configuration used to check the rubocop source code.
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+    - 'tmp/**/*'
+  TargetRubyVersion: 2.3
+
+Style/Encoding:
+  EnforcedStyle: when_needed
+  Enabled: true
+
+#Style/FrozenStringLiteralComment:
+#  EnforcedStyle: always
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/SignalException:
+  Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: false

@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
 require 'phtools/runner'
 
 module PhTools
-  # list generation
   class Phls < Runner
     def self.about
-      %Q{generates list of phtools friendly files}
+      %(generates list of phtools friendly files)
     end
 
     def run!

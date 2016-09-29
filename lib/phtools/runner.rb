@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -9,7 +10,6 @@ require 'phtools/error.rb'
 require 'phtools/ph_file.rb'
 require 'docopt'
 
-# Foto Tools
 module PhTools
   # Main class processing input stream
   class Runner
@@ -37,7 +37,7 @@ module PhTools
       exit 1
     ensure
       if PhTools.debug
-        STDERR.puts "Runner Instance Variables: "
+        STDERR.puts 'Runner Instance Variables: '
         STDERR.puts context
       end
     end
@@ -84,8 +84,8 @@ module PhTools
     end
 
     def context
-      self.instance_variables.map do |item|
-        { item => self.instance_variable_get(item) }
+      instance_variables.map do |item|
+        { item => instance_variable_get(item) }
       end
     end
   end

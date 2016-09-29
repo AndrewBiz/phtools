@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -6,14 +7,13 @@ require 'phtools/error'
 require 'date'
 require 'fileutils'
 
-# Foto tools
 module PhTools
   # media type constants
-  FILE_TYPE_IMAGE_NORMAL = %w{jpg jpeg tif tiff png}
-  FILE_TYPE_IMAGE_RAW = %w{orf arw dng}
+  FILE_TYPE_IMAGE_NORMAL = %w(jpg jpeg tif tiff png).freeze
+  FILE_TYPE_IMAGE_RAW = %w(orf arw dng).freeze
   FILE_TYPE_IMAGE = FILE_TYPE_IMAGE_NORMAL + FILE_TYPE_IMAGE_RAW
-  FILE_TYPE_VIDEO = %w{avi mp4 mpg mts dv mov mkv m2t m2ts}
-  FILE_TYPE_AUDIO = %w{wav}
+  FILE_TYPE_VIDEO = %w(avi mp4 mpg mts dv mov mkv m2t m2ts).freeze
+  FILE_TYPE_AUDIO = %w(wav).freeze
 
   # phtools file name operations
   class PhFile
@@ -26,7 +26,7 @@ module PhTools
     ZERO_DATE = DateTime.new(0)
 
     def self.validate_file!(filename, file_type)
-      fail PhTools::Error, 'does not exist'  unless
+      fail PhTools::Error, 'does not exist' unless
         filename && File.exist?(filename)
       fail PhTools::Error, 'not a file' if File.directory?(filename)
       fail PhTools::Error, 'no permission to write' unless
@@ -57,7 +57,7 @@ module PhTools
     end
 
     def to_s
-      "#{@filename}"
+      @filename.to_s
     end
 
     def <=>(other)
@@ -67,7 +67,7 @@ module PhTools
     def basename_standard(basename_clean: @basename_clean,
                           date_time: @date_time,
                           author: @author)
-      %Q{#{date_time.strftime('%Y%m%d-%H%M%S')}_#{(author.upcase + "XXXXXX")[0, NICKNAME_SIZE]} #{basename_clean}}
+      %(#{date_time.strftime('%Y%m%d-%H%M%S')}_#{(author.upcase + 'XXXXXX')[0, NICKNAME_SIZE]} #{basename_clean})
     end
 
     def basename_is_standard?
@@ -100,7 +100,7 @@ module PhTools
     end
 
     def cleanse!(dirname: @dirname, basename_clean: @basename_clean,
-               extname: @extname)
+                 extname: @extname)
       filename = cleanse(dirname: dirname, basename_clean: basename_clean,
                          extname: extname)
       set_state(filename)
@@ -119,8 +119,8 @@ module PhTools
     def date_time_to_time
       Time.new(@date_time.year, @date_time.month, @date_time.day,
                @date_time.hour, @date_time.min, @date_time.sec)
-               # no use of @date_time.zone - assuming file's timezone always
-               # equals to photografer's computer timezone
+      # no use of @date_time.zone - assuming file's timezone always
+      # equals to photografer's computer timezone
     end
 
     private
