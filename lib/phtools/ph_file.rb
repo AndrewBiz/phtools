@@ -49,7 +49,7 @@ module PhTools
       [true, '']
     end
 
-    attr_reader :filename, :dirname, :extname, :basename, :basename_part,
+    attr_reader :filename, :dirname, :extname, :type, :basename, :basename_part,
                 :basename_clean, :date_time, :author
 
     def initialize(filename)
@@ -130,6 +130,7 @@ module PhTools
       @extname = File.extname(filename)
       @basename = File.basename(filename, @extname)
       @filename = File.join(@dirname, @basename + @extname)
+      @type = @extname.empty? ? '' : @extname.slice(1..-1).downcase
       parse_basename
       @basename_clean = @basename_part[:clean]
       @date_time = reveal_date_time

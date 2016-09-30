@@ -15,45 +15,53 @@ describe PhTools::PhFile, 'constants' do
   end
 
   it 'include NICKNAME_SIZE within the range of MIN-MAX' do
-    expect(PhTools::PhFile::NICKNAME_SIZE).to be <=
-      PhTools::PhFile::NICKNAME_MAX_SIZE
-    expect(PhTools::PhFile::NICKNAME_SIZE).to be >=
-      PhTools::PhFile::NICKNAME_MIN_SIZE
+    expect(PhTools::PhFile::NICKNAME_SIZE).to be <= PhTools::PhFile::NICKNAME_MAX_SIZE
+    expect(PhTools::PhFile::NICKNAME_SIZE).to be >= PhTools::PhFile::NICKNAME_MIN_SIZE
   end
 end
 
 describe PhTools::PhFile do
   it 'stores filename with dirname .' do
-    fn = PhTools::PhFile.new('file.ext')
+    fn = described_class.new('file.ext')
     expect(fn.filename).to eq('./file.ext')
   end
 
   it 'stores filename with dirname aaa/bbb' do
-    fn = PhTools::PhFile.new('aaa/bbb/file.ext')
+    fn = described_class.new('aaa/bbb/file.ext')
     expect(fn.filename).to eq('aaa/bbb/file.ext')
   end
 
   it 'prints object as filename' do
-    fn = PhTools::PhFile.new('file.ext')
+    fn = described_class.new('file.ext')
     expect(fn.to_s).to eq('./file.ext')
   end
 
   it 'stores file dir name' do
-    fn = PhTools::PhFile.new('./aaa/bbb/file.ext')
+    fn = described_class.new('./aaa/bbb/file.ext')
     expect(fn.dirname).to eq('./aaa/bbb')
   end
 
   it 'stores file base name' do
-    fn = PhTools::PhFile.new('./aaa/bbb/file.ext')
+    fn = described_class.new('./aaa/bbb/file.ext')
     expect(fn.basename).to eq('file')
   end
 
   it 'stores file extention name' do
-    fn = PhTools::PhFile.new('./aaa/bbb/file.ext')
+    fn = described_class.new('./aaa/bbb/file.ext')
     expect(fn.extname).to eq('.ext')
   end
 
-  it 'is comparable to other FT objects via filename' do
+  it 'stores file type' do
+    fn = described_class.new('./aaa/bbb/file.EXT')
+    expect(fn.type).to eq('ext')
+  end
+
+  it 'stores empty file type for file without extention' do
+    fn = described_class.new('./aaa/bbb/file')
+    expect(fn.type).to eq('')
+  end
+
+  it 'is comparable to other objects via filename' do
     fn1 = PhTools::PhFile.new('file1.ext')
     fn2 = PhTools::PhFile.new('file2.ext')
     fn3 = PhTools::PhFile.new('file1.ext')
