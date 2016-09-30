@@ -3,7 +3,9 @@ AllCops:
   Exclude:
     - 'vendor/**/*'
     - 'spec/fixtures/**/*'
+    - 'spec/**/*'
     - 'tmp/**/*'
+    - 'Guardfile'
   TargetRubyVersion: 2.3
 
 Style/Encoding:
