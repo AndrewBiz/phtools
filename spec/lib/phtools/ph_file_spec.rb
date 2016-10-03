@@ -5,129 +5,165 @@
 require 'spec_helper'
 require 'phtools/ph_file'
 
-describe PhTools::PhFile, 'constants' do
-  it 'include NICKNAME_MIN_SIZE == 3' do
+RSpec.describe PhTools::PhFile, 'constants' do
+  it 'includes NICKNAME_MIN_SIZE == 3' do
     expect(PhTools::PhFile::NICKNAME_MIN_SIZE).to eq 3
   end
 
-  it 'include NICKNAME_MAX_SIZE == 6' do
+  it 'includes NICKNAME_MAX_SIZE == 6' do
     expect(PhTools::PhFile::NICKNAME_MAX_SIZE).to eq 6
   end
 
-  it 'include NICKNAME_SIZE within the range of MIN-MAX' do
+  it 'includes NICKNAME_SIZE within the range of MIN-MAX' do
     expect(PhTools::PhFile::NICKNAME_SIZE).to be <= PhTools::PhFile::NICKNAME_MAX_SIZE
     expect(PhTools::PhFile::NICKNAME_SIZE).to be >= PhTools::PhFile::NICKNAME_MIN_SIZE
   end
 end
 
-describe PhTools::PhFile do
-  it 'stores filename with dirname .' do
-    fn = described_class.new('file.ext')
-    expect(fn.filename).to eq('./file.ext')
+RSpec.describe PhTools::PhFile do
+  context "when it is created" do
+    it 'stores filename with dirname .' do
+      fn = described_class.new('file.ext')
+      expect(fn.filename).to eq('./file.ext')
+    end
+
+    it 'stores filename with dirname aaa/bbb' do
+      fn = described_class.new('aaa/bbb/file.ext')
+      expect(fn.filename).to eq('aaa/bbb/file.ext')
+    end
+
+    it 'prints object as filename' do
+      fn = described_class.new('file.ext')
+      expect(fn.to_s).to eq('./file.ext')
+    end
+
+    it 'stores file dir name' do
+      fn = described_class.new('./aaa/bbb/file.ext')
+      expect(fn.dirname).to eq('./aaa/bbb')
+    end
+
+    it 'stores file base name' do
+      fn = described_class.new('./aaa/bbb/file.ext')
+      expect(fn.basename).to eq('file')
+    end
+
+    it 'stores file extention name' do
+      fn = described_class.new('./aaa/bbb/file.ext')
+      expect(fn.extname).to eq('.ext')
+    end
+
+    it 'stores file type' do
+      fn = described_class.new('./aaa/bbb/file.EXT')
+      expect(fn.type).to eq('ext')
+    end
+
+    it 'stores empty file type for file without extention' do
+      fn = described_class.new('./aaa/bbb/file')
+      expect(fn.type).to eq('')
+    end
+
+    it 'is comparable to other objects via filename' do
+      fn1 = described_class.new('file1.ext')
+      fn2 = described_class.new('file2.ext')
+      fn3 = described_class.new('file1.ext')
+
+      expect(fn1).not_to eq(fn2)
+      expect(fn1).to eq(fn3)
+    end
   end
 
-  it 'stores filename with dirname aaa/bbb' do
-    fn = described_class.new('aaa/bbb/file.ext')
-    expect(fn.filename).to eq('aaa/bbb/file.ext')
+  describe 'helps to check the type of' do
+    example 'file.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj).to be_image
+      expect(obj).to be_image_normal
+      expect(obj).not_to be_image_raw
+      expect(obj).not_to be_video
+      expect(obj).not_to be_audio
+    end
+
+    example 'file.arw' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj).to be_image
+      expect(obj).not_to be_image_normal
+      expect(obj).to be_image_raw
+      expect(obj).not_to be_video
+      expect(obj).not_to be_audio
+    end
+
+    example 'file.mov' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj).not_to be_image
+      expect(obj).not_to be_image_normal
+      expect(obj).not_to be_image_raw
+      expect(obj).to be_video
+      expect(obj).not_to be_audio
+    end
+
+    example 'file.wav' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj).not_to be_image
+      expect(obj).not_to be_image_normal
+      expect(obj).not_to be_image_raw
+      expect(obj).not_to be_video
+      expect(obj).to be_audio
+    end
   end
 
-  it 'prints object as filename' do
-    fn = described_class.new('file.ext')
-    expect(fn.to_s).to eq('./file.ext')
-  end
-
-  it 'stores file dir name' do
-    fn = described_class.new('./aaa/bbb/file.ext')
-    expect(fn.dirname).to eq('./aaa/bbb')
-  end
-
-  it 'stores file base name' do
-    fn = described_class.new('./aaa/bbb/file.ext')
-    expect(fn.basename).to eq('file')
-  end
-
-  it 'stores file extention name' do
-    fn = described_class.new('./aaa/bbb/file.ext')
-    expect(fn.extname).to eq('.ext')
-  end
-
-  it 'stores file type' do
-    fn = described_class.new('./aaa/bbb/file.EXT')
-    expect(fn.type).to eq('ext')
-  end
-
-  it 'stores empty file type for file without extention' do
-    fn = described_class.new('./aaa/bbb/file')
-    expect(fn.type).to eq('')
-  end
-
-  it 'is comparable to other objects via filename' do
-    fn1 = PhTools::PhFile.new('file1.ext')
-    fn2 = PhTools::PhFile.new('file2.ext')
-    fn3 = PhTools::PhFile.new('file1.ext')
-
-    expect(fn1).not_to eq(fn2)
-    expect(fn1).to eq(fn3)
-  end
-
-  describe 'validates the author NICKNAME' do
-    an1 = 'A'
-    it "and reports wrong size for '#{an1}'" do
-      ok, message = PhTools::PhFile.validate_author(an1)
+  context 'when validate the author NICKNAME' do
+    it "reports wrong size for 'A'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('wrong author size')
     end
-    an2 = 'ANNB'
-    it "and reports wrong size for '#{an2}'" do
-      ok, message = PhTools::PhFile.validate_author(an2)
+
+    it "reports wrong size for 'ANNB'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('wrong author size')
     end
-    an3 = 'ANB'
-    it "and keeps silince for '#{an3}'" do
-      ok, message = PhTools::PhFile.validate_author(an3)
+
+    it "and keeps silince for 'ANB'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be true
       expect(message).to be_empty
     end
-    an4 = 'A N'
-    it "and reports wrong SPACE char for '#{an4}'" do
-      ok, message = PhTools::PhFile.validate_author(an4)
+
+    it "and reports wrong SPACE char for 'A N'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should not contain spaces')
     end
-    an5 = 'A_B'
-    it "and reports wrong '_' char for '#{an5}'" do
-      ok, message = PhTools::PhFile.validate_author(an5)
+
+    it "and reports wrong '_' char for 'A_B'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('_')
     end
-    an6 = 'A-B'
-    it "and reports wrong '-' char for '#{an6}'" do
-      ok, message = PhTools::PhFile.validate_author(an6)
+
+    it "and reports wrong '-' char for 'A-B'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('-')
     end
-    an7 = 'A5B'
-    it "and reports wrong DIGIT char for '#{an7}'" do
-      ok, message = PhTools::PhFile.validate_author(an7)
+
+    it "and reports wrong DIGIT char for 'A5B'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should not contain digits')
     end
-    an8 = 'AБB'
-    it "and reports wrong non-ASCII char for '#{an8}'" do
-      ok, message = PhTools::PhFile.validate_author(an8)
+
+    it "and reports wrong non-ASCII char for 'АБВ'" do |this_example|
+      ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should contain only ASCII')
     end
   end
 
   describe 'parses the basename of' do
-
-    fn1 = '20011231-112233_ANB[20010101-ABCDEF]{flags}cleanname.jpg'
-    it fn1 do
-      obj = PhTools::PhFile.new(fn1)
-      expect(obj.basename_part[:prefix]).to eq \
-        '20011231-112233_ANB[20010101-ABCDEF]{flags}'
+    example '20011231-112233_ANB[20010101-ABCDEF]{flags}cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-112233_ANB[20010101-ABCDEF]{flags}'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '112233'
@@ -136,11 +172,9 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq 'flags'
     end
 
-    fn2 = '20011231-112233_ANB[20010101-ABCDEF]cleanname.jpg'
-    it fn2 do
-      obj = PhTools::PhFile.new(fn2)
-      expect(obj.basename_part[:prefix]).to eq \
-        '20011231-112233_ANB[20010101-ABCDEF]'
+    example '20011231-112233_ANB[20010101-ABCDEF]cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-112233_ANB[20010101-ABCDEF]'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '112233'
@@ -149,11 +183,9 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq ''
     end
 
-    fn3 = '20011231-112233_ANB_cleanname.jpg'
-    it fn3 do
-      obj = PhTools::PhFile.new(fn3)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-112233_ANB_'
+    example '20011231-112233_ANB_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-112233_ANB_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '112233'
@@ -163,11 +195,9 @@ describe PhTools::PhFile do
     end
 
     describe '(STANDARD template)' do
-      fn4 = '20011231-112233_ANB cleanname.jpg'
-      it fn4 do
-        obj = PhTools::PhFile.new(fn4)
-        expect(obj.basename_part[:prefix]).to eq \
-        '20011231-112233_ANB '
+      example '20011231-112233_ANB cleanname.jpg' do |this_example|
+        obj = described_class.new(this_example.metadata[:description])
+        expect(obj.basename_part[:prefix]).to eq '20011231-112233_ANB '
         expect(obj.basename_part[:clean]).to eq 'cleanname'
         expect(obj.basename_part[:date]).to eq '20011231'
         expect(obj.basename_part[:time]).to eq '112233'
@@ -175,11 +205,10 @@ describe PhTools::PhFile do
         expect(obj.basename_part[:id]).to eq ''
         expect(obj.basename_part[:flags]).to eq ''
       end
-      fn5 = '20011231-112233_ANDREW cleanname.jpg'
-      it fn5 do
-        obj = PhTools::PhFile.new(fn5)
-        expect(obj.basename_part[:prefix]).to eq \
-        '20011231-112233_ANDREW '
+
+      example '20011231-112233_ANDREW cleanname.jpg' do |this_example|
+        obj = described_class.new(this_example.metadata[:description])
+        expect(obj.basename_part[:prefix]).to eq '20011231-112233_ANDREW '
         expect(obj.basename_part[:clean]).to eq 'cleanname'
         expect(obj.basename_part[:date]).to eq '20011231'
         expect(obj.basename_part[:time]).to eq '112233'
@@ -189,35 +218,9 @@ describe PhTools::PhFile do
       end
     end
 
-    fn7 = '20011231-1122_ANB_cleanname.jpg'
-    it fn7 do
-      obj = PhTools::PhFile.new(fn7)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-1122_ANB_'
-      expect(obj.basename_part[:clean]).to eq 'cleanname'
-      expect(obj.basename_part[:date]).to eq '20011231'
-      expect(obj.basename_part[:time]).to eq '1122'
-      expect(obj.basename_part[:author]).to eq 'ANB'
-      expect(obj.basename_part[:id]).to eq ''
-      expect(obj.basename_part[:flags]).to eq ''
-    end
-    fn8 = '20011231-1122-ANB_cleanname.jpg'
-    it fn8 do
-      obj = PhTools::PhFile.new(fn8)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-1122-ANB_'
-      expect(obj.basename_part[:clean]).to eq 'cleanname'
-      expect(obj.basename_part[:date]).to eq '20011231'
-      expect(obj.basename_part[:time]).to eq '1122'
-      expect(obj.basename_part[:author]).to eq 'ANB'
-      expect(obj.basename_part[:id]).to eq ''
-      expect(obj.basename_part[:flags]).to eq ''
-    end
-    fn9 = '20011231-1122_ANB cleanname.jpg'
-    it fn9 do
-      obj = PhTools::PhFile.new(fn9)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-1122_ANB '
+    example '20011231-1122_ANB_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-1122_ANB_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '1122'
@@ -226,23 +229,31 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq ''
     end
 
-    fn10 = '20011231-1122_cleanname.jpg'
-    it fn10 do
-      obj = PhTools::PhFile.new(fn10)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-1122_'
+    example '20011231-1122-ANB_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-1122-ANB_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '1122'
-      expect(obj.basename_part[:author]).to eq ''
+      expect(obj.basename_part[:author]).to eq 'ANB'
       expect(obj.basename_part[:id]).to eq ''
       expect(obj.basename_part[:flags]).to eq ''
     end
-    fn11 = '20011231-1122 cleanname.jpg'
-    it fn11 do
-      obj = PhTools::PhFile.new(fn11)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-1122 '
+
+    example '20011231-1122_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-1122_ANB '
+      expect(obj.basename_part[:clean]).to eq 'cleanname'
+      expect(obj.basename_part[:date]).to eq '20011231'
+      expect(obj.basename_part[:time]).to eq '1122'
+      expect(obj.basename_part[:author]).to eq 'ANB'
+      expect(obj.basename_part[:id]).to eq ''
+      expect(obj.basename_part[:flags]).to eq ''
+    end
+
+    example '20011231-1122_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-1122_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq '1122'
@@ -251,35 +262,20 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq ''
     end
 
-    fn12 = '20011231_cleanname.jpg'
-    it fn12 do
-      obj = PhTools::PhFile.new(fn12)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231_'
+    example '20011231-1122 cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-1122 '
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
-      expect(obj.basename_part[:time]).to eq ''
+      expect(obj.basename_part[:time]).to eq '1122'
       expect(obj.basename_part[:author]).to eq ''
       expect(obj.basename_part[:id]).to eq ''
       expect(obj.basename_part[:flags]).to eq ''
     end
-    fn13 = '20011231 cleanname.jpg'
-    it fn13 do
-      obj = PhTools::PhFile.new(fn13)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231 '
-      expect(obj.basename_part[:clean]).to eq 'cleanname'
-      expect(obj.basename_part[:date]).to eq '20011231'
-      expect(obj.basename_part[:time]).to eq ''
-      expect(obj.basename_part[:author]).to eq ''
-      expect(obj.basename_part[:id]).to eq ''
-      expect(obj.basename_part[:flags]).to eq ''
-    end
-    fn14 = '20011231-cleanname.jpg'
-    it fn14 do
-      obj = PhTools::PhFile.new(fn14)
-      expect(obj.basename_part[:prefix]).to eq \
-      '20011231-'
+
+    example '20011231_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '20011231'
       expect(obj.basename_part[:time]).to eq ''
@@ -288,9 +284,30 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq ''
     end
 
-    fn15 = '2001_cleanname.jpg'
-    it fn15 do
-      obj = PhTools::PhFile.new(fn15)
+    example '20011231 cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231 '
+      expect(obj.basename_part[:clean]).to eq 'cleanname'
+      expect(obj.basename_part[:date]).to eq '20011231'
+      expect(obj.basename_part[:time]).to eq ''
+      expect(obj.basename_part[:author]).to eq ''
+      expect(obj.basename_part[:id]).to eq ''
+      expect(obj.basename_part[:flags]).to eq ''
+    end
+
+    example '20011231-cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.basename_part[:prefix]).to eq '20011231-'
+      expect(obj.basename_part[:clean]).to eq 'cleanname'
+      expect(obj.basename_part[:date]).to eq '20011231'
+      expect(obj.basename_part[:time]).to eq ''
+      expect(obj.basename_part[:author]).to eq ''
+      expect(obj.basename_part[:id]).to eq ''
+      expect(obj.basename_part[:flags]).to eq ''
+    end
+
+    example '2001_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_part[:prefix]).to eq '2001_'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '2001'
@@ -299,9 +316,9 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:id]).to eq ''
       expect(obj.basename_part[:flags]).to eq ''
     end
-    fn16 = '2001-cleanname.jpg'
-    it fn16 do
-      obj = PhTools::PhFile.new(fn16)
+
+    example '2001-cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_part[:prefix]).to eq '2001-'
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '2001'
@@ -310,9 +327,9 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:id]).to eq ''
       expect(obj.basename_part[:flags]).to eq ''
     end
-    fn17 = '2001 cleanname.jpg'
-    it fn17 do
-      obj = PhTools::PhFile.new(fn17)
+
+    example '2001 cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_part[:prefix]).to eq '2001 '
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq '2001'
@@ -322,9 +339,8 @@ describe PhTools::PhFile do
       expect(obj.basename_part[:flags]).to eq ''
     end
 
-    fn99 = 'cleanname.jpg'
-    it fn99 do
-      obj = PhTools::PhFile.new(fn99)
+    example 'cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_part[:prefix]).to eq ''
       expect(obj.basename_part[:clean]).to eq 'cleanname'
       expect(obj.basename_part[:date]).to eq ''
@@ -335,109 +351,102 @@ describe PhTools::PhFile do
     end
   end
 
-  describe 'reveals date_time from the filename' do
-    fndt1 = '20011231-112233_ANB cleanname.jpg'
-    it fndt1 do
-      obj = PhTools::PhFile.new(fndt1)
-      expect(obj.date_time).to eq \
-        DateTime.strptime('2001-12-31T11:22:33+00:00')
+  describe 'reveals date_time from the filename of' do
+    example '20011231-112233_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.date_time).to eq DateTime.strptime('2001-12-31T11:22:33+00:00')
       expect(obj.date_time_ok?).to be true
     end
-    fndt2 = '20011231-112269_ANB cleanname.jpg'
-    it fndt2 do
-      obj = PhTools::PhFile.new(fndt2)
+
+    example '20011231-112269_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.date_time_ok?).to be false
     end
-    fndt3 = '20011231-1122_ANB cleanname.jpg'
-    it fndt3 do
-      obj = PhTools::PhFile.new(fndt3)
-      expect(obj.date_time).to eq \
-        DateTime.strptime('2001-12-31T11:22:00+00:00')
+
+    example '20011231-1122_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.date_time).to eq DateTime.strptime('2001-12-31T11:22:00+00:00')
       expect(obj.date_time_ok?).to be true
     end
-    fndt4 = '20011231_cleanname.jpg'
-    it fndt4 do
-      obj = PhTools::PhFile.new(fndt4)
-      expect(obj.date_time).to eq \
-        DateTime.strptime('2001-12-31T00:00:00+00:00')
+
+    example '20011231_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.date_time).to eq DateTime.strptime('2001-12-31T00:00:00+00:00')
       expect(obj.date_time_ok?).to be true
     end
-    fndt5 = '2001_cleanname.jpg'
-    it fndt5 do
-      obj = PhTools::PhFile.new(fndt5)
-      expect(obj.date_time).to eq \
-        DateTime.strptime('2001-01-01T00:00:00+00:00')
+
+    example '2001_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
+      expect(obj.date_time).to eq DateTime.strptime('2001-01-01T00:00:00+00:00')
       expect(obj.date_time_ok?).to be true
     end
   end
 
-  describe 'checks if the name complies with FT standard for' do
-    fts1 = '20011231-112233_ANB[20010101-ABCDEF]{flags}cleanname.jpg'
-    it fts1 do
-      obj = PhTools::PhFile.new(fts1)
+  describe 'checks if the name complies with PHTOOLS standard for' do
+    example '20011231-112233_ANB[20010101-ABCDEF]{flags}cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts2 = '20011231-112233_ANB[20010101-ABCDEF]cleanname.jpg'
-    it fts2 do
-      obj = PhTools::PhFile.new(fts2)
+
+    example '20011231-112233_ANB[20010101-ABCDEF]cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts3 = '20011231-112233_ANB_cleanname.jpg'
-    it fts3 do
-      obj = PhTools::PhFile.new(fts3)
+
+    example '20011231-112233_ANB_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts4 = '20011231-112233_ANB-cleanname.jpg'
-    it fts4 do
-      obj = PhTools::PhFile.new(fts4)
+
+    example '20011231-112233_ANB-cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts5 = '20011232-112233_ANB cleanname.jpg'
-    it fts5 do
-      obj = PhTools::PhFile.new(fts5)
+
+    example '20011231-112233_ANB_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
+
     # STANDARD name!
-    fts6 = '20011231-112233_ANB cleanname.jpg'
-    it fts6 do
-      obj = PhTools::PhFile.new(fts6)
+    example '20011231-112233_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be true
     end
-    fts7 = '20011231-1122_ANB cleanname.jpg'
-    it fts7 do
-      obj = PhTools::PhFile.new(fts7)
+
+    example '20011231-1122_ANB cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts8 = '20011231-1122_cleanname.jpg'
-    it fts8 do
-      obj = PhTools::PhFile.new(fts8)
+
+    example '20011231-1122_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts9 = '20011231_cleanname.jpg'
-    it fts9 do
-      obj = PhTools::PhFile.new(fts9)
+
+    example '20011231_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    fts10 = '2001_cleanname.jpg'
-    it fts10 do
-      obj = PhTools::PhFile.new(fts10)
+
+    example '2001_cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
-    # author shpuld be upcased
-    fts11 = '20011231-112233_anb cleanname.jpg'
-    it fts11 do
-      obj = PhTools::PhFile.new(fts11)
+
+    # author should be upcased
+    example '20011231-112233_anb cleanname.jpg' do |this_example|
+      obj = described_class.new(this_example.metadata[:description])
       expect(obj.basename_is_standard?).to be false
     end
   end
 
   describe 'generates standard file name' do
-    describe 'without changes of the inner state' do
-      it 'when I set only date_time and author' do
-        obj = PhTools::PhFile.new('cleanname.jpg')
+    context 'without changes of the inner state' do
+      specify 'when I set only date_time and author' do
+        obj = described_class.new('cleanname.jpg')
         expect(obj.standardize(date_time: DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S'),
-                               author: 'anb'))
-          .to eq './20131130-183657_ANB cleanname.jpg'
+                               author: 'anb')).to eq './20131130-183657_ANB cleanname.jpg'
         expect(obj.basename).to eq 'cleanname'
         expect(obj.basename_clean).to eq 'cleanname'
         expect(obj.dirname).to eq '.'
@@ -446,14 +455,14 @@ describe PhTools::PhFile do
         expect(obj.date_time).to eq DateTime.new(0)
         expect(obj.basename_is_standard?).to be false
       end
-      it 'when I change all parts of the filename' do
-        obj = PhTools::PhFile.new('cleanname.jpg')
+
+      specify 'when I change all parts of the filename' do
+        obj = described_class.new('cleanname.jpg')
         expect(obj.standardize(basename_clean: 'clean_name',
                                extname: '.jpeg',
                                dirname: 'changed/dir',
                                date_time: DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S'),
-                               author: 'anb'))
-          .to eq 'changed/dir/20131130-183657_ANB clean_name.jpeg'
+                               author: 'anb')).to eq 'changed/dir/20131130-183657_ANB clean_name.jpeg'
         expect(obj.basename).to eq 'cleanname'
         expect(obj.basename_clean).to eq 'cleanname'
         expect(obj.dirname).to eq '.'
@@ -463,12 +472,12 @@ describe PhTools::PhFile do
         expect(obj.basename_is_standard?).to be false
       end
     end
-    describe 'and updates inner state' do
-      it 'when I set only date_time and author' do
-        obj = PhTools::PhFile.new('cleanname.jpg')
+
+    context 'with change of the inner state' do
+      specify 'when I set only date_time and author' do
+        obj = described_class.new('cleanname.jpg')
         expect(obj.standardize!(date_time: DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S'),
-                               author: 'anb'))
-          .to eq './20131130-183657_ANB cleanname.jpg'
+                                author: 'anb')).to eq './20131130-183657_ANB cleanname.jpg'
         expect(obj.filename).to eq './20131130-183657_ANB cleanname.jpg'
         expect(obj.basename).to eq '20131130-183657_ANB cleanname'
         expect(obj.basename_clean).to eq 'cleanname'
@@ -478,14 +487,14 @@ describe PhTools::PhFile do
         expect(obj.date_time).to eq DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S')
         expect(obj.basename_is_standard?).to be true
       end
-      it 'when I change all parts of the filename' do
-        obj = PhTools::PhFile.new('cleanname.jpg')
+
+      specify 'when I change all parts of the filename' do
+        obj = described_class.new('cleanname.jpg')
         expect(obj.standardize!(basename_clean: 'clean_name',
                                 extname: '.jpeg',
                                 dirname: 'changed/dir',
                                 date_time: DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S'),
-                                author: 'anb'))
-          .to eq 'changed/dir/20131130-183657_ANB clean_name.jpeg'
+                                author: 'anb')).to eq 'changed/dir/20131130-183657_ANB clean_name.jpeg'
         expect(obj.filename).to eq 'changed/dir/20131130-183657_ANB clean_name.jpeg'
         expect(obj.basename).to eq '20131130-183657_ANB clean_name'
         expect(obj.basename_clean).to eq 'clean_name'
@@ -499,10 +508,9 @@ describe PhTools::PhFile do
   end
 
   describe 'generates clean file name' do
-    describe 'without changes of the inner state' do
-      fcl01 = '20131130-183657_ANB cleanname.jpg'
-      it "when I just clean the name for #{fcl01}" do
-        obj = PhTools::PhFile.new(fcl01)
+    context 'without changes of the inner state' do
+      specify "when I just clean the name for '20131130-183657_ANB cleanname.jpg'" do |this_example|
+        obj = described_class.new(get_argument(this_example.metadata[:description]))
         expect(obj.cleanse).to eq './cleanname.jpg'
         expect(obj.basename).to eq '20131130-183657_ANB cleanname'
         expect(obj.basename_clean).to eq 'cleanname'
@@ -512,9 +520,9 @@ describe PhTools::PhFile do
         expect(obj.date_time).to eq DateTime.strptime('20131130-183657', '%Y%m%d-%H%M%S')
         expect(obj.basename_is_standard?).to be true
       end
-      fcl02 = '20131130-183657_ANB cleanname.jpg'
-      it "when I change all parts of the #{fcl01}" do
-        obj = PhTools::PhFile.new(fcl02)
+
+      specify "when I change all parts of the '20131130-183657_ANB cleanname.jpg'" do |this_example|
+        obj = described_class.new(get_argument(this_example.metadata[:description]))
         expect(obj.cleanse(dirname: 'new/dir',
                            basename_clean: 'clean_name',
                            extname: '.jpeg')).to eq 'new/dir/clean_name.jpeg'
@@ -527,10 +535,10 @@ describe PhTools::PhFile do
         expect(obj.basename_is_standard?).to be true
       end
     end
-    describe 'and updates inner state' do
-      fcl03 = '20131130-183657_ANB cleanname.jpg'
-      it "when I just clean the name for #{fcl03}" do
-        obj = PhTools::PhFile.new(fcl03)
+
+    context 'with changes of the inner state' do
+      specify "when I just clean the name for '20131130-183657_ANB cleanname.jpg'" do |this_example|
+        obj = described_class.new(get_argument(this_example.metadata[:description]))
         expect(obj.cleanse!).to eq './cleanname.jpg'
         expect(obj.basename).to eq 'cleanname'
         expect(obj.basename_clean).to eq 'cleanname'
@@ -540,9 +548,9 @@ describe PhTools::PhFile do
         expect(obj.date_time).to eq DateTime.new(0)
         expect(obj.basename_is_standard?).to be false
       end
-      fcl04 = '20131130-183657_ANB cleanname.jpg'
-      it "when I change all parts of the #{fcl04}" do
-        obj = PhTools::PhFile.new(fcl04)
+
+      it "when I change all parts of the '20131130-183657_ANB cleanname.jpg'" do |this_example|
+        obj = described_class.new(get_argument(this_example.metadata[:description]))
         expect(obj.cleanse!(dirname: 'new/dir',
                             basename_clean: 'clean_name',
                             extname: '.jpeg')).to eq 'new/dir/clean_name.jpeg'
@@ -558,9 +566,8 @@ describe PhTools::PhFile do
   end
 
   describe 'changes dirname' do
-    fcn01 = '20131130-183657_ANB cleanname.jpg'
-    it 'when I set new dirname' do
-      obj = PhTools::PhFile.new(fcn01)
+    specify "when I set new dirname for '20131130-183657_ANB cleanname.jpg'" do |this_example|
+      obj = described_class.new(get_argument(this_example.metadata[:description]))
       expect(obj.basename).to eq '20131130-183657_ANB cleanname'
       expect(obj.basename_clean).to eq 'cleanname'
       expect(obj.dirname).to eq '.'

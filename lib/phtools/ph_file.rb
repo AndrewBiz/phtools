@@ -74,6 +74,26 @@ module PhTools
       @basename == basename_standard
     end
 
+    def image?
+      FILE_TYPE_IMAGE.include?(@type)
+    end
+
+    def image_normal?
+      FILE_TYPE_IMAGE_NORMAL.include?(@type)
+    end
+
+    def image_raw?
+      FILE_TYPE_IMAGE_RAW.include?(@type)
+    end
+
+    def video?
+      FILE_TYPE_VIDEO.include?(@type)
+    end
+
+    def audio?
+      FILE_TYPE_AUDIO.include?(@type)
+    end
+
     def standardize(dirname: @dirname, basename_clean: @basename_clean,
                     extname: @extname, date_time: @date_time,
                     author: @author)
@@ -167,8 +187,8 @@ module PhTools
     end
 
     def parse_basename
-      default = { prefix: '', clean: '', date: '',
-                  time: '', author: '', id: '', flags: '' }
+      default = { prefix: '', clean: '', date: '', time: '', author: '', id: '', flags: '' }
+
       case @basename
       # check YYYYmmdd-HHMMSS_AUT[ID]{FLAGS}cleanname
       when /^(?<prefix>(?<date>\d{8})-(?<time>\d{6})_(?<author>\w{#{NICKNAME_MIN_SIZE},#{NICKNAME_MAX_SIZE}})\[(?<id>.*)\]\{(?<flags>.*)\})(?<clean>.*)/
