@@ -40,20 +40,14 @@ module PhTools
 
     def process_file(phfile)
       phfile_out = phfile.clone
-      file_type = phfile.extname.slice(1..-1).downcase
-      case
-      when FILE_TYPE_IMAGE_NORMAL.include?(file_type)
-        phfile_out.dirname = @target_folder
-      when FILE_TYPE_IMAGE_RAW.include?(file_type)
-        phfile_out.dirname = @raw_folder
-      when FILE_TYPE_VIDEO.include?(file_type)
-        phfile_out.dirname = @video_folder
-      when FILE_TYPE_AUDIO.include?(file_type)
-        phfile_out.dirname = @target_folder
-      end
+      phfile_out.dirname = @target_folder if phfile_out.image_normal?
+      phfile_out.dirname = @raw_folder if phfile_out.image_raw?
+      phfile_out.dirname = @video_folder if phfile_out.video?
+      phfile_out.dirname = @target_folder if phfile_out.audio?
 
       FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out
       phfile_out
+
     rescue SystemCallError => e
       raise PhTools::Error, 'file moving - ' + e.message
     end
