@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -10,15 +11,11 @@ module ExifTagger
     def initialize(init_values = nil)
       @collection = []
       return if init_values.nil?
-      case
-      when init_values.is_a?(Hash)
-        init_values.each do |k, v|
-          self[k] = v
-        end
-      when init_values.is_a?(ExifTagger::TagCollection)
-        init_values.each do |item|
-          self[item.tag_id] = item.value
-        end
+
+      if init_values.is_a? Hash
+        init_values.each { |k, v| self[k] = v }
+      elsif init_values.is_a? ExifTagger::TagCollection
+        init_values.each { |item| self[item.tag_id] = item.value }
       end
     end
 
@@ -27,7 +24,7 @@ module ExifTagger
     end
 
     def to_s
-      str = ''
+      str = +''
       @collection.each { |i| str << i.to_s }
       str
     end
@@ -73,7 +70,7 @@ module ExifTagger
     def error_message
       str = ''
       unless valid?
-        str = "Tags are NOT VALID:\n"
+        str = +"Tags are NOT VALID:\n"
         @collection.each do |item|
           item.errors.each { |e| str << '    ' + e + "\n" }
         end
@@ -82,7 +79,7 @@ module ExifTagger
     end
 
     def warning_message
-      str = ''
+      str = +''
       if with_warnings?
         @collection.each do |item|
           item.warnings.each { |e| str << '    WARNING: ' + e + "\n" }
