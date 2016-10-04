@@ -123,37 +123,37 @@ RSpec.describe PhTools::PhFile do
       expect(message).to include('wrong author size')
     end
 
-    it "and keeps silince for 'ANB'" do |this_example|
+    it "keeps silince for 'ANB'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be true
       expect(message).to be_empty
     end
 
-    it "and reports wrong SPACE char for 'A N'" do |this_example|
+    it "reports wrong SPACE char for 'A N'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should not contain spaces')
     end
 
-    it "and reports wrong '_' char for 'A_B'" do |this_example|
+    it "reports wrong \"_\" char for 'A_B'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('_')
     end
 
-    it "and reports wrong '-' char for 'A-B'" do |this_example|
+    it "reports wrong \"-\" char for 'A-B'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('-')
     end
 
-    it "and reports wrong DIGIT char for 'A5B'" do |this_example|
+    it "reports wrong DIGIT char for 'A5B'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should not contain digits')
     end
 
-    it "and reports wrong non-ASCII char for 'АБВ'" do |this_example|
+    it "reports wrong non-ASCII char for 'АБВ'" do |this_example|
       ok, message = described_class.validate_author(get_argument(this_example.metadata[:description]))
       expect(ok).to be false
       expect(message).to include('should contain only ASCII')
