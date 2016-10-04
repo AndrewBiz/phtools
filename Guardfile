@@ -15,6 +15,8 @@ end
 cucumber_options = {
   # Below are examples overriding defaults
   # cmd: 'bundle exec cucumber',
+  cmd_additional_args: '--no-profile --color --format progress --strict',
+  # cmd_additional_args: '--no-profile --color --strict',
   # cmd_additional_args: '--profile guard',
   # all_after_pass: false,
   # all_on_start: false,
