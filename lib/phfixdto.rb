@@ -48,7 +48,7 @@ module PhTools
       @tags_to_write.check_for_warnings(original_values: @tags_original)
       fail PhTools::Error, @tags_to_write.error_message unless @tags_to_write.valid?
 
-      @writer.add_to_script(phfile: phfile, tags: @tags_to_write)
+      @writer.add_to_script(filename: phfile, tags: @tags_to_write)
 
       return ''
 
