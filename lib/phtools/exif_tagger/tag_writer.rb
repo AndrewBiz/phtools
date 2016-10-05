@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -8,7 +9,7 @@ require 'date'
 module ExifTagger
   # batch EXIF tags setter
   class TagWriter
-    DEFAULT_OPTIONS = %w(-v0 -FileModifyDate<DateTimeOriginal -overwrite_original -ignoreMinorErrors)
+    DEFAULT_OPTIONS = %w(-v0 -FileModifyDate<DateTimeOriginal -overwrite_original -ignoreMinorErrors).freeze
     attr_reader :script_name, :added_files_count
 
     def initialize(script_name: 'exif_tagger.txt',
@@ -22,17 +23,17 @@ module ExifTagger
       @output.puts "*** Preparing exiftool script '#{@script_name}' ..."
     end
 
-    def add_to_script(phfile: '', tags: {}, options: DEFAULT_OPTIONS)
-      @script.puts "# **(#{@added_files_count + 1})** Processing file: #{phfile} *****"
+    def add_to_script(filename: '', tags: {}, options: DEFAULT_OPTIONS)
+      @script.puts "# **(#{@added_files_count + 1})** Processing file: #{filename} *****"
       # tags
       tags.each do |k|
         @script.puts tags.item(k).to_write_script
       end
       # file to be altered
-      @script.puts %Q{#{phfile}}
+      @script.puts filename
       # General options
-      options.each { |o| @script.puts "#{o}" }
-      @script.puts %Q{-execute}
+      options.each { |o| @script.puts o }
+      @script.puts %(-execute)
       @script.puts
       @added_files_count += 1
 
@@ -53,7 +54,7 @@ module ExifTagger
 
     def run!
       close_script
-      if @added_files_count > 0
+      if @added_files_count.positive?
         @output.puts "*** Running #{command} ..."
         ok = system(command, out: @output, err: @err)
         fail if ok.nil?
