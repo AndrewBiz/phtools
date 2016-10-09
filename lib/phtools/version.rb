@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module PhTools
-  VERSION = '0.10.5'
+  VERSION = '0.11.0-beta1'
 end
