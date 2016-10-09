@@ -7,9 +7,10 @@ notification :terminal_notifier, app_name: "phtools"
 
 guard :rspec, cmd: "bundle exec rspec" do
   watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^bin/(.+)$}) { |m| "spec/#{m[1]}_spec.rb" }
+  watch(%r{^exe/(.+)$}) { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^lib/(.+)\.rb$}) { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb') { "spec" }
+  watch(%r{^spec/support/(.+)\.rb$}) { 'spec' }
 end
 
 cucumber_options = {
