@@ -11,6 +11,12 @@ describe ExifTagger::Tag::City do
   let(:val_orig_empty) { { 'City' => '', 'LocationShownCity' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
+  let(:val_mhash_ok) { instance_double("MiniExiftool", class: MiniExiftool) }
+  before(:example) do
+    hash = { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' }
+    allow(val_mhash_ok).to receive(:[]) { |tag_id| hash[tag_id] }
+  end
+
   it_behaves_like 'any tag'
 
   it 'knows it\'s ID' do
@@ -41,5 +47,24 @@ describe ExifTagger::Tag::City do
     its(:value_invalid) { should match_array([val_nok]) }
     its('errors.inspect') { should include("#{val_nok}") }
     its(:to_write_script) { should be_empty }
+  end
+
+  context 'when gets the mini_exiftool hash as initial value' do
+    subject { described_class.new(val_mhash_ok) }
+
+    it "works well with its test-double" do
+      expect(val_mhash_ok.class).to eq MiniExiftool
+      expect(val_mhash_ok['City']).to eq 'Moscow'
+      expect(val_mhash_ok['LocationShownCity']).to eq 'Москва'
+    end
+
+    it "accepts MiniExiftool hash with raw values" do
+      expect(subject.value).to eq val_ok
+      expect(subject.to_s).to include(val_ok.to_s)
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
   end
 end

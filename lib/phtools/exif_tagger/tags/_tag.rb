@@ -3,6 +3,7 @@
 # (c) ANB Andrew Bizyaev
 
 require 'active_support/core_ext'
+require 'mini_exiftool'
 
 module ExifTagger
   module Tag
@@ -10,7 +11,7 @@ module ExifTagger
     class Tag
       include Comparable
 
-      EXIFTOOL_TAGS = []
+      EXIFTOOL_TAGS = [].freeze
       attr_reader :errors, :value, :value_invalid, :warnings, :write_script_lines
       attr_accessor :info, :force_write
 

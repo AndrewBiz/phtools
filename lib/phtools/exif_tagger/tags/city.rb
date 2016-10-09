@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -8,12 +9,24 @@ module ExifTagger
   module Tag
     # MWG:City, String[0,32]
     #   = IPTC:City XMP-photoshop:City XMP-iptcExt:LocationShownCity
+    # Read sequence from mini_exiftool hash: City -> LocationShownCity
+
     class City < Tag
       MAX_BYTESIZE = 32
-      EXIFTOOL_TAGS = %w(City LocationShownCity)
+      EXIFTOOL_TAGS = %w(City LocationShownCity).freeze
 
       def initialize(value_raw = '')
-        super(value_raw.to_s)
+        if value_raw.class == MiniExiftool
+          self.class::EXIFTOOL_TAGS.each do |tag|
+            v = value_raw[tag]
+            unless v.nil?
+              super(v.to_s)
+              break
+            end
+          end
+        else
+          super(value_raw.to_s)
+        end
       end
 
       private
@@ -30,9 +43,8 @@ module ExifTagger
 
       def generate_write_script_lines
         @write_script_lines = []
-        unless @value.empty?
-          @write_script_lines << %Q(-MWG:City=#{@value})
-        end
+        return if @value.empty?
+        @write_script_lines << %(-MWG:City=#{@value})
       end
     end
   end

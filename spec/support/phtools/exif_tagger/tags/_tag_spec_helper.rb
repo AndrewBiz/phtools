@@ -13,7 +13,7 @@ shared_examples_for 'any tag' do
     expect(tag.to_write_script).to include('# INFO: Here I describe usefull info about this tag')
   end
 
-  context 'when saves the correct value' do
+  context 'when gets the correct input value' do
     subject { described_class.new(val_ok) }
     its(:value) { should eql(val_ok) }
     its(:to_s) { should include(val_ok.to_s) }
