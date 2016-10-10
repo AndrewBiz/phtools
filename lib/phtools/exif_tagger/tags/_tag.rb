@@ -12,11 +12,17 @@ module ExifTagger
       include Comparable
 
       EXIFTOOL_TAGS = [].freeze
-      attr_reader :errors, :value, :value_invalid, :warnings, :write_script_lines
+      attr_reader :errors, :value, :raw_values, :value_invalid, :warnings, :write_script_lines
       attr_accessor :info, :force_write
 
-      def initialize(value_norm = '')
-        @value = value_norm
+      def initialize(value = '')
+        @raw_values = {}
+        if value.class == MiniExiftool
+          init_raw_values(value)
+          get_value_from_raw
+        else
+          @value = value
+        end
         @errors = []
         @value_invalid = []
         @warnings = []
@@ -24,10 +30,7 @@ module ExifTagger
         @info = ''
         @force_write = false
         validate
-        @value.freeze
-        @errors.freeze
-        @value_invalid.freeze
-        @warnings.freeze
+        freeze_values
       end
 
       def tag_id
@@ -84,6 +87,29 @@ module ExifTagger
       end
 
       private
+
+      def init_raw_values(raw)
+        self.class::EXIFTOOL_TAGS.each do |tag|
+          @raw_values[tag] = raw[tag]
+        end
+      end
+
+      def get_value_from_raw
+        @raw_values.each_value do |value|
+          if value
+            @value = value
+            break
+          end
+        end
+      end
+
+      def freeze_values
+        @value.freeze
+        @raw_values.freeze
+        @errors.freeze
+        @value_invalid.freeze
+        @warnings.freeze
+      end
 
       def print_info
         @info.empty? ? '' : "# INFO: #{@info}\n"

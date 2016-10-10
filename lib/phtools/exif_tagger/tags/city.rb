@@ -15,20 +15,6 @@ module ExifTagger
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(City LocationShownCity).freeze
 
-      def initialize(value_raw = '')
-        if value_raw.class == MiniExiftool
-          self.class::EXIFTOOL_TAGS.each do |tag|
-            v = value_raw[tag]
-            unless v.nil?
-              super(v.to_s)
-              break
-            end
-          end
-        else
-          super(value_raw.to_s)
-        end
-      end
-
       private
 
       def validate

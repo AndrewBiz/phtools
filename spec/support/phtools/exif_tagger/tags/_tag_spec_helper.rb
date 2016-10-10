@@ -28,6 +28,7 @@ shared_examples_for 'any tag' do
     expect(tag.value_invalid).to be_frozen
     expect(tag.errors).to be_frozen
     expect(tag.warnings).to be_frozen
+    expect(tag.raw_values).to be_frozen
   end
 end
 
