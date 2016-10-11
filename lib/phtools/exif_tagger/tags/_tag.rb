@@ -26,7 +26,7 @@ module ExifTagger
         @raw_values = {}
         if value.class == MiniExiftool
           init_raw_values(value)
-          get_value_from_raw
+          @value = get_from_raw
         else
           @value = normalize(value)
         end
@@ -110,14 +110,11 @@ module ExifTagger
         end
       end
 
-      def get_value_from_raw
-        @value = EMPTY
+      def get_from_raw
         @raw_values.each_value do |value|
-          unless Tag.empty?(value)
-            @value = value
-            break
-          end
+          return value unless Tag.empty?(value)
         end
+        EMPTY
       end
 
       def freeze_values
