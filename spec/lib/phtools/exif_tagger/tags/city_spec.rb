@@ -11,11 +11,8 @@ describe ExifTagger::Tag::City do
   let(:val_orig_empty) { { 'City' => '', 'LocationShownCity' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
-  let(:val_mhash_ok) { instance_double("MiniExiftool", class: MiniExiftool) }
-  let(:mhash_ok) { { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' } }
-  before(:example) do
-    allow(val_mhash_ok).to receive(:[]) { |tag_id| mhash_ok[tag_id] }
-  end
+  let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
+  let(:hash_ok) { { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' } }
 
   it_behaves_like 'any tag'
 
@@ -51,12 +48,16 @@ describe ExifTagger::Tag::City do
 
   # TODO move to any tag
   context 'when gets correct mini_exiftool hash as initial value' do
-    subject { described_class.new(val_mhash_ok) }
+    subject { described_class.new(mhash) }
+
+    before(:example) do
+      allow(mhash).to receive(:[]) { |tag| hash_ok[tag] }
+    end
 
     it "works well with its test-double" do
-      expect(val_mhash_ok.class).to eq MiniExiftool
-      mhash_ok.each do |tag, value|
-        expect(val_mhash_ok[tag]).to eq value
+      expect(mhash.class).to eq MiniExiftool
+      hash_ok.each do |tag, value|
+        expect(mhash[tag]).to eq value
       end
     end
 
@@ -70,11 +71,62 @@ describe ExifTagger::Tag::City do
     end
 
     it "keeps raw_values" do
-      mhash_ok.each do |tag, value|
+      hash_ok.each do |tag, value|
         expect(subject.raw_values[tag]).to eq value
       end
     end
   end
 
+  context 'when gets partially defined mini_exiftool hash as initial value' do
+    subject { described_class.new(mhash) }
 
+    it "works well with its test-double" do
+      hash = { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' }
+      allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+      expect(mhash.class).to eq MiniExiftool
+      hash.each do |tag, value|
+        expect(mhash[tag]).to eq value
+      end
+    end
+
+    context 'when processing raw_values' do
+      it "accepts empty strings" do
+        hash = { 'City' => 'Moscow', 'LocationShownCity' => '' }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+      end
+
+      it "converts all-spaces value to empty string" do
+        hash = { 'City' => ' Moscow ', 'LocationShownCity' => '      ' }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['City']).to eq ' Moscow '
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+      end
+
+      it "converts nil value to empty string" do
+        hash = { 'City' => 'Moscow', 'LocationShownCity' => nil }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+      end
+
+      it "converts non-defined tag to empty string" do
+        hash = { 'City' => 'Moscow' }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+      end
+
+      it "converts bool value to empty string" do
+        hash = { 'City' => true, 'LocationShownCity' => false }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['City']).to be_empty
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+      end
+    end
+  end
 end

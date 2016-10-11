@@ -11,9 +11,16 @@ module ExifTagger
     class Tag
       include Comparable
 
+      EMPTY = ''.freeze
       EXIFTOOL_TAGS = [].freeze
+
       attr_reader :errors, :value, :raw_values, :value_invalid, :warnings, :write_script_lines
       attr_accessor :info, :force_write
+
+      def self.empty?(value)
+        return value.empty? if value.is_a?(String) || value.is_a?(Array)
+        false
+      end
 
       def initialize(value = '')
         @raw_values = {}
@@ -21,7 +28,7 @@ module ExifTagger
           init_raw_values(value)
           get_value_from_raw
         else
-          @value = value
+          @value = normalize(value)
         end
         @errors = []
         @value_invalid = []
@@ -88,15 +95,25 @@ module ExifTagger
 
       private
 
+      def normalize(value)
+        return EMPTY if value.nil?
+        return EMPTY if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+        if value.is_a?(String)
+          return EMPTY if value.strip.empty?
+        end
+        value
+      end
+
       def init_raw_values(raw)
         self.class::EXIFTOOL_TAGS.each do |tag|
-          @raw_values[tag] = raw[tag]
+          @raw_values[tag] = normalize(raw[tag])
         end
       end
 
       def get_value_from_raw
+        @value = EMPTY
         @raw_values.each_value do |value|
-          if value
+          unless Tag.empty?(value)
             @value = value
             break
           end
