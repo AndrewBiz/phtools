@@ -127,6 +127,34 @@ describe ExifTagger::Tag::City do
         expect(subject.raw_values['City']).to be_empty
         expect(subject.raw_values['LocationShownCity']).to be_empty
       end
+
+      it "chooses correct main value" do
+        hash = { 'City' => nil, 'LocationShownCity' => 'Москва' }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['City']).to be_empty
+        expect(subject.raw_values['LocationShownCity']).to eq 'Москва'
+        expect(subject.value).to eq 'Москва'
+        expect(subject.to_s).to include('Москва')
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
+
+      it "feels Ok with empty main value" do
+        hash = { 'City' => '', 'LocationShownCity' => nil }
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        expect(subject.raw_values['City']).to be_empty
+        expect(subject.raw_values['LocationShownCity']).to be_empty
+        expect(subject.value).to be_empty
+        expect(subject.to_s).to include('is EMPTY')
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
     end
   end
 end

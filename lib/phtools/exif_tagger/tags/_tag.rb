@@ -57,6 +57,7 @@ module ExifTagger
       end
 
       def to_s
+        return "#{tag_id} is EMPTY" if Tag.empty?(@value)
         "#{tag_id} = #{@value}"
       end
 
