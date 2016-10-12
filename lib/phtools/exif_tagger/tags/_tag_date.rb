@@ -8,7 +8,6 @@ require 'date'
 module ExifTagger
   module Tag
     class TagDate < Tag
-      MAX_BYTESIZE = 32 # no limit set in EXIF spec for Date
 
       private
 

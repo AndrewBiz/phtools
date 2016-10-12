@@ -13,6 +13,7 @@ module ExifTagger
 
       EMPTY = ''.freeze
       EXIFTOOL_TAGS = [].freeze
+      MAX_BYTESIZE = 32
 
       attr_reader :errors, :value, :raw_values, :value_invalid, :warnings, :write_script_lines
       attr_accessor :info, :force_write
@@ -22,7 +23,7 @@ module ExifTagger
         false
       end
 
-      def initialize(value = '')
+      def initialize(value = '', previous = nil)
         @raw_values = {}
         if value.class == MiniExiftool
           init_raw_values(value)
@@ -36,6 +37,8 @@ module ExifTagger
         @write_script_lines = []
         @info = ''
         @force_write = false
+        @previous = previous
+
         validate
         freeze_values
       end
@@ -49,11 +52,8 @@ module ExifTagger
       end
 
       def <=>(other)
-        if other.respond_to? :tag_id
-          tag_id <=> other.tag_id
-        else
-          tag_id <=> other.to_s.to_sym
-        end
+        return tag_id <=> other.tag_id if other.respond_to?(:tag_id)
+        tag_id <=> other.to_s.to_sym
       end
 
       def to_s
@@ -85,11 +85,19 @@ module ExifTagger
 
       def to_write_script
         str = ''
-        generate_write_script_lines
+        @write_script_lines = []
+        generate_write_script_lines unless Tag.empty?(@value)
         unless @write_script_lines.empty?
-          str << print_info
-          str << print_warnings
-          str << print_lines
+          str << (info.empty? ? '' : "# INFO: #{@info}\n")
+          @warnings.each do |w|
+            str << "# WARNING: #{w}\n"
+          end
+          @write_script_lines.each do |l|
+            unless @warnings.empty?
+              str << '# ' unless @force_write
+            end
+            str << "#{l}\n"
+          end
         end
         str
       end
@@ -118,35 +126,21 @@ module ExifTagger
         EMPTY
       end
 
+      def validate
+        bsize = @value.bytesize
+        return if bsize <= self.class::MAX_BYTESIZE
+        @errors << %(#{tag_name}: '#{@value}' ) +
+                   %(is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
+        @value_invalid << @value
+        @value = EMPTY
+      end
+
       def freeze_values
         @value.freeze
         @raw_values.freeze
         @errors.freeze
         @value_invalid.freeze
         @warnings.freeze
-      end
-
-      def print_info
-        @info.empty? ? '' : "# INFO: #{@info}\n"
-      end
-
-      def print_warnings
-        str = ''
-        @warnings.each do |w|
-          str << "# WARNING: #{w}\n"
-        end
-        str
-      end
-
-      def print_lines
-        str = ''
-        @write_script_lines.each do |l|
-          unless @warnings.empty?
-            str << '# ' unless @force_write
-          end
-          str << "#{l}\n"
-        end
-        str
       end
     end
   end
