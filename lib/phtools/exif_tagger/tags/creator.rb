@@ -9,6 +9,8 @@ module ExifTagger
     # MWG:Creator, string[0,32]+, List of strings
     #   = EXIF:Artist, IPTC:By-line, XMP-dc:Creator
     class Creator < Tag
+      TYPE = :array_of_string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Artist By-line Creator)
 
       def initialize(value_raw = [])

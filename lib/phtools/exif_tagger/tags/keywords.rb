@@ -9,6 +9,7 @@ module ExifTagger
     # MWG:Keywords, string[0,64]+, List of Strings
     #   = IPTC:Keywords, XMP-dc:Subject
     class Keywords < Tag
+      TYPE = :array_of_string
       MAX_BYTESIZE = 64
       EXIFTOOL_TAGS = %w(Keywords Subject)
 

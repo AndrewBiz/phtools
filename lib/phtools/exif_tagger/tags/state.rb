@@ -10,6 +10,8 @@ module ExifTagger
     #   = IPTC:Province-State + XMP-photoshop:State
     #   + XMP-iptcExt:LocationShownProvinceState
     class State < Tag
+      TYPE = :string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Province-State State LocationShownProvinceState)
 
       def initialize(value_raw = [])

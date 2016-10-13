@@ -8,6 +8,8 @@ module ExifTagger
   module Tag
     # ImageUniqueID, String
     class ImageUniqueId < Tag
+      TYPE = :string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(ImageUniqueID)
 
       def initialize(value_raw = [])

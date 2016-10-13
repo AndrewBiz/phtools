@@ -9,6 +9,7 @@ module ExifTagger
     # NMG:Copyright, string[0,128]
     #   = EXIF:Copyright IPTC:CopyrightNotice XMP-dc:Rights
     class Copyright < Tag
+      TYPE = :string
       MAX_BYTESIZE = 128
       EXIFTOOL_TAGS = %w(Copyright CopyrightNotice Rights)
 

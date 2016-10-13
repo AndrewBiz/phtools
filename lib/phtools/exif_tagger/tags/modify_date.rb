@@ -8,6 +8,8 @@ module ExifTagger
   module Tag
     # -EXIF:ModifyDate=now
     class ModifyDate < TagDate
+      TYPE = :date_time
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(ModifyDate)
 
       private

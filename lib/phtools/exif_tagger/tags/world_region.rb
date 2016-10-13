@@ -8,6 +8,7 @@ module ExifTagger
   module Tag
     # -XMP-iptcExt:LocationShownWorldRegion, String
     class WorldRegion < Tag
+      TYPE = :string
       MAX_BYTESIZE = 64 # No limit in XMP spec
       EXIFTOOL_TAGS = %w(LocationShownWorldRegion)
 

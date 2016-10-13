@@ -8,6 +8,8 @@ module ExifTagger
   module Tag
     # XMP-iptcExt:LocationShownCountryCode, String
     class CountryCode < Tag
+      TYPE = :string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(LocationShownCountryCode)
 
       def initialize(value_raw = '')

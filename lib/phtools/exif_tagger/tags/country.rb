@@ -10,6 +10,7 @@ module ExifTagger
     #   = IPTC:Country-PrimaryLocationName XMP-photoshop:Country
     #       XMP-iptcExt:LocationShownCountryName
     class Country < Tag
+      TYPE = :string
       MAX_BYTESIZE = 64
       EXIFTOOL_TAGS = %w(Country-PrimaryLocationName Country LocationShownCountryName)
 

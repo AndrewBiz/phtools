@@ -8,6 +8,8 @@ module ExifTagger
   module Tag
     # -IPTC:CodedCharacterSet, string[0,32]!
     class CodedCharacterSet < Tag
+      TYPE = :string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(CodedCharacterSet)
 
       def initialize(value_raw = '')

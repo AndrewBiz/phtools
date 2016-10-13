@@ -14,6 +14,8 @@ module ExifTagger
     #    XMP-xmp:CreateDate
     # creation date of the digital representation
     class CreateDate < TagDate
+      TYPE = :date_time
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(CreateDate SubSecTimeDigitized DigitalCreationDate DigitalCreationTime)
 
       private

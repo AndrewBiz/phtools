@@ -14,6 +14,8 @@ module ExifTagger
     #    XMP-photoshop:DateCreated
     # creation date of the intellectual content being shown
     class DateTimeOriginal < TagDate
+      TYPE = :date_time
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(DateTimeOriginal SubSecTimeOriginal DateCreated TimeCreated)
 
       private

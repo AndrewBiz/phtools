@@ -14,8 +14,9 @@ module ExifTagger
     # GPSAltitude (rational64u)
     # GPSAltitudeRef (int8u 0 = Above Sea Level, 1 = Below Sea Level)
     class GpsCreated < Tag
-      VALID_KEYS = [:gps_latitude, :gps_latitude_ref, :gps_longitude,
-                    :gps_longitude_ref, :gps_altitude, :gps_altitude_ref]
+      TYPE = :hash_of_string
+      MAX_BYTESIZE = 64
+      VALID_KEYS = [:gps_latitude, :gps_latitude_ref, :gps_longitude, :gps_longitude_ref, :gps_altitude, :gps_altitude_ref].freeze
       EXIFTOOL_TAGS = %w(
         GPSPosition
         GPSLatitude
@@ -24,7 +25,7 @@ module ExifTagger
         GPSLongitudeRef
         GPSAltitude
         GPSAltitudeRef
-      )
+      ).freeze
 
       def initialize(value_raw = {})
         # TODO: value = value_raw.each { |k, v| value_raw[k] = v.to_s }

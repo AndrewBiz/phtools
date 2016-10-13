@@ -9,9 +9,11 @@ module ExifTagger
   module Tag
     # MWG:City, String[0,32]
     #   = IPTC:City XMP-photoshop:City XMP-iptcExt:LocationShownCity
-    # Read sequence from mini_exiftool hash: City -> LocationShownCity
+    # Read sequence from mini_exiftool hash: City, LocationShownCity
 
     class City < Tag
+      TYPE = :string
+      MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(City LocationShownCity).freeze
 
       private

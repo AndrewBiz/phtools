@@ -10,6 +10,8 @@ module ExifTagger
     #   CollectionName
     #   CollectionURI
     class Collections < Tag
+      TYPE = :hash_of_string
+      MAX_BYTESIZE = 32 # TODO
       VALID_KEYS = [:collection_name, :collection_uri]
       EXIFTOOL_TAGS = %w(CollectionName CollectionURI)
       def initialize(value_raw = {})
