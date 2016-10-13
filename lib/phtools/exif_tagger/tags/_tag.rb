@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -11,11 +12,11 @@ module ExifTagger
     class Tag
       include Comparable
 
-      EMPTY = ''.freeze
+      EMPTY = ''
       EXIFTOOL_TAGS = [].freeze
       MAX_BYTESIZE = 32
 
-      attr_reader :errors, :value, :raw_values, :value_invalid, :warnings, :write_script_lines
+      attr_reader :errors, :value, :type, :raw_values, :value_invalid, :warnings, :write_script_lines
       attr_accessor :info, :force_write
 
       def self.empty?(value)
@@ -24,6 +25,7 @@ module ExifTagger
       end
 
       def initialize(value = '', previous = nil)
+        @type = self.class::TYPE
         @raw_values = {}
         if value.class == MiniExiftool
           init_raw_values(value)
@@ -31,13 +33,12 @@ module ExifTagger
         else
           @value = normalize(value)
         end
-        @errors = []
-        @value_invalid = []
-        @warnings = []
-        @write_script_lines = []
         @info = ''
         @force_write = false
+        @errors = [] # TODO: remove
+        @value_invalid = [] # TODO: remove
         @previous = previous
+        @warnings = [] # TODO: remove
 
         validate
         freeze_values
@@ -84,7 +85,7 @@ module ExifTagger
       end
 
       def to_write_script
-        str = ''
+        str = +''
         @write_script_lines = []
         generate_write_script_lines unless Tag.empty?(@value)
         unless @write_script_lines.empty?
@@ -127,12 +128,37 @@ module ExifTagger
       end
 
       def validate
-        bsize = @value.bytesize
-        return if bsize <= self.class::MAX_BYTESIZE
-        @errors << %(#{tag_name}: '#{@value}' ) +
-                   %(is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
+        @errors = []
+        @value_invalid = []
+        return if Tag.empty?(@value)
+
+        case @type
+        when :string
+          if @value.is_a?(String)
+            validate_string_size
+          else
+            @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
+          end
+        when :array_of_string
+          # TODO
+        when :date_time
+          # TODO
+        when :hash_of_string
+          # TODO
+        else
+          @errors << %(#{tag_name}: '#{@value}' the type #{@type} is unknown)
+        end
+
+        return if @errors.empty?
+
         @value_invalid << @value
         @value = EMPTY
+      end
+
+      def validate_string_size
+        bsize = @value.bytesize
+        return if bsize <= self.class::MAX_BYTESIZE
+        @errors << %(#{tag_name}: '#{@value}' is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
       end
 
       def freeze_values
@@ -141,6 +167,7 @@ module ExifTagger
         @errors.freeze
         @value_invalid.freeze
         @warnings.freeze
+        @type.freeze
       end
     end
   end
