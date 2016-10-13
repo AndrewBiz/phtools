@@ -94,7 +94,7 @@ module ExifTagger
       tag_class = ExifTagger::Tag.const_get(tag.to_s.camelize)
       tag_class.new(value)
     rescue => e
-      raise ExifTagger::UnknownTag, "Tag #{tag} - #{e.message}"
+      raise ExifTagger::UnknownTag, "Tag #{tag.to_s.camelize}, value '#{value}' - #{e.message}"
     end
   end
 end
