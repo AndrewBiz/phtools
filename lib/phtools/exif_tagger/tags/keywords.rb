@@ -9,12 +9,17 @@ module ExifTagger
     # MWG:Keywords, string[0,64]+, List of Strings
     #   = IPTC:Keywords, XMP-dc:Subject
     class Keywords < Tag
-      TYPE = :array_of_string
+      TYPE = :array_of_strings
       MAX_BYTESIZE = 64
       EXIFTOOL_TAGS = %w(Keywords Subject)
 
-      def initialize(value_raw = [])
-        super(Array(value_raw).flatten.map { |i| i.to_s })
+      def initialize(value_raw = [], previous = nil)
+        value = normalize(value_raw)
+        if Tag.empty?(value)
+          super(value)
+        else
+          super(Array(value).flatten.map { |i| i.to_s })
+        end
       end
 
       def check_for_warnings(original_values: {})
@@ -25,6 +30,10 @@ module ExifTagger
       private
 
       def validate
+        @errors = []
+        @value_invalid = []
+        return if Tag.empty?(@value)
+
         @value.each do |v|
           bsize = v.bytesize
           if bsize > MAX_BYTESIZE

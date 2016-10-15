@@ -12,9 +12,9 @@ module ExifTagger
       MAX_BYTESIZE = 64 # No limit in XMP spec
       EXIFTOOL_TAGS = %w(LocationShownWorldRegion)
 
-      def initialize(value_raw = [])
-        super(value_raw.to_s)
-      end
+      # def initialize(value_raw = [])
+      #   super(value_raw.to_s)
+      # end
 
       private
 

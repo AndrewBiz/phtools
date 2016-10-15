@@ -9,17 +9,26 @@ module ExifTagger
     # MWG:Creator, string[0,32]+, List of strings
     #   = EXIF:Artist, IPTC:By-line, XMP-dc:Creator
     class Creator < Tag
-      TYPE = :array_of_string
+      TYPE = :array_of_strings
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Artist By-line Creator)
 
-      def initialize(value_raw = [])
-        super(Array(value_raw).flatten.map { |i| i.to_s })
+      def initialize(value_raw = [], previous = nil)
+        value = normalize(value_raw)
+        if Tag.empty?(value)
+          super(value)
+        else
+          super(Array(value).flatten.map { |i| i.to_s })
+        end
       end
 
       private
 
       def validate
+        @errors = []
+        @value_invalid = []
+        return if Tag.empty?(@value)
+
         @value.each do |v|
           bsize = v.bytesize
           if bsize > MAX_BYTESIZE

@@ -12,9 +12,9 @@ module ExifTagger
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(CodedCharacterSet)
 
-      def initialize(value_raw = '')
-        super(value_raw.to_s)
-      end
+      # def initialize(value_raw = '')
+      #   super(value_raw.to_s)
+      # end
 
       private
 

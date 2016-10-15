@@ -14,9 +14,9 @@ module ExifTagger
       MAX_BYTESIZE = 64
       EXIFTOOL_TAGS = %w(Country-PrimaryLocationName Country LocationShownCountryName)
 
-      def initialize(value_raw = '')
-        super(value_raw.to_s)
-      end
+      # def initialize(value_raw = '')
+      #   super(value_raw.to_s)
+      # end
 
       private
 

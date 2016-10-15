@@ -10,17 +10,22 @@ module ExifTagger
     #   CollectionName
     #   CollectionURI
     class Collections < Tag
-      TYPE = :hash_of_string
+      TYPE = :hash_of_strings
       MAX_BYTESIZE = 32 # TODO
       VALID_KEYS = [:collection_name, :collection_uri]
       EXIFTOOL_TAGS = %w(CollectionName CollectionURI)
-      def initialize(value_raw = {})
+
+      def initialize(value_raw = {}, previous = nil)
         super
       end
 
       private
 
       def validate
+        @errors = []
+        @value_invalid = []
+        return if Tag.empty?(@value)
+
         unknown_keys = @value.keys - VALID_KEYS
         unknown_keys.each do |k|
           @errors << %{#{tag_name}: KEY '#{k}' is unknown}
