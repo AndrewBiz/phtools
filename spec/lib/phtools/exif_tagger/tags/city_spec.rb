@@ -6,12 +6,13 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/city'
 
 describe ExifTagger::Tag::City do
-  let(:val_ok) { 'Moscow' }
-  let(:val_orig) { { 'City' => 'Kiev' } }
-  let(:val_orig_empty) { { 'City' => '', 'LocationShownCity' => '' } }
+  let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
   let(:tag) { described_class.new(val_ok) }
 
-  let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
+  let(:val_ok) { 'Moscow' }
+  let(:val_orig) { { 'City' => 'Kiev' } }
+  let(:val_orig_empty) { { 'City' => '', 'LocationShownCity' => nil } }
+
   let(:hash_ok) { { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' } }
 
   it 'knows it\'s ID' do
@@ -26,9 +27,11 @@ describe ExifTagger::Tag::City do
   it_behaves_like 'any tag'
 
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
-  it_behaves_like 'any_string_tag'
+  it_behaves_like 'any string_tag'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
+
+  it_behaves_like 'any tag with previous value'
 
   context 'when gets partially defined mini_exiftool hash as initial value' do
     subject { described_class.new(mhash) }
@@ -108,17 +111,6 @@ describe ExifTagger::Tag::City do
         expect(subject.value_invalid).to be_empty
         expect(subject.warnings).to be_empty
       end
-    end
-  end
-
-  # TODO change the approach how to check original values - via previous.raw_values
-  it_behaves_like 'any paranoid tag'
-
-  context 'when the original value exists' do
-    it 'considers empty strings as a no-value' do
-      tag.check_for_warnings(original_values: val_orig_empty)
-      expect(tag.warnings).to be_empty
-      expect(tag.warnings.inspect).not_to include('has original value:')
     end
   end
 end

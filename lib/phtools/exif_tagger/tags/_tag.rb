@@ -17,10 +17,14 @@ module ExifTagger
       MAX_BYTESIZE = 32
 
       attr_reader :errors, :value, :type, :raw_values, :value_invalid, :warnings, :write_script_lines
+      attr_reader :previous
       attr_accessor :info, :force_write
 
       def self.empty?(value)
+        return true if value.nil?
         return value.empty? if value.is_a?(String) || value.is_a?(Array)
+        # TODO: for array value.join.empty?
+        # TODO: for hash value.values.join.empty?
         false
       end
 
@@ -33,14 +37,15 @@ module ExifTagger
         else
           @value = normalize(value)
         end
+        @previous = (previous.is_a?(self.class) ? previous : nil)
         @info = ''
         @force_write = false
         @errors = [] # TODO: remove
         @value_invalid = [] # TODO: remove
-        @previous = previous
         @warnings = [] # TODO: remove
 
         validate
+        validate_vs_previous
         freeze_values
       end
 
@@ -139,11 +144,11 @@ module ExifTagger
           else
             @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
           end
-        when :array_of_string
+        when :array_of_strings
           # TODO
         when :date_time
           # TODO
-        when :hash_of_string
+        when :hash_of_strings
           # TODO
         else
           @errors << %(#{tag_name}: '#{@value}' the type #{@type} is unknown)
@@ -159,6 +164,15 @@ module ExifTagger
         bsize = @value.bytesize
         return if bsize <= self.class::MAX_BYTESIZE
         @errors << %(#{tag_name}: '#{@value}' is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
+      end
+
+      def validate_vs_previous
+        @warnings = []
+        return if @previous.nil?
+        @previous.raw_values.each do |tag, val|
+          @warnings << "#{tag_name} has original value: #{tag}='#{val}'" unless Tag.empty?(val)
+        end
+        @warnings.freeze
       end
 
       def freeze_values
