@@ -97,6 +97,96 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
       end
     end
   end
+
+  context 'when gets partially defined mini_exiftool hash as initial value' do
+    subject { described_class.new(mhash) }
+
+    it "works well with its test-double" do
+      hash = hash_ok
+      allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+      expect(mhash.class).to eq MiniExiftool
+      hash.each do |tag, value|
+        expect(mhash[tag]).to eq value
+      end
+    end
+
+    context 'when processing raw_values' do
+      it "accepts empty strings" do
+        hash = hash_last_is_empty
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+        last = hash.keys.last
+
+        subject.raw_values.each do |tag, val|
+          if tag == last
+            expect(subject.raw_values[tag]).to be_empty
+          else
+            expect(subject.raw_values[tag]).to eq hash[tag]
+          end
+        end
+      end
+
+      it "converts all-spaces value to empty string" do
+        hash = hash_last_is_all_spaces
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        last = hash.keys.last
+        subject.raw_values.each do |tag, val|
+          if tag == last
+            expect(subject.raw_values[tag]).to be_empty
+          else
+            expect(subject.raw_values[tag]).to eq hash[tag]
+          end
+        end
+      end
+
+      it "converts nil value to empty string" do
+        hash = hash_last_is_nil
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+        last = hash.keys.last
+
+        subject.raw_values.each do |tag, val|
+          if tag == last
+            expect(subject.raw_values[tag]).to be_empty
+          else
+            expect(subject.raw_values[tag]).to eq hash[tag]
+          end
+        end
+      end
+
+      it "converts non-defined tag to empty string" do
+        hash = hash_with_nondefined
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        nondefined = (subject.raw_values.keys - hash.keys)[0]
+        expect(subject.raw_values[nondefined]).to be_empty
+      end
+
+      it "converts bool value to empty string" do
+        hash = hash_with_all_bool
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        subject.raw_values.each do |tag, val|
+          expect(subject.raw_values[tag]).to be_empty
+        end
+      end
+
+      it "Ok with all empty raw values" do
+        hash = hash_with_all_empty
+        allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+        subject.raw_values.each do |tag, val|
+          expect(subject.raw_values[tag]).to be_empty
+        end
+        expect(subject.value).to be_empty
+        expect(subject.to_s).to include('is EMPTY')
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
+    end
+  end
 end
 
 shared_examples_for 'any string_tag' do

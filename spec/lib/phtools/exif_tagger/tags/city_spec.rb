@@ -14,6 +14,12 @@ describe ExifTagger::Tag::City do
   let(:val_orig_empty) { { 'City' => '', 'LocationShownCity' => nil } }
 
   let(:hash_ok) { { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' } }
+  let(:hash_last_is_empty) { { 'City' => 'Moscow', 'LocationShownCity' => '' } }
+  let(:hash_last_is_all_spaces) { { 'City' => ' Moscow ', 'LocationShownCity' => '      ' } }
+  let(:hash_last_is_nil) { { 'City' => 'Moscow', 'LocationShownCity' => nil } }
+  let(:hash_with_nondefined) { { 'City' => 'Moscow' } }
+  let(:hash_with_all_bool) { { 'City' => true, 'LocationShownCity' => false } }
+  let(:hash_with_all_empty) { { 'City' => '', 'LocationShownCity' => nil } }
 
   it 'knows it\'s ID' do
     expect(tag.tag_id).to be :city
@@ -25,92 +31,27 @@ describe ExifTagger::Tag::City do
   end
 
   it_behaves_like 'any tag'
+  it_behaves_like 'any tag with previous value'
 
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
   it_behaves_like 'any string_tag'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 
-  it_behaves_like 'any tag with previous value'
-
   context 'when gets partially defined mini_exiftool hash as initial value' do
     subject { described_class.new(mhash) }
-
-    it "works well with its test-double" do
-      hash = { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' }
+    it "chooses correct main value" do
+      hash = { 'City' => nil, 'LocationShownCity' => 'Москва' }
       allow(mhash).to receive(:[]) { |tag| hash[tag] }
 
-      expect(mhash.class).to eq MiniExiftool
-      hash.each do |tag, value|
-        expect(mhash[tag]).to eq value
-      end
-    end
-
-    context 'when processing raw_values' do
-      it "accepts empty strings" do
-        hash = { 'City' => 'Moscow', 'LocationShownCity' => '' }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-      end
-
-      it "converts all-spaces value to empty string" do
-        hash = { 'City' => ' Moscow ', 'LocationShownCity' => '      ' }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['City']).to eq ' Moscow '
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-      end
-
-      it "converts nil value to empty string" do
-        hash = { 'City' => 'Moscow', 'LocationShownCity' => nil }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-      end
-
-      it "converts non-defined tag to empty string" do
-        hash = { 'City' => 'Moscow' }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-      end
-
-      it "converts bool value to empty string" do
-        hash = { 'City' => true, 'LocationShownCity' => false }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['City']).to be_empty
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-      end
-
-      it "chooses correct main value" do
-        hash = { 'City' => nil, 'LocationShownCity' => 'Москва' }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['City']).to be_empty
-        expect(subject.raw_values['LocationShownCity']).to eq 'Москва'
-        expect(subject.value).to eq 'Москва'
-        expect(subject.to_s).to include('Москва')
-        expect(subject).to be_valid
-        expect(subject.errors).to be_empty
-        expect(subject.value_invalid).to be_empty
-        expect(subject.warnings).to be_empty
-      end
-
-      it "Ok with all empty raw values" do
-        hash = { 'City' => '', 'LocationShownCity' => nil }
-        allow(mhash).to receive(:[]) { |tag| hash[tag] }
-
-        expect(subject.raw_values['City']).to be_empty
-        expect(subject.raw_values['LocationShownCity']).to be_empty
-        expect(subject.value).to be_empty
-        expect(subject.to_s).to include('is EMPTY')
-        expect(subject).to be_valid
-        expect(subject.errors).to be_empty
-        expect(subject.value_invalid).to be_empty
-        expect(subject.warnings).to be_empty
-      end
+      expect(subject.raw_values['City']).to be_empty
+      expect(subject.raw_values['LocationShownCity']).to eq 'Москва'
+      expect(subject.value).to eq 'Москва'
+      expect(subject.to_s).to include('Москва')
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
     end
   end
 end
