@@ -9,34 +9,31 @@ describe ExifTagger::Tag::CodedCharacterSet do
   let(:tag_id) { :coded_character_set }
   let(:tag_name) { 'CodedCharacterSet' }
 
+  let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
+  let(:tag) { described_class.new(val_ok) }
+
   let(:val_ok) { 'UTF8' }
   let(:val_orig) { { 'CodedCharacterSet' => 'UTF8' } }
   let(:val_orig_empty) { { 'CodedCharacterSet' => '' } }
-  let(:tag) { described_class.new(val_ok) }
 
-  it_behaves_like 'any tag'
+  let(:hash_ok) { { 'CodedCharacterSet' => 'UTF8' } }
+  let(:hash_last_is_empty) { { 'CodedCharacterSet' => '' } }
+  let(:hash_last_is_all_spaces) { { 'CodedCharacterSet' => '    ' } }
+  let(:hash_last_is_nil) { { 'CodedCharacterSet' => nil } }
+  let(:hash_with_nondefined) { {} }
+  let(:hash_with_all_bool) { { 'CodedCharacterSet' => true } }
+  let(:hash_with_all_empty) { { 'CodedCharacterSet' => '' } }
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-IPTC:CodedCharacterSet=UTF8')
   end
 
-  it_behaves_like 'any paranoid tag'
+  it_behaves_like 'any tag'
 
-  context 'when the original value exists' do
-    it 'considers empty strings as a no-value' do
-      tag.check_for_warnings(original_values: val_orig_empty)
-      expect(tag.warnings).to be_empty
-      expect(tag.warnings.inspect).not_to include('has original value:')
-    end
-  end
+  let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
+  it_behaves_like 'any string_tag'
 
-  context 'when gets invalid values' do
-    val_nok = '123456789012345678901234567890123' # bytesize=33
-    subject { described_class.new(val_nok) }
-    its(:value) { should be_empty }
-    it { should_not be_valid }
-    its(:value_invalid) { should_not be_empty }
-    its(:value_invalid) { should match_array([val_nok]) }
-    its(:to_write_script) { should be_empty }
-  end
+  it_behaves_like 'any tag with previous value'
+
+  it_behaves_like 'any tag with MiniExiftool hash input'
 end

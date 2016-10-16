@@ -29,10 +29,11 @@ describe ExifTagger::Tag::City do
   end
 
   it_behaves_like 'any tag'
-  it_behaves_like 'any tag with previous value'
 
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
   it_behaves_like 'any string_tag'
+
+  it_behaves_like 'any tag with previous value'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 
