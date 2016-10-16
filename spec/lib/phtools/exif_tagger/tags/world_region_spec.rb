@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/world_region'
 
 describe ExifTagger::Tag::WorldRegion do
+  let(:tag_id) { :world_region }
+  let(:tag_name) { 'WorldRegion' }
+
   let(:val_ok) { 'Asia' }
   let(:val_orig) { { 'LocationShownWorldRegion' => 'America' } }
   let(:val_orig_empty) { { 'LocationShownWorldRegion' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :world_region
-    expect(tag.tag_name).to eq 'WorldRegion'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-XMP-iptcExt:LocationShownWorldRegion=Asia')

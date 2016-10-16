@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/location'
 
 describe ExifTagger::Tag::Location do
+  let(:tag_id) { :location }
+  let(:tag_name) { 'Location' }
+
   let(:val_ok) { 'Orekhovo-Borisovo' }
   let(:val_orig) { { 'Location' => 'Maidan' } }
   let(:val_orig_empty) do
@@ -16,11 +19,6 @@ describe ExifTagger::Tag::Location do
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :location
-    expect(tag.tag_name).to eq 'Location'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Location=Orekhovo-Borisovo')

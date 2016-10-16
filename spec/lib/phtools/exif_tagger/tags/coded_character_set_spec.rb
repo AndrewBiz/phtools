@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/coded_character_set'
 
 describe ExifTagger::Tag::CodedCharacterSet do
+  let(:tag_id) { :coded_character_set }
+  let(:tag_name) { 'CodedCharacterSet' }
+
   let(:val_ok) { 'UTF8' }
   let(:val_orig) { { 'CodedCharacterSet' => 'UTF8' } }
   let(:val_orig_empty) { { 'CodedCharacterSet' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :coded_character_set
-    expect(tag.tag_name).to eq 'CodedCharacterSet'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-IPTC:CodedCharacterSet=UTF8')

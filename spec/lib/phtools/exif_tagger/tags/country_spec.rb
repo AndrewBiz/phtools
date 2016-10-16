@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/country'
 
 describe ExifTagger::Tag::Country do
+  let(:tag_id) { :country }
+  let(:tag_name) { 'Country' }
+
   let(:val_ok) { 'Russia' }
   let(:val_orig) { { 'Country' => 'Ukraine' } }
   let(:val_orig_empty) do {
@@ -17,11 +20,6 @@ describe ExifTagger::Tag::Country do
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :country
-    expect(tag.tag_name).to eq 'Country'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Country=Russia')

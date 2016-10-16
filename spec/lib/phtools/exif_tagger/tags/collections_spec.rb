@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/collections'
 
 describe ExifTagger::Tag::Collections do
+  let(:tag_id) { :collections }
+  let(:tag_name) { 'Collections' }
+
   let(:val_ok) { { collection_name: 'Collection Name', collection_uri: 'www.abc.net' } }
   let(:val_orig) { { 'CollectionName' => 'tralala', 'CollectionURI' => 'trululu' } }
   let(:val_orig_empty) { { 'CollectionName' => '', 'CollectionURI' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :collections
-    expect(tag.tag_name).to eq 'Collections'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-XMP-mwg-coll:Collections-={CollectionName=Collection Name, CollectionURI=www.abc.net}')

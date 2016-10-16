@@ -3,6 +3,11 @@
 # (c) ANB Andrew Bizyaev
 
 shared_examples_for 'any tag' do
+  it 'knows it\'s ID' do
+    expect(tag.tag_id).to be tag_id
+    expect(tag.tag_name).to eq tag_name
+  end
+
   it 'knows it\'s own exiftool tag name' do
     expect(described_class::EXIFTOOL_TAGS).not_to be_empty
   end

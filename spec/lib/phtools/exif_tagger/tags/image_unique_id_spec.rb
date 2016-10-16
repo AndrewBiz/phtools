@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/image_unique_id'
 
 describe ExifTagger::Tag::ImageUniqueId do
+  let(:tag_id) { :image_unique_id }
+  let(:tag_name) { 'ImageUniqueId' }
+
   let(:val_ok) { %(20140413-172725-002) }
   let(:val_orig_ok) { { 'ImageUniqueID' => '20140301-180023-001' } }
   let(:val_orig_nok) { { 'ImageUniqueID' => 'ab3b4bc6ba4bb2c343ab' } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :image_unique_id
-    expect(tag.tag_name).to eq 'ImageUniqueId'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-ImageUniqueID=20140413-172725-002')

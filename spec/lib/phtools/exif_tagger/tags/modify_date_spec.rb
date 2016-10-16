@@ -7,16 +7,14 @@ require 'phtools/exif_tagger/tags/modify_date'
 require 'date'
 
 describe ExifTagger::Tag::ModifyDate do
+  let(:tag_id) { :modify_date }
+  let(:tag_name) { 'ModifyDate' }
+
   let(:val_ok) { 'now' }
   let(:val_orig) { { 'ModifyDate' => DateTime.now } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :modify_date
-    expect(tag.tag_name).to eq 'ModifyDate'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-EXIF:ModifyDate=now')

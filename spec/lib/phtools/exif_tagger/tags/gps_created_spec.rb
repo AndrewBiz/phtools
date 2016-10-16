@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/gps_created'
 
 describe ExifTagger::Tag::GpsCreated do
+  let(:tag_id) { :gps_created }
+  let(:tag_name) { 'GpsCreated' }
+
   let(:val_ok) do
     { gps_latitude: '55 36 31.49',
       gps_latitude_ref: 'N',
@@ -27,11 +30,6 @@ describe ExifTagger::Tag::GpsCreated do
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :gps_created
-    expect(tag.tag_name).to eq 'GpsCreated'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-GPSLatitude="55 36 31.49"')

@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/state'
 
 describe ExifTagger::Tag::State do
+  let(:tag_id) { :state }
+  let(:tag_name) { 'State' }
+
   let(:val_ok) { 'Moscow oblast' }
   let(:val_orig) { { 'State' => 'Sverdlovsk oblast' } }
   let(:val_orig_empty) do
@@ -16,11 +19,6 @@ describe ExifTagger::Tag::State do
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :state
-    expect(tag.tag_name).to eq 'State'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:State=Moscow oblast')

@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/country_code'
 
 describe ExifTagger::Tag::CountryCode do
+  let(:tag_id) { :country_code }
+  let(:tag_name) { 'CountryCode' }
+
   let(:val_ok) { 'RU' }
   let(:val_orig) { { 'LocationShownCountryCode' => 'UA' } }
   let(:val_orig_empty) { { 'LocationShownCountryCode' => '' } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :country_code
-    expect(tag.tag_name).to eq 'CountryCode'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-XMP-iptcExt:LocationShownCountryCode=RU')

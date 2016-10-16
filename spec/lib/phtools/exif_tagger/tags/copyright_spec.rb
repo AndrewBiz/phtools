@@ -6,6 +6,8 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/copyright'
 
 describe ExifTagger::Tag::Copyright do
+  let(:tag_id) { :copyright }
+  let(:tag_name) { 'Copyright' }
 
   let(:val_ok) { '2014 (c) Andrew Bizyaev' }
   let(:val_orig) { { 'Copyright' => 'Shirli-Myrli' } }
@@ -13,11 +15,6 @@ describe ExifTagger::Tag::Copyright do
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :copyright
-    expect(tag.tag_name).to eq 'Copyright'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Copyright=2014 (c) Andrew Bizyaev')

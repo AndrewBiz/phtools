@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/city'
 
 describe ExifTagger::Tag::City do
+  let(:tag_id) { :city }
+  let(:tag_name) { 'City' }
+
   let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
   let(:tag) { described_class.new(val_ok) }
 
@@ -20,11 +23,6 @@ describe ExifTagger::Tag::City do
   let(:hash_with_nondefined) { { 'City' => 'Moscow' } }
   let(:hash_with_all_bool) { { 'City' => true, 'LocationShownCity' => false } }
   let(:hash_with_all_empty) { { 'City' => '', 'LocationShownCity' => nil } }
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :city
-    expect(tag.tag_name).to eq 'City'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:City=Moscow')

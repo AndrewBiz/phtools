@@ -6,16 +6,14 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/keywords'
 
 describe ExifTagger::Tag::Keywords do
+  let(:tag_id) { :keywords }
+  let(:tag_name) { 'Keywords' }
+
   let(:val_ok) { %w(aaa bbb ййй ццц) }
   let(:val_orig) { { 'Keywords' => %w(original keyword) } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :keywords
-    expect(tag.tag_name).to eq 'Keywords'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Keywords-=aaa')

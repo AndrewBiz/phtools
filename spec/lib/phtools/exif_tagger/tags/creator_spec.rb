@@ -6,17 +6,15 @@ require 'spec_helper'
 require 'phtools/exif_tagger/tags/creator'
 
 describe ExifTagger::Tag::Creator do
+  let(:tag_id) { :creator }
+  let(:tag_name) { 'Creator' }
+
   let(:val_ok) { %w(Andrew Natalia) }
   let(:val_orig) { { 'Creator' => ['Dima', 'Polya'] } }
   let(:val_orig_empty) { { 'Creator' => [''], 'Artist' => '', 'By-line' => [''] } }
   let(:tag) { described_class.new(val_ok) }
 
   it_behaves_like 'any tag'
-
-  it 'knows it\'s ID' do
-    expect(tag.tag_id).to be :creator
-    expect(tag.tag_name).to eq 'Creator'
-  end
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Creator-=Andrew')
