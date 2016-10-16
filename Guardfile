@@ -1,8 +1,8 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-notification :terminal_notifier, app_name: "phtools"
-# notification :terminal_title
+# notification :terminal_notifier, app_name: "phtools"
+notification :terminal_title
 # notification :tmux, display_message: false
 
 guard :rspec, cmd: "bundle exec rspec" do
