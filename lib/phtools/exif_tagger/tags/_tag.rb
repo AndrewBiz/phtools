@@ -16,20 +16,19 @@ module ExifTagger
       EXIFTOOL_TAGS = [].freeze
       MAX_BYTESIZE = 32
 
-      attr_reader :errors, :value, :type, :raw_values, :value_invalid, :warnings, :write_script_lines
+      attr_reader :errors, :value, :raw_values, :value_invalid, :warnings, :write_script_lines
       attr_reader :previous
       attr_accessor :info, :force_write
 
       def self.empty?(value)
         return true if value.nil?
-        return value.empty? if value.is_a?(String) || value.is_a?(Array)
-        # TODO: for array value.join.empty?
+        return value.empty? if value.is_a?(String)
+        return value.join.empty? if value.is_a?(Array)
         # TODO: for hash value.values.join.empty?
         false
       end
 
       def initialize(value = '', previous = nil)
-        @type = self.class::TYPE
         @raw_values = {}
         if value.class == MiniExiftool
           init_raw_values(value)
@@ -71,6 +70,7 @@ module ExifTagger
         @errors.empty?
       end
 
+      # TODO: remove deprecated method
       def check_for_warnings(original_values: {})
         @warnings = []
         self.class::EXIFTOOL_TAGS.each do |tag|
@@ -115,6 +115,8 @@ module ExifTagger
         return EMPTY if value.is_a?(TrueClass) || value.is_a?(FalseClass)
         if value.is_a?(String)
           return EMPTY if value.strip.empty?
+        elsif value.is_a?(Array)
+          return value.flatten.map { |i| normalize(i.to_s) }
         end
         value
       end
@@ -136,28 +138,7 @@ module ExifTagger
         @errors = []
         @value_invalid = []
         return if Tag.empty?(@value)
-
-        case @type
-        when :string
-          if @value.is_a?(String)
-            validate_string_size
-          else
-            @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
-          end
-        when :array_of_strings
-          # TODO
-        when :date_time
-          # TODO
-        when :hash_of_strings
-          # TODO
-        else
-          @errors << %(#{tag_name}: '#{@value}' the type #{@type} is unknown)
-        end
-
-        return if @errors.empty?
-
-        @value_invalid << @value
-        @value = EMPTY
+        validate_type
       end
 
       def validate_string_size
@@ -181,7 +162,6 @@ module ExifTagger
         @errors.freeze
         @value_invalid.freeze
         @warnings.freeze
-        @type.freeze
       end
     end
   end

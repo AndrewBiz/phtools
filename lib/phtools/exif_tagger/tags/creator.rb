@@ -1,26 +1,17 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_array_of_strings'
 
 module ExifTagger
   module Tag
     # MWG:Creator, string[0,32]+, List of strings
     #   = EXIF:Artist, IPTC:By-line, XMP-dc:Creator
-    class Creator < Tag
-      TYPE = :array_of_strings
+    class Creator < TagArrayOfStrings
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Artist By-line Creator)
-
-      def initialize(value_raw = [], previous = nil)
-        value = normalize(value_raw)
-        if Tag.empty?(value)
-          super(value)
-        else
-          super(Array(value).flatten.map { |i| i.to_s })
-        end
-      end
 
       private
 
@@ -41,11 +32,10 @@ module ExifTagger
       end
 
       def generate_write_script_lines
-        @write_script_lines = []
-        unless @value.empty?
-          @value.each do |o|
-            @write_script_lines << %Q(-MWG:Creator-=#{o})
-            @write_script_lines << %Q(-MWG:Creator+=#{o})
+        @value.each do |o|
+          unless Tag.empty?(o)
+            @write_script_lines << %(-MWG:Creator-=#{o})
+            @write_script_lines << %(-MWG:Creator+=#{o})
           end
         end
       end
