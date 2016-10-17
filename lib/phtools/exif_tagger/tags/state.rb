@@ -2,21 +2,16 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # MWG:State, String[0,32]
     #   = IPTC:Province-State + XMP-photoshop:State
     #   + XMP-iptcExt:LocationShownProvinceState
-    class State < Tag
-      TYPE = :string
+    class State < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Province-State State LocationShownProvinceState)
-
-      # def initialize(value_raw = [])
-      #   super(value_raw.to_s)
-      # end
 
       private
 

@@ -3,14 +3,13 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # -IPTC:CodedCharacterSet, string[0,32]!
 
-    class CodedCharacterSet < Tag
-      TYPE = :string
+    class CodedCharacterSet < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(CodedCharacterSet).freeze
 

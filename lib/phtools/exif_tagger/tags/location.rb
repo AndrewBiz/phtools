@@ -2,21 +2,16 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # MWG:Location, String[0,32]
     #   = IPTC:Sub-location + XMP-iptcCore:Location
     #   + XMP-iptcExt:LocationShownSublocation
-    class Location < Tag
-      TYPE = :string
+    class Location < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(Sub-location Location LocationShownSublocation)
-
-      # def initialize(value_raw = [])
-      #   super(value_raw.to_s)
-      # end
 
       private
 

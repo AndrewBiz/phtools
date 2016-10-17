@@ -3,7 +3,7 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
@@ -11,8 +11,7 @@ module ExifTagger
     #   = IPTC:City XMP-photoshop:City XMP-iptcExt:LocationShownCity
     # Read sequence from mini_exiftool hash: City, LocationShownCity
 
-    class City < Tag
-      TYPE = :string
+    class City < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(City LocationShownCity).freeze
 

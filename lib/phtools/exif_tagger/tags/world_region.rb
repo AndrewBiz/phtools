@@ -2,19 +2,14 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # -XMP-iptcExt:LocationShownWorldRegion, String
-    class WorldRegion < Tag
-      TYPE = :string
+    class WorldRegion < TagString
       MAX_BYTESIZE = 64 # No limit in XMP spec
       EXIFTOOL_TAGS = %w(LocationShownWorldRegion)
-
-      # def initialize(value_raw = [])
-      #   super(value_raw.to_s)
-      # end
 
       private
 

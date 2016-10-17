@@ -2,15 +2,14 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # MWG:Country, String[0,64]
     #   = IPTC:Country-PrimaryLocationName XMP-photoshop:Country
     #       XMP-iptcExt:LocationShownCountryName
-    class Country < Tag
-      TYPE = :string
+    class Country < TagString
       MAX_BYTESIZE = 64
       EXIFTOOL_TAGS = %w(Country-PrimaryLocationName Country LocationShownCountryName)
 

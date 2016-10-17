@@ -2,14 +2,13 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # NMG:Copyright, string[0,128]
     #   = EXIF:Copyright IPTC:CopyrightNotice XMP-dc:Rights
-    class Copyright < Tag
-      TYPE = :string
+    class Copyright < TagString
       MAX_BYTESIZE = 128
       EXIFTOOL_TAGS = %w(Copyright CopyrightNotice Rights)
 

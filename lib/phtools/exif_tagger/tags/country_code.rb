@@ -2,13 +2,12 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # XMP-iptcExt:LocationShownCountryCode, String
-    class CountryCode < Tag
-      TYPE = :string
+    class CountryCode < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(LocationShownCountryCode)
 

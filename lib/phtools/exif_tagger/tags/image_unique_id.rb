@@ -2,13 +2,12 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_string'
 
 module ExifTagger
   module Tag
     # ImageUniqueID, String
-    class ImageUniqueId < Tag
-      TYPE = :string
+    class ImageUniqueId < TagString
       MAX_BYTESIZE = 32
       EXIFTOOL_TAGS = %w(ImageUniqueID)
 
