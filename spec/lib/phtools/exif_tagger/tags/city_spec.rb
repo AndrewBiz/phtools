@@ -28,10 +28,15 @@ describe ExifTagger::Tag::City do
     expect(tag.to_write_script).to include('-MWG:City=Moscow')
   end
 
+  it 'does NOT generate write_script for EMPTY value' do
+    tag = described_class.new('')
+    expect(tag.to_write_script).not_to include('-MWG:City=')
+  end
+
   it_behaves_like 'any tag'
 
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
-  it_behaves_like 'any string_tag'
+  it_behaves_like 'any string tag'
 
   it_behaves_like 'any tag with previous value'
 
