@@ -1,19 +1,46 @@
 #!/usr/bin/env bash
 echo "Generating sample files with phtools-related tags"
-cfile="tag_city1.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:City=IPTC-Петербург" "-XMP:City=XMP-Москва" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
+# cfile="tag_city0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:City=MWG-Петербург" "$cfile"
+#
+# cfile="tag_city1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:City=IPTC-Петербург" "-XMP:City=XMP-Москва" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
+#
+# cfile="tag_city2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:City=" "-XMP:City=XMP-Москва" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
+#
+# cfile="tag_city3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:City=" "-XMP:City=" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
 
-cfile="tag_city2.JPG"
+# ********** CREATOR ************
+# EXIF:Artist, IPTC:By-line, XMP-dc:Creator
+cfile="tag_creator0.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:City=" "-XMP:City=XMP-Москва" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
+exiftool -P -overwrite_original "-MWG:Creator-=mwg1" "-MWG:Creator+=mwg1" "-MWG:Creator-=mwg2" "-MWG:Creator+=mwg2" "$cfile"
 
-cfile="tag_city3.JPG"
+cfile="tag_creator1.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:City=" "-XMP:City=" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
+exiftool -P -overwrite_original "-EXIF:Artist=exif_artist1; exif_artist2; exif_artist3" "-IPTC:By-line+=iptc_by-line1" "-IPTC:By-line+=iptc_by-line2" "-IPTC:By-line+=iptc_by-line3" "-XMP:Creator+=xmp-creator1" "-XMP:Creator+=xmp-creator2" "-XMP:Creator+=xmp-creator3" "$cfile"
+
+cfile="tag_creator2.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-EXIF:Artist=" "-IPTC:By-line+=iptc_by-line1" "-IPTC:By-line+=iptc_by-line2" "-IPTC:By-line+=iptc_by-line3" "-XMP:Creator+=xmp-creator1" "-XMP:Creator+=xmp-creator2" "-XMP:Creator+=xmp-creator3" "$cfile"
+
+cfile="tag_creator3.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-EXIF:Artist=" "-IPTC:By-line=" "-XMP:Creator+=xmp-creator1" "-XMP:Creator+=xmp-creator2" "-XMP:Creator+=xmp-creator3" "$cfile"
 
 # cfile="1exif_datetimeoriginal.JPG"
 # echo "Preparing file $cfile ..."
