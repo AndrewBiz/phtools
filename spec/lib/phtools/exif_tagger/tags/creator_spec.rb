@@ -51,35 +51,23 @@ describe ExifTagger::Tag::Creator do
 
   it_behaves_like 'any tag'
 
-  it_behaves_like 'any array_of_strings tag'
-
-  context 'when gets invalid value' do
-    val_ok = []
-    val_ok << 'just test string' # bytesize=16
-    val_ok << '12345678901234567890123456789012' # bytesize=32
-    val_ok << 'абвгдеёжзийклмно' # bytesize=32
-    val_nok = []
-    val_nok << '123456789012345678901234567890123' # bytesize=33
-    val_nok << 'абвгдеёжзийклмноZ' # bytesize=33
-    val_nok << 'абвгдеёжзийклмноп' # bytesize=34
-
-    subject { described_class.new((val_ok + val_nok).sort) }
-    its(:value) { should match_array(val_ok) }
-    it { should_not be_valid }
-    its(:value_invalid) { should_not be_empty }
-    its(:value_invalid) { should match_array(val_nok) }
-
-    val_nok.each do |i|
-      its('errors.inspect') { should include("'#{i}'") }
-      its(:to_write_script) { should_not include("#{i}") }
-    end
-    val_ok.each do |i|
-      its('errors.inspect') { should_not include("'#{i}'") }
-      its(:to_write_script) { should include("#{i}") }
-    end
+  let(:val_ok_size) do
+    val = []
+    val << 'just test string' # bytesize=16
+    val << '12345678901234567890123456789012' # bytesize=32
+    val << 'абвгдеёжзийклмно' # bytesize=32
   end
 
-  # it_behaves_like 'any tag with previous value'
+  let(:val_nok_size) do
+    val = []
+    val << '123456789012345678901234567890123' # bytesize=33
+    val << 'абвгдеёжзийклмноZ' # bytesize=33
+    val << 'абвгдеёжзийклмноп' # bytesize=34
+  end
+
+  it_behaves_like 'any array_of_strings tag'
+
+  it_behaves_like 'any tag with previous value'
   #
   # it_behaves_like 'any tag with MiniExiftool hash input'
   #

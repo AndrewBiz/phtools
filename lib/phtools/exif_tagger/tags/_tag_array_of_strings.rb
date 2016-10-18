@@ -11,14 +11,16 @@ module ExifTagger
       private
 
       def validate_type
-        # if @value.is_a?(String)
-        #   validate_string_size
-        # else
-        #   @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
-        # end
-        # return if @errors.empty?
-        # @value_invalid << @value
-        # @value = EMPTY
+        if @value.is_a?(Array)
+          @value.each do |val|
+            @value_invalid << val unless validate_string_size(val)
+          end
+          @value -= @value_invalid
+        else
+          @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
+          @value_invalid << @value
+          @value = EMPTY
+        end
       end
     end
   end

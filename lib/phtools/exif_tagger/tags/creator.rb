@@ -8,28 +8,17 @@ require_relative '_tag_array_of_strings'
 module ExifTagger
   module Tag
     # MWG:Creator, string[0,32]+, List of strings
-    #   = EXIF:Artist, IPTC:By-line, XMP-dc:Creator
+    #   EXIF:Artist, IPTC:By-line, XMP-dc:Creator
+    # exiftool types:
+    #   Artist = String "aaa; bbb"
+    #   By-line = Array ["aaa", "bbb"] OR String "aaa"
+    #   Creator = Array ["aaa", "bbb"] OR String "aaa"
+
     class Creator < TagArrayOfStrings
       MAX_BYTESIZE = 32
-      EXIFTOOL_TAGS = %w(Artist By-line Creator)
+      EXIFTOOL_TAGS = %w(Artist By-line Creator).freeze
 
       private
-
-      def validate
-        @errors = []
-        @value_invalid = []
-        return if Tag.empty?(@value)
-
-        @value.each do |v|
-          bsize = v.bytesize
-          if bsize > MAX_BYTESIZE
-            @errors << %(#{tag_name}: '#{v}' ) +
-                       %(is #{bsize - MAX_BYTESIZE} bytes longer than allowed #{MAX_BYTESIZE})
-            @value_invalid << v
-          end
-        end
-        @value = @value - @value_invalid
-      end
 
       def generate_write_script_lines
         @value.each do |o|

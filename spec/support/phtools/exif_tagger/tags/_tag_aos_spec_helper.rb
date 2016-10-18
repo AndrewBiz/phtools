@@ -44,59 +44,66 @@ shared_examples_for 'any array_of_strings tag' do
   end
 
   context 'when gets invalid value' do
-  #   example '= wrong type (String)' do
-  #     val_nok = 'abcd'
-  #     tag = described_class.new(val_nok)
-  #     expect(tag.value).to be_empty
-  #     expect(tag).not_to be_valid
-  #     expect(tag.value_invalid).not_to be_empty
-  #     expect(tag.value_invalid).to match_array([val_nok])
-  #     expect(tag.errors.inspect).to include("wrong type (String)")
-  #     expect(tag.to_write_script).to be_empty
-  #   end
-  #
-  #   example '= wrong type (DateTime)' do
-  #     val_nok = DateTime.new(2016)
-  #     tag = described_class.new(val_nok)
-  #     expect(tag.value).to be_empty
-  #     expect(tag).not_to be_valid
-  #     expect(tag.value_invalid).not_to be_empty
-  #     expect(tag.value_invalid).to match_array([val_nok])
-  #     expect(tag.errors.inspect).to include("wrong type (DateTime)")
-  #     expect(tag.to_write_script).to be_empty
-  #   end
-  #
-  #   example '= wrong type (Hash)' do
-  #     val_nok = { aaa: 1, bbb: 2 }
-  #     tag = described_class.new(val_nok)
-  #     expect(tag.value).to be_empty
-  #     expect(tag).not_to be_valid
-  #     expect(tag.value_invalid).not_to be_empty
-  #     expect(tag.value_invalid).to match_array([val_nok])
-  #     expect(tag.errors.inspect).to include("wrong type (Hash)")
-  #     expect(tag.to_write_script).to be_empty
-  #   end
-  #
-  #   example '= wrong type (Fixnum)' do
-  #     val_nok = 1
-  #     tag = described_class.new(val_nok)
-  #     expect(tag.value).to be_empty
-  #     expect(tag).not_to be_valid
-  #     expect(tag.value_invalid).not_to be_empty
-  #     expect(tag.value_invalid).to match_array([val_nok])
-  #     expect(tag.errors.inspect).to include("wrong type (Fixnum)")
-  #     expect(tag.to_write_script).to be_empty
-  #   end
+    example 'with wrong type (String)' do
+      val_nok = 'abcd'
+      tag = described_class.new(val_nok)
+      expect(tag.value).to be_empty
+      expect(tag).not_to be_valid
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to match_array([val_nok])
+      expect(tag.errors.inspect).to include("wrong type (String)")
+      expect(tag.to_write_script).to be_empty
+    end
 
-    # example '= too big string' do
-    #   tag = described_class.new(val_nok_size)
-    #   expect(tag.value).to be_empty
-    #   expect(tag).not_to be_valid
-    #   expect(tag.value_invalid).not_to be_empty
-    #   expect(tag.value_invalid).to match_array([val_nok_size])
-    #   expect(tag.errors.inspect).to include("#{val_nok_size}")
-    #   expect(tag.errors.inspect).to include('longer than allowed')
-    #   expect(tag.to_write_script).to be_empty
-    # end
+    example 'with wrong type (DateTime)' do
+      val_nok = DateTime.new(2016)
+      tag = described_class.new(val_nok)
+      expect(tag.value).to be_empty
+      expect(tag).not_to be_valid
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to match_array([val_nok])
+      expect(tag.errors.inspect).to include("wrong type (DateTime)")
+      expect(tag.to_write_script).to be_empty
+    end
+
+    example 'with wrong type (Hash)' do
+      val_nok = { aaa: 1, bbb: 2 }
+      tag = described_class.new(val_nok)
+      expect(tag.value).to be_empty
+      expect(tag).not_to be_valid
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to match_array([val_nok])
+      expect(tag.errors.inspect).to include("wrong type (Hash)")
+      expect(tag.to_write_script).to be_empty
+    end
+
+    example 'with wrong type (Fixnum)' do
+      val_nok = 1
+      tag = described_class.new(val_nok)
+      expect(tag.value).to be_empty
+      expect(tag).not_to be_valid
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to match_array([val_nok])
+      expect(tag.errors.inspect).to include("wrong type (Fixnum)")
+      expect(tag.to_write_script).to be_empty
+    end
+
+    example 'with wrong string items sizes' do
+      tag = described_class.new((val_ok_size + val_nok_size).sort)
+
+      expect(tag).not_to be_valid
+      expect(tag.value).to match_array(val_ok_size)
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to match_array(val_nok_size)
+
+      val_nok_size.each do |i|
+        expect(tag.errors.inspect).to include("'#{i}'")
+        expect(tag.to_write_script).not_to include("#{i}")
+      end
+      val_ok_size.each do |i|
+        expect(tag.errors.inspect).not_to include("'#{i}'")
+        expect(tag.to_write_script).to include("#{i}")
+      end
+    end
   end
 end

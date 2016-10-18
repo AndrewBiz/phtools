@@ -12,7 +12,7 @@ module ExifTagger
 
       def validate_type
         if @value.is_a?(String)
-          validate_string_size
+          validate_string_size(@value)
         else
           @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
         end

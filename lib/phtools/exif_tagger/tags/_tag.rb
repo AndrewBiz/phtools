@@ -141,10 +141,11 @@ module ExifTagger
         validate_type
       end
 
-      def validate_string_size
-        bsize = @value.bytesize
-        return if bsize <= self.class::MAX_BYTESIZE
-        @errors << %(#{tag_name}: '#{@value}' is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
+      def validate_string_size(value)
+        bsize = value.bytesize
+        return true if bsize <= self.class::MAX_BYTESIZE
+        @errors << %(#{tag_name}: '#{value}' is #{bsize - self.class::MAX_BYTESIZE} bytes longer than allowed #{self.class::MAX_BYTESIZE})
+        false
       end
 
       def validate_vs_previous
