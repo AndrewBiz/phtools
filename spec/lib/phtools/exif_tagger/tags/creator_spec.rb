@@ -74,37 +74,74 @@ describe ExifTagger::Tag::Creator do
   context 'when gets partially defined mini_exiftool hash' do
     subject { described_class.new(mhash) }
 
-    it "chooses correct main value = 1st when 1 and 3 exist" do
-      hash = { 'Artist' => 'Andrew-A; Natalia-A', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
-      allow(mhash).to receive(:[]) { |t| hash[t] }
+    context 'when input values have >1 items in arrays' do
+      it "chooses correct main value = 1st when 1 and 3 exist" do
+        hash = { 'Artist' => 'Andrew-A; Natalia-A', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
 
-      expect(subject.value).to eq ['Andrew-A', 'Natalia-A']
-      expect(subject).to be_valid
-      expect(subject.errors).to be_empty
-      expect(subject.value_invalid).to be_empty
-      expect(subject.warnings).to be_empty
+        expect(subject.value).to eq ['Andrew-A', 'Natalia-A']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
+
+      it "chooses correct main value = 2nd when 2 and 3 exist" do
+        hash = { 'Artist' => '', 'By-line' => ['Andrew-B', 'Natalia-B'], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
+
+        expect(subject.value).to eq ['Andrew-B', 'Natalia-B']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
+
+      it "chooses correct main value = 3rd when only 3 exists" do
+        hash = { 'Artist' => '', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
+
+        expect(subject.value).to eq ['Andrew-C', 'Natalia-C']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
     end
 
-    it "chooses correct main value = 2nd when 2 and 3 exist" do
-      hash = { 'Artist' => '', 'By-line' => ['Andrew-B', 'Natalia-B'], 'Creator' => ['Andrew-C', 'Natalia-C'] }
-      allow(mhash).to receive(:[]) { |t| hash[t] }
+    context 'when input values have 1 item (string)' do
+      it "chooses correct main value = 1st when 1 and 3 exist" do
+        hash = { 'Artist' => 'Andrew-A', 'By-line' => [], 'Creator' => 'Andrew-C' }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
 
-      expect(subject.value).to eq ['Andrew-B', 'Natalia-B']
-      expect(subject).to be_valid
-      expect(subject.errors).to be_empty
-      expect(subject.value_invalid).to be_empty
-      expect(subject.warnings).to be_empty
-    end
+        expect(subject.value).to eq ['Andrew-A']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
 
-    it "chooses correct main value = 3rd when only 3 exists" do
-      hash = { 'Artist' => '', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
-      allow(mhash).to receive(:[]) { |t| hash[t] }
+      it "chooses correct main value = 2nd when 2 and 3 exist" do
+        hash = { 'Artist' => '', 'By-line' => 'Andrew-B', 'Creator' => 'Andrew-C' }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
 
-      expect(subject.value).to eq ['Andrew-C', 'Natalia-C']
-      expect(subject).to be_valid
-      expect(subject.errors).to be_empty
-      expect(subject.value_invalid).to be_empty
-      expect(subject.warnings).to be_empty
+        expect(subject.value).to eq ['Andrew-B']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
+
+      it "chooses correct main value = 3rd when only 3 exists" do
+        hash = { 'Artist' => '', 'By-line' => [], 'Creator' => 'Andrew-C' }
+        allow(mhash).to receive(:[]) { |t| hash[t] }
+
+        expect(subject.value).to eq ['Andrew-C']
+        expect(subject).to be_valid
+        expect(subject.errors).to be_empty
+        expect(subject.value_invalid).to be_empty
+        expect(subject.warnings).to be_empty
+      end
     end
   end
 end
