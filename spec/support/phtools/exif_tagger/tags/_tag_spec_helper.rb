@@ -48,7 +48,6 @@ shared_examples_for 'any tag' do
     end
   end
 
-
   it "accepts nil as previous value" do
     tag = described_class.new(val_ok, nil)
     expect(tag.previous).to be_nil
@@ -72,9 +71,8 @@ end
 
 # *****************************************************************************#
 shared_examples_for 'any tag with MiniExiftool hash input' do
+  # TODO: move it to any_tag group
   context 'when gets correct mini_exiftool hash' do
-    subject { described_class.new(mhash) }
-
     before(:example) do
       allow(mhash).to receive(:[]) { |tag| hash_ok[tag] }
     end
@@ -87,23 +85,26 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
     end
 
     it "accepts input MiniExiftool hash" do
-      expect(subject.value).to eq val_ok
-      expect(subject.to_s).to include(val_ok.to_s)
-      expect(subject).to be_valid
-      expect(subject.raw_values).not_to be_empty
-      expect(subject.errors).to be_empty
-      expect(subject.value_invalid).to be_empty
-      expect(subject.warnings).to be_empty
+      tag = described_class.new(mhash)
+
+      expect(tag.raw_values).not_to be_empty
+      expect(tag).to be_valid
+      expect(tag.value_invalid).to be_empty
+      expect(tag.errors).to be_empty
+      expect(tag.warnings).to be_empty
+      expect(tag.value).to eq val_ok
     end
 
     it "keeps raw_values" do
-      hash_ok.each do |tag, value|
-        expect(subject.raw_values[tag]).to eq value
+      tag = described_class.new(mhash)
+      hash_ok.each do |t, v|
+        expect(tag.raw_values[t]).to eq v
       end
     end
   end
 
-  context 'when gets partially defined mini_exiftool hash as initial value' do
+  context 'when gets partially defined mini_exiftool hash' do
+  # TODO: move it to any_tag group
     subject { described_class.new(mhash) }
 
     it "works well with its test-double" do
@@ -176,7 +177,7 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
         end
       end
 
-      it "Ok with all empty raw values" do
+      it "is Ok with all empty raw values" do
         hash = hash_with_all_empty
         allow(mhash).to receive(:[]) { |tag| hash[tag] }
 
@@ -195,6 +196,7 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
 end
 
 # *****************************************************************************#
+# TODO: to put to any tag shared_examples
 shared_examples_for 'any tag with previous value' do
   context 'when gets both new and previous value' do
     let(:previous_value) { described_class.new(mhash) }
@@ -234,6 +236,7 @@ shared_examples_for 'any tag with previous value' do
 
       expect(tag.previous).not_to be_nil
       expect(tag.previous.class).to eq(described_class)
+      expect(tag.previous.raw_values).not_to be_empty
       expect(tag.value).to eq(val_ok)
       expect(tag.raw_values).to be_empty
       expect(tag.to_s).to include(val_ok.to_s)

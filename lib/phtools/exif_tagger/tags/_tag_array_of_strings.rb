@@ -10,6 +10,14 @@ module ExifTagger
     class TagArrayOfStrings < Tag
       private
 
+      def get_from_raw
+        @raw_values.each_value do |v|
+          v = v.split('; ') if v.is_a?(String)
+          return v unless Tag.empty?(v)
+        end
+        EMPTY
+      end
+
       def validate_type
         if @value.is_a?(Array)
           @value.each do |val|

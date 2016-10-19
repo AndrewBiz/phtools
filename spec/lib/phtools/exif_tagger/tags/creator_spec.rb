@@ -14,15 +14,15 @@ describe ExifTagger::Tag::Creator do
 
   let(:val_ok) { %w(Andrew Natalia) }
   let(:val_orig) { { 'Creator' => ['Dima', 'Polya'] } }
-  let(:val_orig_empty) { { 'Creator' => [''], 'Artist' => '', 'By-line' => [''] } }
+  let(:val_orig_empty) { { 'Artist' => '', 'By-line' => [''], 'Creator' => ['']} }
 
-  # let(:hash_ok) { { 'City' => 'Moscow', 'LocationShownCity' => 'Москва' } }
-  # let(:hash_last_is_empty) { { 'City' => 'Moscow', 'LocationShownCity' => '' } }
-  # let(:hash_last_is_all_spaces) { { 'City' => ' Moscow ', 'LocationShownCity' => '      ' } }
-  # let(:hash_last_is_nil) { { 'City' => 'Moscow', 'LocationShownCity' => nil } }
-  # let(:hash_with_nondefined) { { 'City' => 'Moscow' } }
-  # let(:hash_with_all_bool) { { 'City' => true, 'LocationShownCity' => false } }
-  # let(:hash_with_all_empty) { { 'City' => '', 'LocationShownCity' => nil } }
+  let(:hash_ok) { { 'Artist' => 'Andrew; Natalia', 'Creator' => ['Andrew-C', 'Natalia-C'], 'By-line' => ['Andrew-B', 'Natalia-B'] } }
+  let(:hash_last_is_empty) { { 'Artist' => 'Andrew; Natalia', 'Creator' => ['Andrew-C', 'Natalia-C'], 'By-line' => '' } }
+  let(:hash_last_is_all_spaces) { { 'Artist' => 'Andrew; Natalia', 'Creator' => ['Andrew-C', 'Natalia-C'], 'By-line' => '                        ' } }
+  let(:hash_last_is_nil) { { 'Artist' => 'Andrew; Natalia', 'Creator' => ['Andrew-C', 'Natalia-C'], 'By-line' => nil } }
+  let(:hash_with_nondefined) { { 'Artist' => 'Andrew; Natalia', 'By-line' => nil } }
+  let(:hash_with_all_bool) { { 'Artist' => true, 'Creator' => false, 'By-line' => true } }
+  let(:hash_with_all_empty) { { 'Artist' => '', 'Creator' => [], 'By-line' => nil } }
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-MWG:Creator-=Andrew')
@@ -68,32 +68,43 @@ describe ExifTagger::Tag::Creator do
   it_behaves_like 'any array_of_strings tag'
 
   it_behaves_like 'any tag with previous value'
-  #
-  # it_behaves_like 'any tag with MiniExiftool hash input'
-  #
-  # context 'when gets partially defined mini_exiftool hash as initial value' do
-  #   subject { described_class.new(mhash) }
-  #   it "chooses correct main value" do
-  #     hash = { 'City' => nil, 'LocationShownCity' => 'Москва' }
-  #     allow(mhash).to receive(:[]) { |tag| hash[tag] }
-  #
-  #     expect(subject.raw_values['City']).to be_empty
-  #     expect(subject.raw_values['LocationShownCity']).to eq 'Москва'
-  #     expect(subject.value).to eq 'Москва'
-  #     expect(subject.to_s).to include('Москва')
-  #     expect(subject).to be_valid
-  #     expect(subject.errors).to be_empty
-  #     expect(subject.value_invalid).to be_empty
-  #     expect(subject.warnings).to be_empty
-  #   end
-  # end
-  # TODO: remove
-  context 'when the original value exists' do
-    it 'considers empty strings as a no-value' do
-      tag.check_for_warnings(original_values: val_orig_empty)
-      expect(tag.warnings).to be_empty
-      expect(tag.warnings.inspect).not_to include('has original value:')
+
+  it_behaves_like 'any tag with MiniExiftool hash input'
+
+  context 'when gets partially defined mini_exiftool hash' do
+    subject { described_class.new(mhash) }
+
+    it "chooses correct main value = 1st when 1 and 3 exist" do
+      hash = { 'Artist' => 'Andrew-A; Natalia-A', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq ['Andrew-A', 'Natalia-A']
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
+
+    it "chooses correct main value = 2nd when 2 and 3 exist" do
+      hash = { 'Artist' => '', 'By-line' => ['Andrew-B', 'Natalia-B'], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq ['Andrew-B', 'Natalia-B']
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
+
+    it "chooses correct main value = 3rd when only 3 exists" do
+      hash = { 'Artist' => '', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq ['Andrew-C', 'Natalia-C']
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
     end
   end
-
 end
