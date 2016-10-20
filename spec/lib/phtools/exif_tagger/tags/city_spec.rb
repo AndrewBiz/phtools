@@ -42,7 +42,7 @@ describe ExifTagger::Tag::City do
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 
-  context 'when gets partially defined mini_exiftool hash as initial value' do
+  context 'when gets partially defined mini_exiftool hash' do
     subject { described_class.new(mhash) }
     it "chooses correct main value" do
       hash = { 'City' => nil, 'LocationShownCity' => 'Москва' }
