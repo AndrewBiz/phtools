@@ -89,28 +89,47 @@ echo "Generating sample files with phtools-related tags"
 
 # ********** LOCATION ************
 # IPTC:Sub-location, XMP:Location, XMP:LocationShownSublocation
-cfile="tag_location0.JPG"
+# cfile="tag_location0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:Location=mwg_location" "$cfile"
+#
+# cfile="tag_location1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Sub-location=iptc_sublocation" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+#
+# cfile="tag_location2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+#
+# cfile="tag_location3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+
+# ********** STATE ************
+# IPTC:Province-State, XMP-photoshop:State, XMP-iptcExt:LocationShownProvinceState
+cfile="tag_state0.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-MWG:Location=mwg_location" "$cfile"
+exiftool -P -overwrite_original "-MWG:State=mwg_state" "$cfile"
 
-cfile="tag_location1.JPG"
+cfile="tag_state1.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Sub-location=iptc_sublocation" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Province-State=iptc_provincestate" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
 
-cfile="tag_location2.JPG"
+cfile="tag_state2.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
 
-cfile="tag_location3.JPG"
+cfile="tag_state3.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
-
-
-
+exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
 
 
 
