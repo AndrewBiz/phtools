@@ -87,6 +87,23 @@ echo "Generating sample files with phtools-related tags"
 # cp "_template.JPG" "$cfile"
 # exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
 
+# ********** Keywords ************
+# IPTC:Keywords, XMP:Subject
+cfile="tag_keywords0.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-MWG:Keywords+=mwg_keyword1" "-MWG:Keywords+=mwg_keyword2" "$cfile"
+
+cfile="tag_keywords1.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Keywords+=iptc_kw1" "-IPTC:Keywords+=iptc_kw2" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
+
+cfile="tag_keywords2.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Keywords=" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
+
 # ********** LOCATION ************
 # IPTC:Sub-location, XMP:Location, XMP:LocationShownSublocation
 # cfile="tag_location0.JPG"
@@ -111,25 +128,25 @@ echo "Generating sample files with phtools-related tags"
 
 # ********** STATE ************
 # IPTC:Province-State, XMP-photoshop:State, XMP-iptcExt:LocationShownProvinceState
-cfile="tag_state0.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-MWG:State=mwg_state" "$cfile"
-
-cfile="tag_state1.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Province-State=iptc_provincestate" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
-
-cfile="tag_state2.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
-
-cfile="tag_state3.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
+# cfile="tag_state0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:State=mwg_state" "$cfile"
+#
+# cfile="tag_state1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Province-State=iptc_provincestate" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
+#
+# cfile="tag_state2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=xmp_state" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
+#
+# cfile="tag_state3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
 
 
 
