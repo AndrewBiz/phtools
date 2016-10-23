@@ -45,26 +45,47 @@ echo "Generating sample files with phtools-related tags"
 
 # ********** COPYRIGHT ************
 # EXIF:Artist, IPTC:By-line, XMP-dc:Creator
-cfile="tag_copyright0.JPG"
+# cfile="tag_copyright0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:Copyright=mwg_AndrewBiz" "$cfile"
+#
+# cfile="tag_copyright1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:Copyright=exif_copyright" "-IPTC:CopyrightNotice=iptc_copyrightnotice" "-XMP:Rights=xmp-rights" "$cfile"
+#
+# cfile="tag_copyright2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:Copyright=" "-IPTC:CopyrightNotice=iptc_copyrightnotice" "-XMP:Rights=xmp-rights" "$cfile"
+#
+# cfile="tag_copyright3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:Copyright=" "-IPTC:CopyrightNotice=" "-XMP:Rights=xmp-rights" "$cfile"
+
+# ********** COUNTRY ************
+# IPTC:Country-PrimaryLocationName, XMP-photoshop:Country, XMP-iptcExt:LocationShownCountryName
+cfile="tag_country0.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-MWG:Copyright=mwg_AndrewBiz" "$cfile"
+exiftool -P -overwrite_original "-MWG:Country=mwg_country" "$cfile"
 
-cfile="tag_copyright1.JPG"
+cfile="tag_country1.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-EXIF:Copyright=exif_copyright" "-IPTC:CopyrightNotice=iptc_copyrightnotice" "-XMP:Rights=xmp-rights" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=iptc_country-primarylocationname" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
 
-cfile="tag_copyright2.JPG"
+cfile="tag_country2.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-EXIF:Copyright=" "-IPTC:CopyrightNotice=iptc_copyrightnotice" "-XMP:Rights=xmp-rights" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
 
-cfile="tag_copyright3.JPG"
+cfile="tag_country3.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-EXIF:Copyright=" "-IPTC:CopyrightNotice=" "-XMP:Rights=xmp-rights" "$cfile"
-
+exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
 
 
 
