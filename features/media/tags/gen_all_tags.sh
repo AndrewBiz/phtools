@@ -21,6 +21,15 @@ echo "Generating sample files with phtools-related tags"
 # cp "_template.JPG" "$cfile"
 # exiftool -P -overwrite_original "-IPTC:City=" "-XMP:City=" "-XMP:LocationShownCity=XMP-ShownCity" "$cfile"
 
+# ********** Collections ************
+# XMP-mwg-coll:Collections (struct+)
+#   CollectionName
+#   CollectionURI
+cfile="tag_collections0.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname1, CollectionURI=mwg_colluri1}" "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname2, CollectionURI=mwg_colluri2}" "$cfile"
+
 # ********** CREATOR ************
 # EXIF:Artist, IPTC:By-line, XMP-dc:Creator
 # cfile="tag_creator0.JPG"
@@ -89,20 +98,20 @@ echo "Generating sample files with phtools-related tags"
 
 # ********** Keywords ************
 # IPTC:Keywords, XMP:Subject
-cfile="tag_keywords0.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-MWG:Keywords+=mwg_keyword1" "-MWG:Keywords+=mwg_keyword2" "$cfile"
-
-cfile="tag_keywords1.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Keywords+=iptc_kw1" "-IPTC:Keywords+=iptc_kw2" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
-
-cfile="tag_keywords2.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Keywords=" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
+# cfile="tag_keywords0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:Keywords+=mwg_keyword1" "-MWG:Keywords+=mwg_keyword2" "$cfile"
+#
+# cfile="tag_keywords1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Keywords+=iptc_kw1" "-IPTC:Keywords+=iptc_kw2" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
+#
+# cfile="tag_keywords2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Keywords=" "-XMP:Subject+=xmp_subj1" "-XMP:Subject+=xmp_subj2" "$cfile"
 
 # ********** LOCATION ************
 # IPTC:Sub-location, XMP:Location, XMP:LocationShownSublocation
