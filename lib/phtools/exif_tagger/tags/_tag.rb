@@ -24,7 +24,7 @@ module ExifTagger
         return true if value.nil?
         return value.empty? if value.is_a?(String)
         return value.join.empty? if value.is_a?(Array)
-        # TODO: for hash value.values.join.empty?
+        return value.values.join.empty? if value.is_a?(Hash)
         false
       end
 

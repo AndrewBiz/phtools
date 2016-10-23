@@ -1,19 +1,19 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require_relative '_tag'
+require_relative '_tag_hash_of_strings'
 
 module ExifTagger
   module Tag
-    # Collections (struct+)
+    # XMP-mwg-coll:Collections (struct+)
     #   CollectionName
     #   CollectionURI
-    class Collections < Tag
-      TYPE = :hash_of_strings
-      MAX_BYTESIZE = 32 # TODO
-      VALID_KEYS = [:collection_name, :collection_uri]
-      EXIFTOOL_TAGS = %w(CollectionName CollectionURI)
+    class Collections < TagHashOfStrings
+      MAX_BYTESIZE = 64
+      VALID_KEYS = [:collection_name, :collection_uri].freeze
+      EXIFTOOL_TAGS = %w(CollectionName CollectionURI).freeze
 
       def initialize(value_raw = {}, previous = nil)
         super
@@ -43,8 +43,8 @@ module ExifTagger
       def generate_write_script_lines
         @write_script_lines = []
         unless @value.empty?
-          @write_script_lines << %Q(-XMP-mwg-coll:Collections-={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
-          @write_script_lines << %Q(-XMP-mwg-coll:Collections+={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
+          @write_script_lines << %(-XMP-mwg-coll:Collections-={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
+          @write_script_lines << %(-XMP-mwg-coll:Collections+={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
         end
       end
     end
