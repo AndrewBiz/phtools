@@ -196,8 +196,7 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
 end
 
 # *****************************************************************************#
-# TODO: to put to any tag shared_examples
-shared_examples_for 'any tag with previous value' do
+shared_examples_for 'any tag who cares about previous value' do
   context 'when gets both new and previous value' do
     let(:previous_value) { described_class.new(mhash) }
     let(:tag) { described_class.new(val_ok, previous_value) }

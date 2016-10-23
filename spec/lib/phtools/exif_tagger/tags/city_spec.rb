@@ -38,7 +38,7 @@ describe ExifTagger::Tag::City do
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
   it_behaves_like 'any string tag'
 
-  it_behaves_like 'any tag with previous value'
+  it_behaves_like 'any tag who cares about previous value'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 

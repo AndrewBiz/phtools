@@ -67,7 +67,7 @@ describe ExifTagger::Tag::Creator do
 
   it_behaves_like 'any array_of_strings tag'
 
-  it_behaves_like 'any tag with previous value'
+  it_behaves_like 'any tag who cares about previous value'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 
