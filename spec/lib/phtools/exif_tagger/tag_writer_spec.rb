@@ -76,7 +76,7 @@ describe ExifTagger::TagWriter do
     expect(mfile.string).to include('-MWG:Keywords+=keyword1')
     expect(mfile.string).to include('-MWG:Keywords-=keyword2')
     expect(mfile.string).to include('-MWG:Keywords+=keyword2')
-    expect(mfile.string).to include('-XMP-iptcExt:LocationShownWorldRegion=Europe')
+    expect(mfile.string).to include('-XMP:LocationShownWorldRegion=Europe')
     expect(mfile.string).to include('-MWG:Country=Russia')
     expect(mfile.string).to include('-MWG:State=State')
     expect(mfile.string).to include('-MWG:City=Moscow')
