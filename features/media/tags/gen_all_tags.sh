@@ -67,25 +67,47 @@ echo "Generating sample files with phtools-related tags"
 
 # ********** COUNTRY ************
 # IPTC:Country-PrimaryLocationName, XMP-photoshop:Country, XMP-iptcExt:LocationShownCountryName
-cfile="tag_country0.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-MWG:Country=mwg_country" "$cfile"
+# cfile="tag_country0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:Country=mwg_country" "$cfile"
+#
+# cfile="tag_country1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=iptc_country-primarylocationname" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
+#
+# cfile="tag_country2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
+#
+# cfile="tag_country3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
 
-cfile="tag_country1.JPG"
+# ********** LOCATION ************
+# IPTC:Sub-location, XMP:Location, XMP:LocationShownSublocation
+cfile="tag_location0.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=iptc_country-primarylocationname" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
+exiftool -P -overwrite_original "-MWG:Location=mwg_location" "$cfile"
 
-cfile="tag_country2.JPG"
+cfile="tag_location1.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=xmp_country" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Sub-location=iptc_sublocation" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
 
-cfile="tag_country3.JPG"
+cfile="tag_location2.JPG"
 echo "Preparing file $cfile ..."
 cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-IPTC:Country-PrimaryLocationName=" "-XMP:Country=" "-XMP:LocationShownCountryName=xmp_locationshowncountryname" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=xmp_location" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
+
+cfile="tag_location3.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-IPTC:Sub-location=" "-XMP:Location=" "-XMP:LocationShownSublocation=xmp_locationshownsublocation" "$cfile"
 
 
 
