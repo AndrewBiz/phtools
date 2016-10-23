@@ -8,5 +8,5 @@ Dir.glob(File.join(__dir__, 'tags', '*.rb')).each { |f| require_relative f }
 
 # ExifTagger helper methods
 module ExifTagger
-  TAGS_SUPPORTED = (Tag.constants - [:Tag, :TagArrayOfStrings, :TagString, :TagDate]).map { |i| i.to_s.underscore.to_sym }
+  TAGS_SUPPORTED = (Tag.constants - [:Tag, :TagArrayOfStrings, :TagHashOfStrings, :TagString, :TagDate]).map { |i| i.to_s.underscore.to_sym }
 end
