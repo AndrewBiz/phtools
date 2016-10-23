@@ -28,6 +28,11 @@ describe ExifTagger::Tag::CodedCharacterSet do
     expect(tag.to_write_script).to include('-IPTC:CodedCharacterSet=UTF8')
   end
 
+  it 'does NOT generate write_script for EMPTY value' do
+    tag = described_class.new('')
+    expect(tag.to_write_script).not_to include('-IPTC:CodedCharacterSet=')
+  end
+
   it_behaves_like 'any tag'
 
   let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
