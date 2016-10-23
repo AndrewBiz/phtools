@@ -15,7 +15,7 @@ module ExifTagger
       private
 
       def generate_write_script_lines
-        @write_script_lines << %(-XMP-iptcExt:LocationShownCountryCode=#{@value})
+        @write_script_lines << %(-XMP:LocationShownCountryCode=#{@value})
       end
     end
   end

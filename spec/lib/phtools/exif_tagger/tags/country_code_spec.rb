@@ -25,12 +25,12 @@ describe ExifTagger::Tag::CountryCode do
   let(:hash_with_all_empty) { { 'LocationShownCountryCode' => '' } }
 
   it 'generates write_script for exiftool' do
-    expect(tag.to_write_script).to include('-XMP-iptcExt:LocationShownCountryCode=RU')
+    expect(tag.to_write_script).to include('-XMP:LocationShownCountryCode=RU')
   end
 
   it 'does NOT generate write_script for EMPTY value' do
     tag = described_class.new('')
-    expect(tag.to_write_script).not_to include('-XMP-iptcExt:LocationShownCountryCode=')
+    expect(tag.to_write_script).not_to include('-XMP:LocationShownCountryCode=')
   end
 
   it_behaves_like 'any tag'
