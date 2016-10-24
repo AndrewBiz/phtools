@@ -39,6 +39,26 @@ describe ExifTagger::Tag::Collections do
 
   it_behaves_like 'any tag'
 
+  let(:val_ok_size) do
+    val = []
+    val << 'just test string' # bytesize=16
+    val << '12345678901234567890123456789012' # bytesize=32
+    val << 'абвгдеёжзийклмно' # bytesize=32
+  end
+
+  let(:val_nok_size) do
+    val = []
+    val << '123456789012345678901234567890123' # bytesize=33
+    val << 'абвгдеёжзийклмноZ' # bytesize=33
+    val << 'абвгдеёжзийклмноп' # bytesize=34
+  end
+
+  it_behaves_like 'any hash_of_strings tag'
+
+  # it_behaves_like 'any tag who cares about previous value'
+  #
+  # it_behaves_like 'any tag with MiniExiftool hash input'
+
   context 'when gets invalid input' do
     context 'with unknown key' do
       val_nok = { coll_name_wrong: 'xyz', collection_uri: 'www.xyz.com' }

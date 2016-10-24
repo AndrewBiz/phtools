@@ -117,6 +117,8 @@ module ExifTagger
           return EMPTY if value.strip.empty?
         elsif value.is_a?(Array)
           return value.flatten.map { |i| normalize(i.to_s) }
+        elsif value.is_a?(Hash)
+          return value.map { |k, v| [k, normalize(v.to_s)] }.to_h
         end
         value
       end
