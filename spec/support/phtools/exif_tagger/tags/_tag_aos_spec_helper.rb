@@ -72,7 +72,6 @@ shared_examples_for 'any array_of_strings tag' do
       expect(tag.value).to be_empty
       expect(tag).not_to be_valid
       expect(tag.value_invalid).not_to be_empty
-      expect(tag.value_invalid).to match_array([val_nok])
       expect(tag.errors.inspect).to include("wrong type (Hash)")
       expect(tag.to_write_script).to be_empty
     end
