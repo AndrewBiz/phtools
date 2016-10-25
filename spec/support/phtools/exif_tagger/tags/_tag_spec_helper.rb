@@ -184,7 +184,7 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
         subject.raw_values.each do |tag, val|
           expect(subject.raw_values[tag]).to be_empty
         end
-        expect(subject.value).to be_empty
+        expect(ExifTagger::Tag::Tag.empty?(subject.value)).to be true
         expect(subject.to_s).to include('is EMPTY')
         expect(subject).to be_valid
         expect(subject.errors).to be_empty
