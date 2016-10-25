@@ -10,6 +10,13 @@ module ExifTagger
     class TagString < Tag
       private
 
+      def get_from_raw
+        @raw_values.each_value do |value|
+          return value unless Tag.empty?(value)
+        end
+        EMPTY
+      end
+
       def validate_type
         if @value.is_a?(String)
           validate_string_size(@value)

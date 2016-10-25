@@ -32,7 +32,7 @@ module ExifTagger
         @raw_values = {}
         if value.class == MiniExiftool
           init_raw_values(value)
-          @value = get_from_raw
+          @value = normalize(get_from_raw)
         else
           @value = normalize(value)
         end
@@ -127,13 +127,6 @@ module ExifTagger
         self.class::EXIFTOOL_TAGS.each do |tag|
           @raw_values[tag] = normalize(raw[tag])
         end
-      end
-
-      def get_from_raw
-        @raw_values.each_value do |value|
-          return value unless Tag.empty?(value)
-        end
-        EMPTY
       end
 
       def validate
