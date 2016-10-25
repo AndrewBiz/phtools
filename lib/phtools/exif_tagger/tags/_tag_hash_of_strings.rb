@@ -10,26 +10,26 @@ module ExifTagger
     class TagHashOfStrings < Tag
       private
 
-      # def get_from_raw
-      #   @raw_values.each_value do |v|
-      #     v = v.split('; ') if v.is_a?(String)
-      #     return v unless Tag.empty?(v)
-      #   end
-      #   EMPTY
-      # end
-
-      # def validate_type
-      #   if @value.is_a?(Array)
-      #     @value.each do |val|
-      #       @value_invalid << val unless validate_string_size(val)
-      #     end
-      #     @value -= @value_invalid
-      #   else
-      #     @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
-      #     @value_invalid << @value
-      #     @value = EMPTY
-      #   end
-      # end
+      def validate_type
+        if @value.is_a?(Hash)
+          @value.each_value do |val|
+            validate_string_size(val)
+          end
+          unknown_keys = @value.keys - self.class::VALID_KEYS
+          unknown_keys.each do |k|
+            @errors << %(#{tag_name}: KEY '#{k}' is unknown)
+          end
+          missed_keys = self.class::VALID_KEYS - @value.keys
+          missed_keys.each do |k|
+            @errors << %(#{tag_name}: KEY '#{k}' is missed)
+          end
+        else
+          @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
+        end
+        return if @errors.empty?
+        @value_invalid << @value
+        @value = EMPTY
+      end
     end
   end
 end

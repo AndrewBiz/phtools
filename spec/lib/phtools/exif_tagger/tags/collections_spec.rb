@@ -13,16 +13,19 @@ describe ExifTagger::Tag::Collections do
   let(:tag) { described_class.new(val_ok) }
 
   let(:val_ok) { { collection_name: 'Collection Name', collection_uri: 'www.abc.net' } }
+  let(:val_with_unknown_key) { { collection_name_wrong: 'Collection Name', collection_uri: 'www.abc.net' } }
+  let(:val_with_missed_key) { { collection_name: 'Collection Name' } }
+
   let(:val_orig) { { 'CollectionName' => 'tralala', 'CollectionURI' => 'trululu' } }
   let(:val_orig_empty) { { 'CollectionName' => '', 'CollectionURI' => '' } }
 
-  let(:hash_ok) {}
-  let(:hash_last_is_empty) {}
-  let(:hash_last_is_all_spaces) {}
-  let(:hash_last_is_nil) {}
-  let(:hash_with_nondefined) {}
-  let(:hash_with_all_bool) {}
-  let(:hash_with_all_empty) {}
+  let(:hash_ok) { { 'CollectionName' => 'Collection Name', 'CollectionURI' => 'www.abc.net' } }
+  let(:hash_last_is_empty) { { 'CollectionName' => 'Collection Name', 'CollectionURI' => '' } }
+  let(:hash_last_is_all_spaces) { { 'CollectionName' => 'Collection Name', 'CollectionURI' => '' } }
+  let(:hash_last_is_nil) { { 'CollectionName' => 'Collection Name', 'CollectionURI' => nil } }
+  let(:hash_with_nondefined) { { 'CollectionURI' => '' } }
+  let(:hash_with_all_bool) { { 'CollectionName' => true, 'CollectionURI' => false } }
+  let(:hash_with_all_empty) { { 'CollectionName' => '', 'CollectionURI' => '' } }
 
   it 'generates write_script for exiftool' do
     expect(tag.to_write_script).to include('-XMP-mwg-coll:Collections-={CollectionName=Collection Name, CollectionURI=www.abc.net}')
@@ -39,46 +42,26 @@ describe ExifTagger::Tag::Collections do
 
   it_behaves_like 'any tag'
 
-  let(:val_ok_size) do
-    val = []
-    val << 'just test string' # bytesize=16
-    val << '12345678901234567890123456789012' # bytesize=32
-    val << 'абвгдеёжзийклмно' # bytesize=32
-  end
-
-  let(:val_nok_size) do
-    val = []
-    val << '123456789012345678901234567890123' # bytesize=33
-    val << 'абвгдеёжзийклмноZ' # bytesize=33
-    val << 'абвгдеёжзийклмноп' # bytesize=34
-  end
-
+  let(:val_nok_size) { { collection_name: '1234567890123456789012345678901212345678901234567890123456789012X', collection_uri: 'www.abc.net' } } # size=65
   it_behaves_like 'any hash_of_strings tag'
 
-  # it_behaves_like 'any tag who cares about previous value'
-  #
-  # it_behaves_like 'any tag with MiniExiftool hash input'
+  it_behaves_like 'any tag who cares about previous value'
 
-  context 'when gets invalid input' do
-    context 'with unknown key' do
-      val_nok = { coll_name_wrong: 'xyz', collection_uri: 'www.xyz.com' }
-      subject { described_class.new(val_nok) }
-      its(:value) { should be_empty }
-      it { should_not be_valid }
-      its(:value_invalid) { should_not be_empty }
-      its(:value_invalid) { should eql([val_nok]) }
-      its('errors.inspect') { should include("'coll_name_wrong' is unknown") }
-      its(:to_write_script) { should be_empty }
-    end
-    context 'when mandatory keys are missed' do
-      val_nok = { collection_uri: 'www.xyz.com' }
-      subject { described_class.new(val_nok) }
-      its(:value) { should be_empty }
-      it { should_not be_valid }
-      its(:value_invalid) { should_not be_empty }
-      its(:value_invalid) { should eql([val_nok]) }
-      its('errors.inspect') { should include("'collection_name' is missed") }
-      its(:to_write_script) { should be_empty }
-    end
-  end
+  it_behaves_like 'any tag with MiniExiftool hash input'
+  # context 'when gets partially defined mini_exiftool hash' do
+  #   subject { described_class.new(mhash) }
+  #
+  #   context 'when input values have >1 items in arrays' do
+  #     it "chooses correct main value = 1st when 1 and 3 exist" do
+  #       hash = { 'Artist' => 'Andrew-A; Natalia-A', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
+  #       allow(mhash).to receive(:[]) { |t| hash[t] }
+  #
+  #       expect(subject.value).to eq ['Andrew-A', 'Natalia-A']
+  #       expect(subject).to be_valid
+  #       expect(subject.errors).to be_empty
+  #       expect(subject.value_invalid).to be_empty
+  #       expect(subject.warnings).to be_empty
+  #     end
+  #   end
+  # end
 end

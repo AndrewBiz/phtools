@@ -15,37 +15,24 @@ module ExifTagger
       VALID_KEYS = [:collection_name, :collection_uri].freeze
       EXIFTOOL_TAGS = %w(CollectionName CollectionURI).freeze
 
-      def initialize(value_raw = {}, previous = nil)
-        super
-      end
-
       private
 
-      def validate
-        @errors = []
-        @value_invalid = []
-        return if Tag.empty?(@value)
+      def get_from_raw
+        result = {}
+        v = @raw_values['CollectionName']
+        v = v.split('; ') if v.is_a?(String)
+        result[:collection_name] = v[0]
 
-        unknown_keys = @value.keys - VALID_KEYS
-        unknown_keys.each do |k|
-          @errors << %{#{tag_name}: KEY '#{k}' is unknown}
-        end
-        missed_keys = VALID_KEYS - @value.keys
-        missed_keys.each do |k|
-          @errors << %{#{tag_name}: KEY '#{k}' is missed}
-        end
-        unless @errors.empty?
-          @value_invalid << @value
-          @value = {}
-        end
+        v = @raw_values['CollectionURI']
+        v = v.split('; ') if v.is_a?(String)
+        result[:collection_uri] = v[0]
+
+        result
       end
 
       def generate_write_script_lines
-        @write_script_lines = []
-        unless @value.empty?
-          @write_script_lines << %(-XMP-mwg-coll:Collections-={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
-          @write_script_lines << %(-XMP-mwg-coll:Collections+={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
-        end
+        @write_script_lines << %(-XMP-mwg-coll:Collections-={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
+        @write_script_lines << %(-XMP-mwg-coll:Collections+={CollectionName=#{@value[:collection_name]}, CollectionURI=#{@value[:collection_uri]}})
       end
     end
   end
