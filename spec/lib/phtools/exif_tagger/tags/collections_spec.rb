@@ -48,20 +48,41 @@ describe ExifTagger::Tag::Collections do
   it_behaves_like 'any tag who cares about previous value'
 
   it_behaves_like 'any tag with MiniExiftool hash input'
-  # context 'when gets partially defined mini_exiftool hash' do
-  #   subject { described_class.new(mhash) }
-  #
-  #   context 'when input values have >1 items in arrays' do
-  #     it "chooses correct main value = 1st when 1 and 3 exist" do
-  #       hash = { 'Artist' => 'Andrew-A; Natalia-A', 'By-line' => [], 'Creator' => ['Andrew-C', 'Natalia-C'] }
-  #       allow(mhash).to receive(:[]) { |t| hash[t] }
-  #
-  #       expect(subject.value).to eq ['Andrew-A', 'Natalia-A']
-  #       expect(subject).to be_valid
-  #       expect(subject.errors).to be_empty
-  #       expect(subject.value_invalid).to be_empty
-  #       expect(subject.warnings).to be_empty
-  #     end
-  #   end
-  # end
+
+  context 'when gets mini_exiftool hash' do
+    subject { described_class.new(mhash) }
+
+    example "with simple String items" do
+      hash = { 'CollectionName' => 'name', 'CollectionURI' => 'uri' }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq({ collection_name: 'name', collection_uri: 'uri' })
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
+
+    example "with Array items" do
+      hash = { 'CollectionName' => ['name1', 'name2'], 'CollectionURI' => ['uri1', 'uri2'] }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq({ collection_name: 'name1', collection_uri: 'uri1' })
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
+
+    example "with mixed Array and String items" do
+      hash = { 'CollectionName' => 'name', 'CollectionURI' => ['uri1', 'uri2'] }
+      allow(mhash).to receive(:[]) { |t| hash[t] }
+
+      expect(subject.value).to eq({ collection_name: 'name', collection_uri: 'uri1' })
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
+  end
 end
