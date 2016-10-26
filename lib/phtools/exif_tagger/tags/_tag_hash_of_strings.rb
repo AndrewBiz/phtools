@@ -10,6 +10,14 @@ module ExifTagger
     class TagHashOfStrings < Tag
       private
 
+      def get_from_raw
+        result = {}
+        self.class::VALID_KEYS.each do |key|
+          result[key] = @raw_values[key.to_s.camelize]
+        end
+        result
+      end
+
       def validate_type
         if @value.is_a?(Hash)
           @value.each_value do |val|
