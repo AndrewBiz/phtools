@@ -92,37 +92,70 @@ describe ExifTagger::Tag::GpsCreated do
 
   it_behaves_like 'any tag with MiniExiftool hash input'
 
-  # context 'when gets mini_exiftool hash' do
-  #   subject { described_class.new(mhash) }
-  #
-  #   example "with simple String items" do
-  #     hash = { 'CollectionName' => 'name', 'CollectionURI' => 'uri' }
-  #     allow(mhash).to receive(:[]) { |t| hash[t] }
-  #
-  #     expect(subject.value).to eq({ collection_name: 'name', collection_uri: 'uri' })
-  #     expect(subject).to be_valid
-  #     expect(subject.errors).to be_empty
-  #     expect(subject.value_invalid).to be_empty
-  #     expect(subject.warnings).to be_empty
-  #   end
-  # end
-  context 'when gets invalid input' do
-    # context 'with wrong key values' do
-    #   val_nok = { gps_latitude: '55 36 31.49',
-    #               gps_latitude_ref: 'X',
-    #               gps_longitude: '37 43 28.27',
-    #               gps_longitude_ref: 'Y',
-    #               gps_altitude: '170.0',
-    #               gps_altitude_ref: 'Tralala' }
-    #   subject { described_class.new(val_nok) }
-    #   its(:value) { should be_empty }
-    #   it { should_not be_valid }
-    #   its(:value_invalid) { should_not be_empty }
-    #   its(:value_invalid) { should eql([val_nok]) }
-    #   its('errors.inspect') { should include("'gps_latitude_ref' should be") }
-    #   its('errors.inspect') { should include("'gps_longitude_ref' should be") }
-    #   its('errors.inspect') { should include("'gps_altitude_ref' should be") }
-    #   its(:to_write_script) { should be_empty }
-    # end
+  context 'when gets input value' do
+    it 'converts all hash items to strings' do
+      val_hash = { gps_latitude: Date.new(2016),
+                   gps_latitude_ref: 'N',
+                   gps_longitude: 37.43,
+                   gps_longitude_ref: 'E',
+                   gps_altitude: 180,
+                   gps_altitude_ref: 'Above Sea Level' }
+      val_array_normal = [ '2016-01-01', 'N', '37.43', 'E', '180', 'Above Sea Level' ]
+      tag = described_class.new(val_hash)
+
+      expect(tag.value.values).to match_array(val_array_normal)
+      expect(tag).to be_valid
+      expect(tag.errors).to be_empty
+      expect(tag.value_invalid).to be_empty
+    end
+
+    it 'converts all-spaces items to EMPTY strings items' do
+      val_hash = { gps_latitude: '            ',
+                   gps_latitude_ref: 'N',
+                   gps_longitude: '         ',
+                   gps_longitude_ref: 'E',
+                   gps_altitude: '       ',
+                   gps_altitude_ref: 'Above Sea Level' }
+      val_array_normal = [ '', 'N', '', 'E', '', 'Above Sea Level' ]
+      tag = described_class.new(val_hash)
+
+      expect(tag.value.values).to match_array(val_array_normal)
+      expect(tag).to be_valid
+      expect(tag.errors).to be_empty
+      expect(tag.value_invalid).to be_empty
+    end
+
+    it 'finds errors in hash items' do
+      val_nok = { gps_latitude: '55 36 31.49',
+                  gps_latitude_ref: 'X',
+                  gps_longitude: '37 43 28.27',
+                  gps_longitude_ref: 'Y',
+                  gps_altitude: '170.0',
+                  gps_altitude_ref: 'Tralala' }
+      tag = described_class.new(val_nok)
+
+      expect(tag).not_to be_valid
+      expect(tag.value_invalid).not_to be_empty
+      expect(tag.value_invalid).to eql([val_nok])
+      expect(tag.errors.inspect).to include("'gps_latitude_ref' should be")
+      expect(tag.errors.inspect).to include("'gps_longitude_ref' should be")
+      expect(tag.errors.inspect).to include("'gps_altitude_ref' should be")
+      expect(tag.value).to be_empty
+      expect(tag.to_write_script).to be_empty
+    end
+
+    it 'allows alternative values for hash items' do
+      val_nok = { gps_latitude: '55 36 31.49',
+                  gps_latitude_ref: 'North',
+                  gps_longitude: '37 43 28.27',
+                  gps_longitude_ref: 'East',
+                  gps_altitude: '170.0',
+                  gps_altitude_ref: '0' }
+      tag = described_class.new(val_nok)
+
+      expect(tag).to be_valid
+      expect(tag.errors).to be_empty
+      expect(tag.value_invalid).to be_empty
+    end
   end
 end

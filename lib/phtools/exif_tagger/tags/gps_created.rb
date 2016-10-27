@@ -17,6 +17,7 @@ module ExifTagger
     class GpsCreated < TagHashOfStrings
       MAX_BYTESIZE = 64
       VALID_KEYS = [:gps_latitude, :gps_latitude_ref, :gps_longitude, :gps_longitude_ref, :gps_altitude, :gps_altitude_ref].freeze
+      VALID_VALUES = { gps_latitude_ref: %w(N S North South), gps_longitude_ref: %w(E W East West), gps_altitude_ref: ['Above Sea Level', 'Below Sea Level', '0', '1'] }.freeze
       EXIFTOOL_TAGS = %w(
         GPSPosition
         GPSLatitude
@@ -33,38 +34,13 @@ module ExifTagger
         { gps_latitude: @raw_values['GPSLatitude'], gps_latitude_ref: @raw_values['GPSLatitudeRef'], gps_longitude: @raw_values['GPSLongitude'], gps_longitude_ref: @raw_values['GPSLongitudeRef'], gps_altitude: @raw_values['GPSAltitude'], gps_altitude_ref: @raw_values['GPSAltitudeRef'] }
       end
 
-      # def validate
-      #   @errors = []
-      #   @value_invalid = []
-      #   return if Tag.empty?(@value)
-      #
-      #   unknown_keys = @value.keys - VALID_KEYS
-      #   unknown_keys.each do |k|
-      #     @errors << %(#{tag_name}: KEY '#{k}' is unknown)
-      #   end
-      #   missed_keys = VALID_KEYS - @value.keys
-      #   missed_keys.each do |k|
-      #     @errors << %(#{tag_name}: KEY '#{k}' is missed)
-      #   end
-      #   if @errors.empty?
-      #     valid_values = ['N', 'S']
-      #     unless valid_values.include? @value[:gps_latitude_ref]
-      #       @errors << %(#{tag_name}: value of 'gps_latitude_ref' should be one of #{valid_values})
-      #     end
-      #     valid_values = ['E', 'W']
-      #     unless valid_values.include? @value[:gps_longitude_ref]
-      #       @errors << %(#{tag_name}: value of 'gps_longitude_ref' should be one of #{valid_values})
-      #     end
-      #     valid_values = ['Above Sea Level', 'Below Sea Level']
-      #     unless valid_values.include? @value[:gps_altitude_ref]
-      #       @errors << %(#{tag_name}: value of 'gps_altitude_ref' should be one of #{valid_values})
-      #     end
-      #   end
-      #   unless @errors.empty?
-      #     @value_invalid << @value
-      #     @value = {}
-      #   end
-      # end
+      def validate_hash_items
+        VALID_VALUES.each do |vv_key, vv_val|
+          unless vv_val.include?(@value[vv_key])
+            @errors << %(#{tag_name}: value of '#{vv_key}' should be one of #{vv_val})
+          end
+        end
+      end
 
       def generate_write_script_lines
         @write_script_lines << %(-GPSLatitude="#{@value[:gps_latitude]}")

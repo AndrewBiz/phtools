@@ -10,12 +10,7 @@ module ExifTagger
     class TagHashOfStrings < Tag
       private
 
-      def get_from_raw
-        result = {}
-        self.class::VALID_KEYS.each do |key|
-          result[key] = @raw_values[key.to_s.camelize]
-        end
-        result
+      def validate_hash_items
       end
 
       def validate_type
@@ -31,6 +26,7 @@ module ExifTagger
           missed_keys.each do |k|
             @errors << %(#{tag_name}: KEY '#{k}' is missed)
           end
+          validate_hash_items if @errors.empty?
         else
           @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
         end
