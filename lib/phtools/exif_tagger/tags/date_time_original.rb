@@ -7,11 +7,7 @@ require_relative '_tag_date'
 module ExifTagger
   module Tag
     # -MWG:DateTimeOriginal:
-    #    EXIF:DateTimeOriginal
-    #    EXIF:SubSecTimeOriginal
-    #    IPTC:DateCreated
-    #    IPTC:TimeCreated
-    #    XMP-photoshop:DateCreated
+    #    EXIF:DateTimeOriginal, (EXIF:SubSecTimeOriginal), IPTC:DateCreated + IPTC:TimeCreated,    XMP-photoshop:DateCreated
     # creation date of the intellectual content being shown
     class DateTimeOriginal < TagDate
       TYPE = :date_time
