@@ -10,34 +10,6 @@ shared_examples_for 'any hash_of_strings tag' do
     expect(tag).to be_valid
   end
 
-  it 'converts all hash items to strings' do
-    a_raw = [ 3.14, Date.new(2016), 'str' ]
-    a_normal = [ '3.14', '2016-01-01', 'str' ]
-    val_hash = generate_test_hash(val_ok.keys, a_raw)
-    val_array_normal = generate_test_array(a_normal, val_ok.keys.size)
-
-    tag = described_class.new(val_hash)
-
-    expect(tag.value.values).to match_array(val_array_normal)
-    expect(tag).to be_valid
-    expect(tag.errors).to be_empty
-    expect(tag.value_invalid).to be_empty
-  end
-
-  it 'converts all-spaces items to EMPTY strings items' do
-    a_raw = [ '   ', 'str' ]
-    a_normal = [ '', 'str' ]
-    val_hash = generate_test_hash(val_ok.keys, a_raw)
-    val_array_normal = generate_test_array(a_normal, val_ok.keys.size)
-
-    tag = described_class.new(val_hash)
-
-    expect(tag.value.values).to match_array(val_array_normal)
-    expect(tag).to be_valid
-    expect(tag.errors).to be_empty
-    expect(tag.value_invalid).to be_empty
-  end
-
   context 'when gets invalid value' do
     example 'with wrong type (String)' do
       val_nok = 'abcd'
