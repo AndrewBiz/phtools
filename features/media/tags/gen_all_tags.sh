@@ -25,11 +25,11 @@ echo "Generating sample files with phtools-related tags"
 # XMP-mwg-coll:Collections (struct+)
 #   CollectionName
 #   CollectionURI
-cfile="tag_collections0.JPG"
-echo "Preparing file $cfile ..."
-cp "_template.JPG" "$cfile"
-exiftool -P -overwrite_original "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname1, CollectionURI=mwg_colluri1}" "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname2, CollectionURI=mwg_colluri2}" "$cfile"
-
+# cfile="tag_collections0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname1, CollectionURI=mwg_colluri1}" "-XMP-mwg-coll:Collections+={CollectionName=mwg_collname2, CollectionURI=mwg_colluri2}" "$cfile"
+#
 # ********** CREATOR ************
 # EXIF:Artist, IPTC:By-line, XMP-dc:Creator
 # cfile="tag_creator0.JPG"
@@ -157,42 +157,46 @@ exiftool -P -overwrite_original "-XMP-mwg-coll:Collections+={CollectionName=mwg_
 # cp "_template.JPG" "$cfile"
 # exiftool -P -overwrite_original "-IPTC:Province-State=" "-XMP:State=" "-XMP:LocationShownProvinceState=xmp_locationshownprovincestate" "$cfile"
 
+# ********** DateTimeOriginal ************
+# -MWG:DateTimeOriginal: EXIF:DateTimeOriginal, IPTC:DateCreated+IPTC:TimeCreated, XMP-photoshop:DateCreated
+# cfile="tag_dto0.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-MWG:DateTimeOriginal=2000:01:01 00:00:00" "$cfile"
+#
+# cfile="tag_dto1.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:DateTimeOriginal=2001:01:01 01:01:01" "-IPTC:DateCreated=2002:02:02" "-IPTC:TimeCreated=02:02:02+02:00"  "-XMP:DateCreated=2003:03:03 03:03:03" "$cfile"
+#
+# cfile="tag_dto2.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=2002:02:02" "-IPTC:TimeCreated=02:02:02+02:00"  "-XMP:DateCreated=2003:03:03 03:03:03" "$cfile"
+#
+# cfile="tag_dto3.JPG"
+# echo "Preparing file $cfile ..."
+# cp "_template.JPG" "$cfile"
+# exiftool -P -overwrite_original "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated="  "-XMP:DateCreated=2003:03:03 03:03:03" "$cfile"
 
+# ********** CreateDate ************
+# -MWG:CreateDate: EXIF:CreateDate (EXIF:SubSecTimeDigitized), IPTC:DigitalCreationDate+IPTC:DigitalCreationTime, XMP-xmp:CreateDate
+cfile="tag_cd0.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-MWG:CreateDate=2010:10:10 10:10:10" "$cfile"
 
+cfile="tag_cd1.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-EXIF:CreateDate=2004:04:04 04:04:04" "-IPTC:DigitalCreationDate=2005:05:05" "-IPTC:DigitalCreationTime=05:05:05+05:00" "-XMP:CreateDate=2006:06:06 06:06:06"  "$cfile"
 
+cfile="tag_cd2.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-EXIF:CreateDate=" "-IPTC:DigitalCreationDate=2005:05:05" "-IPTC:DigitalCreationTime=05:05:05+05:00" "-XMP:CreateDate=2006:06:06 06:06:06"  "$cfile"
 
-#########################################################################
-# cfile="1exif_datetimeoriginal.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "$cfile"
-#
-# cfile="2iptc_datecreated.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "$cfile"
-#
-# cfile="3xmp_datecreated.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated=" "$cfile"
-#
-# cfile="4exif_createdate.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated=" "-XMP:DateCreated=" "$cfile"
-#
-# cfile="5xmp_createdate.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated=" "-XMP:DateCreated=" "-EXIF:CreateDate=" "$cfile"
-#
-# cfile="6iptc_digitalcreationdate.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated=" "-XMP:DateCreated=" "-EXIF:CreateDate=" "-XMP:CreateDate=" "$cfile"
-#
-# cfile="7filemodifydate.JPG"
-# echo "Preparing file $cfile ..."
-# cp "$@" "$cfile"
-# exiftool -P -overwrite_original "-FileModifyDate=2007:07:07 07:07:07" "-EXIF:DateTimeOriginal=" "-IPTC:DateCreated=" "-IPTC:TimeCreated=" "-XMP:DateCreated=" "-EXIF:CreateDate=" "-XMP:CreateDate=" "-IPTC:DigitalCreationDate=" "-IPTC:DigitalCreationTime=" "$cfile"
+cfile="tag_cd3.JPG"
+echo "Preparing file $cfile ..."
+cp "_template.JPG" "$cfile"
+exiftool -P -overwrite_original "-EXIF:CreateDate=" "-IPTC:DigitalCreationDate=" "-IPTC:DigitalCreationTime=" "-XMP:CreateDate=2006:06:06 06:06:06"  "$cfile"
