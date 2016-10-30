@@ -13,6 +13,7 @@ module ExifTagger
       include Comparable
 
       EMPTY = ''
+      EMPTY_DATE = '0000-01-01 00:00:00'
       EXIFTOOL_TAGS = [].freeze
       MAX_BYTESIZE = 32
 
@@ -119,6 +120,10 @@ module ExifTagger
           return value.flatten.map { |i| normalize(i.to_s) }
         elsif value.is_a?(Hash)
           return value.map { |k, v| [k, normalize(v.to_s)] }.to_h
+        elsif value.is_a?(DateTime)
+          return EMPTY if value.strftime('%F %T') == EMPTY_DATE
+        elsif value.is_a?(Time)
+          return normalize(value.to_datetime)
         end
         value
       end

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -8,8 +9,14 @@ require 'date'
 module ExifTagger
   module Tag
     class TagDate < Tag
-
       private
+
+      def get_from_raw
+        @raw_values.each_value do |value|
+          return value unless Tag.empty?(value)
+        end
+        EMPTY
+      end
 
       def validate
         case

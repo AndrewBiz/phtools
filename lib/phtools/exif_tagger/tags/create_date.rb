@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
@@ -12,20 +13,17 @@ module ExifTagger
     #   XMP-xmp:CreateDate
     # creation date of the digital representation
     class CreateDate < TagDate
-      TYPE = :date_time
       MAX_BYTESIZE = 32
-      EXIFTOOL_TAGS = %w(CreateDate SubSecTimeDigitized DigitalCreationDate DigitalCreationTime)
+      EXIFTOOL_TAGS = %w(CreateDate SubSecTimeDigitized DigitalCreationDate DigitalCreationTime).freeze
 
       private
 
       def generate_write_script_lines
-        @write_script_lines = []
-        case
-        when @value.kind_of?(String) && !@value.empty?
-          @write_script_lines << %Q(-MWG:CreateDate=#{@value})
-        when @value.kind_of?(DateTime) || @value.kind_of?(Time)
-          @write_script_lines << %Q(-MWG:CreateDate=#{@value.strftime('%F %T')})
-        end
+        @write_script_lines << if @value.is_a?(DateTime)
+                                 %(-MWG:CreateDate=#{@value.strftime('%F %T')})
+                               else
+                                 %(-MWG:CreateDate=#{@value})
+                               end
       end
     end
   end

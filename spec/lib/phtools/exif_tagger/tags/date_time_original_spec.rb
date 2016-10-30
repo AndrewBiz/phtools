@@ -14,6 +14,7 @@ describe ExifTagger::Tag::DateTimeOriginal do
   let(:val_orig) { { 'DateTimeOriginal' => DateTime.new(2014, 01, 21, 11, 5, 5) } }
   let(:tag) { described_class.new(val_ok) }
 
+  let(:val_nok_size) { '123456789012345678901234567890123' } # bytesize=33
   it_behaves_like 'any tag'
 
   it 'generates write_script for exiftool' do
