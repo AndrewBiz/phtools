@@ -18,33 +18,25 @@ module ExifTagger
         EMPTY
       end
 
-      def validate
-        case
-        when @value.kind_of?(String)
-          bsize = @value.bytesize
-          if bsize > MAX_BYTESIZE
-            @errors << %(#{tag_name}: '#{@value}' ) +
-              %(is #{bsize - MAX_BYTESIZE} bytes longer than allowed #{MAX_BYTESIZE})
-            @value_invalid << @value
-            @value = ''
-          end
-        when @value.kind_of?(DateTime)
-          if @value == DateTime.new(0)
-            @errors << %(#{tag_name}: '#{@value}' zero Date)
-            @value_invalid << @value
-            @value = ''
-          end
-        when @value.kind_of?(Time)
-          if @value == Time.new(0)
-            @errors << %(#{tag_name}: '#{@value}' zero Date)
-            @value_invalid << @value
-            @value = ''
-          end
+      def make_date_from(tag_date = '', tag_time = '')
+        dcdt = %(#{tag_date} #{tag_time})
+        DateTime.parse(dcdt.sub(/^(\d+):(\d+):/, '\1-\2-'))
+      rescue ArgumentError
+        EMPTY
+      end
+
+      def validate_type
+        if @value.is_a?(String)
+          validate_string_size(@value)
+
+        elsif @value.is_a?(DateTime)
+
         else
-          @errors << %(#{tag_name}: '#{@value}' is of wrong type (#{@value.class}))
-          @value_invalid << @value
-          @value = ''
+          @errors << %(#{tag_name}: '#{@value}' is a wrong type \(#{@value.class}\))
         end
+        return if @errors.empty?
+        @value_invalid << @value
+        @value = EMPTY
       end
     end
   end

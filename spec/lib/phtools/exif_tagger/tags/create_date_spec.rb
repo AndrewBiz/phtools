@@ -59,5 +59,19 @@ describe ExifTagger::Tag::CreateDate do
       expect(subject.value_invalid).to be_empty
       expect(subject.warnings).to be_empty
     end
+    it "avoids execptions when parsing incorrect date from 2 part strings" do
+      hash = { 'CreateDate' => '', 'SubSecTimeDigitized' => '123', 'DigitalCreationDate' => 'unknown date', 'DigitalCreationTime' => 'time' }
+      allow(mhash).to receive(:[]) { |tag| hash[tag] }
+
+      expect(subject.raw_values['CreateDate']).to be_empty
+      expect(subject.raw_values['SubSecTimeDigitized']).to eq '123'
+      expect(subject.raw_values['DigitalCreationDate']).to eq 'unknown date'
+      expect(subject.raw_values['DigitalCreationTime']).to eq 'time'
+      expect(subject.value).to be_empty
+      expect(subject).to be_valid
+      expect(subject.errors).to be_empty
+      expect(subject.value_invalid).to be_empty
+      expect(subject.warnings).to be_empty
+    end
   end
 end

@@ -18,6 +18,12 @@ module ExifTagger
 
       private
 
+      def get_from_raw
+        return @raw_values['CreateDate'] unless Tag.empty?(@raw_values['CreateDate'])
+        return make_date_from(@raw_values['DigitalCreationDate'], @raw_values['DigitalCreationTime']) unless Tag.empty?(@raw_values['DigitalCreationDate'])
+        EMPTY
+      end
+
       def generate_write_script_lines
         @write_script_lines << if @value.is_a?(DateTime)
                                  %(-MWG:CreateDate=#{@value.strftime('%F %T')})
