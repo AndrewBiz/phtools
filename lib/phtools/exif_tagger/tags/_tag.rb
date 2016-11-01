@@ -40,9 +40,6 @@ module ExifTagger
         @previous = (previous.is_a?(self.class) ? previous : nil)
         @info = ''
         @force_write = false
-        @errors = [] # TODO: remove
-        @value_invalid = [] # TODO: remove
-        @warnings = [] # TODO: remove
 
         validate
         validate_vs_previous

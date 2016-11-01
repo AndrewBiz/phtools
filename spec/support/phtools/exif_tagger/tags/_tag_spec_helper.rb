@@ -71,7 +71,6 @@ end
 
 # *****************************************************************************#
 shared_examples_for 'any tag with MiniExiftool hash input' do
-  # TODO: move it to any_tag group
   context 'when gets correct mini_exiftool hash' do
     before(:example) do
       allow(mhash).to receive(:[]) { |tag| hash_ok[tag] }
@@ -104,7 +103,6 @@ shared_examples_for 'any tag with MiniExiftool hash input' do
   end
 
   context 'when gets partially defined mini_exiftool hash' do
-  # TODO: move it to any_tag group
     subject { described_class.new(mhash) }
 
     it "works well with its test-double" do
