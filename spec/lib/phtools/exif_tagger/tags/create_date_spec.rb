@@ -31,7 +31,7 @@ describe ExifTagger::Tag::CreateDate do
 
   it 'does NOT generate write_script for EMPTY value' do
     tag = described_class.new('')
-    expect(tag.to_write_script).not_to include('-MWG:City=')
+    expect(tag.to_write_script).not_to include('-MWG:CreateDate=')
   end
 
   it_behaves_like 'any tag'
