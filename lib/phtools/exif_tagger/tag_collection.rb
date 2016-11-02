@@ -3,6 +3,8 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
+require 'mini_exiftool'
+
 module ExifTagger
   # EXIF tags collection
   class TagCollection
@@ -12,10 +14,14 @@ module ExifTagger
       @collection = []
       return if init_values.nil?
 
-      if init_values.is_a? Hash
+      if init_values.is_a?(Hash)
         init_values.each { |k, v| self[k] = v }
-      elsif init_values.is_a? ExifTagger::TagCollection
+
+      elsif init_values.is_a?(ExifTagger::TagCollection)
         init_values.each { |item| self[item.tag_id] = item.value }
+
+      elsif init_values.is_a?(MiniExiftool)
+        TAGS_SUPPORTED.each { |tag| self[tag] = init_values }
       end
     end
 
@@ -32,7 +38,7 @@ module ExifTagger
     def []=(tag, value)
       return if value.nil?
       delete(tag)
-      @collection << produce_tag(tag, value.dup)
+      @collection << produce_tag(tag, value)
     end
 
     def [](tag)

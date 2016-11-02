@@ -95,7 +95,7 @@ describe ExifTagger::TagCollection do
     expect(mytags.error_message).to be_empty
   end
 
-  it 'saves basic exif tags when they set via initial hash' do
+  it 'saves basic exif tags when they initialized via simple hash' do
     mytags = described_class.new(
       creator: %w(Andrey\ Bizyaev Matz),
       copyright: %(2014 \(c\) Andrey Bizyaev),
@@ -142,7 +142,7 @@ describe ExifTagger::TagCollection do
     expect(mytags.error_message).to be_empty
   end
 
-  it 'saves basic exif tags when they set via another tag collection' do
+  it 'saves basic exif tags when they initialized via another tag collection' do
     deftags = described_class.new(
       creator: %w(Andrey\ Bizyaev Matz),
       copyright: %(2014 \(c\) Andrey Bizyaev),
@@ -207,6 +207,131 @@ describe ExifTagger::TagCollection do
     expect(mytags.error_message).to be_empty
   end
 
+  let(:mhash) { instance_double("MiniExiftool", class: MiniExiftool) }
+
+  it 'saves exif tags when they initialized via exiftool hash (main items)' do
+    hash = {
+      'City' => %(Moscow),
+      'CodedCharacterSet' => 'UTF8',
+      'CollectionName' => 'Collection Name', 'CollectionURI' => 'www.site.com',
+      'Copyright' => %(2014 \(c\) Andrey Bizyaev),
+      'LocationShownCountryCode' => 'RU',
+      'Country-PrimaryLocationName' => 'Russia',
+      'CreateDate' => DateTime.new(2014, 8, 12, 21, 58, 55),
+      'Artist' => 'Andrey Bizyaev; Matz',
+      'DateTimeOriginal' => DateTime.new(2014, 01, 21, 11, 5, 5),
+      'GPSPosition' => 'position',
+      'GPSLatitude' => '55 36 31.49',
+      'GPSLatitudeRef' => 'N',
+      'GPSLongitude' => '37 43 28.27',
+      'GPSLongitudeRef' => 'E',
+      'GPSAltitude' => '170.0',
+      'GPSAltitudeRef' => 'Above Sea Level',
+      'ImageUniqueID' => '20140223-003748-0123',
+      'Keywords' => %w(keyword1 keyword2),
+      'Sub-location' => %(Pushkin street 1),
+      'ModifyDate' => 'now',
+      'Province-State' => 'State',
+      'LocationShownWorldRegion' => %(Europe)
+      }
+
+    allow(mhash).to receive(:[]) { |t| hash[t] }
+    allow(mhash).to receive(:is_a?).with(MiniExiftool).and_return(true)
+    allow(mhash).to receive(:is_a?).with(Hash).and_return(false)
+    allow(mhash).to receive(:is_a?).with(ExifTagger::TagCollection).and_return(false)
+
+    mytags = described_class.new(mhash)
+
+    expect(mytags[:city]).to include(%(Moscow))
+    expect(mytags[:coded_character_set]).to include('UTF8')
+    expect(mytags[:collections]).to eql(collection_name: 'Collection Name',
+                                        collection_uri: 'www.site.com')
+    expect(mytags[:copyright]).to include(%(2014 (c) Andrey Bizyaev))
+    expect(mytags[:country_code]).to include('RU')
+    expect(mytags[:country]).to include(%(Russia))
+    expect(mytags[:create_date]).to eq(DateTime.new(2014, 8, 12, 21, 58, 55))
+    expect(mytags[:creator]).to match_array(%w(Andrey\ Bizyaev Matz))
+    expect(mytags[:date_time_original]).to eq(DateTime.new(2014, 01, 21, 11, 5, 5))
+    expect(mytags[:gps_created]).to eql(gps_latitude: '55 36 31.49',
+                                        gps_latitude_ref: 'N',
+                                        gps_longitude: '37 43 28.27',
+                                        gps_longitude_ref: 'E',
+                                        gps_altitude: '170.0',
+                                        gps_altitude_ref: 'Above Sea Level')
+    expect(mytags[:image_unique_id]).to include('20140223-003748-0123')
+    expect(mytags[:keywords]).to match_array(%w(keyword1 keyword2))
+    expect(mytags[:location]).to include(%(Pushkin street 1))
+    expect(mytags[:modify_date]).to include('now')
+    expect(mytags[:state]).to include(%(State))
+    expect(mytags[:world_region]).to include(%(Europe))
+
+    expect(mytags).to be_valid
+    expect(mytags.error_message).to be_empty
+  end
+
+  it 'saves exif tags when they initialized via exiftool hash (alt items)' do
+    hash = {
+      'LocationShownCity' => %(CityAlt),
+      'CodedCharacterSet' => 'UTF8',
+      'CollectionName' => 'Collection Name', 'CollectionURI' => 'www.site.com',
+      'Rights' => %(2016 \(c\) Andrey Bizyaev),
+      'LocationShownCountryCode' => 'RU',
+      'LocationShownCountryName' => 'CountryAlt',
+      'DigitalCreationDate' => '2005:05:05', 'DigitalCreationTime' => '05:05:05+05:00',
+      'Creator' => ['CreatorAlt1', 'CreatorAlt2'],
+      'DateCreated' => DateTime.new(2016, 01, 21, 11, 5, 5),
+      'GPSPosition' => 'position',
+      'GPSLatitude' => '55 36 31.49',
+      'GPSLatitudeRef' => 'N',
+      'GPSLongitude' => '37 43 28.27',
+      'GPSLongitudeRef' => 'E',
+      'GPSAltitude' => '170.0',
+      'GPSAltitudeRef' => 'Above Sea Level',
+      'ImageUniqueID' => '20140223-003748-0123',
+      'Subject' => %w(subject1 subject2),
+      'LocationShownSublocation' => %(Alt street 1),
+      'ModifyDate' => 'now',
+      'LocationShownProvinceState' => 'StateAlt',
+      'LocationShownWorldRegion' => %(Europe)
+      }
+
+    allow(mhash).to receive(:[]) { |t| hash[t] }
+    allow(mhash).to receive(:is_a?).with(MiniExiftool).and_return(true)
+    allow(mhash).to receive(:is_a?).with(Hash).and_return(false)
+    allow(mhash).to receive(:is_a?).with(ExifTagger::TagCollection).and_return(false)
+
+    mytags = described_class.new(mhash)
+
+    expect(mytags[:city]).to include(%(CityAlt))
+    expect(mytags[:coded_character_set]).to include('UTF8')
+    expect(mytags[:collections]).to eql(collection_name: 'Collection Name',
+                                        collection_uri: 'www.site.com')
+    expect(mytags[:copyright]).to include(%(2016 (c) Andrey Bizyaev))
+    expect(mytags[:country_code]).to include('RU')
+    expect(mytags[:country]).to include(%(CountryAlt))
+    expect(mytags[:create_date]).to eq(DateTime.new(2005, 5, 5, 5, 5, 5, '+05:00'))
+    expect(mytags[:creator]).to match_array(%w(CreatorAlt1 CreatorAlt2))
+    expect(mytags[:date_time_original]).to eq(DateTime.new(2016, 01, 21, 11, 5, 5))
+    expect(mytags[:gps_created]).to eql(gps_latitude: '55 36 31.49',
+                                        gps_latitude_ref: 'N',
+                                        gps_longitude: '37 43 28.27',
+                                        gps_longitude_ref: 'E',
+                                        gps_altitude: '170.0',
+                                        gps_altitude_ref: 'Above Sea Level')
+    expect(mytags[:image_unique_id]).to include('20140223-003748-0123')
+    expect(mytags[:keywords]).to match_array(%w(subject1 subject2))
+    expect(mytags[:location]).to include(%(Alt street 1))
+    expect(mytags[:modify_date]).to include('now')
+    expect(mytags[:state]).to include(%(StateAlt))
+    expect(mytags[:world_region]).to include(%(Europe))
+
+    expect(mytags).to be_valid
+    expect(mytags.error_message).to be_empty
+  end
+
+  # TODO: test set individual tags via mini_exiftool hash
+
+  # TODO: test previous via new mechanizm
   context 'when previous tag value (read by mini_exiftool) exists -' do
     mytags = described_class.new(
         creator: %w(Andrey\ Bizyaev Matz),
