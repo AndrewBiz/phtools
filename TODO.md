@@ -13,6 +13,7 @@
 - [x] phmove: make target_folder as parameter not an option
 - [x] phmove: -a (--arrange) parameter means to put photo, video, raw files into separate folders inside target. If -a is not set all files are moved to root of target directory (plain collection of files)
 - [x] phmove: delete unused empty RAW and VIDEO folders
+- [ ] phmove: make default TARGET_FOLDER = . or correctly report error
 - [ ] phmove: make options to set video, raw folder names
 
 ### phrename
