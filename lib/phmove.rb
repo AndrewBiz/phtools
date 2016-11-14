@@ -14,7 +14,7 @@ module PhTools
     private
 
     def validate_options
-      @target_folder = @options_cli['TARGET_FOLDER']
+      @target_folder = @options_cli['TARGET_FOLDER'] || '.'
       @arrange = @options_cli['--arrange']
       if @arrange
         @raw_folder = File.join(@target_folder, 'RAW')

@@ -103,6 +103,31 @@ Feature: Arrange files into the given folder
     | FOLDER/video.mts |
 
   #@announce:
+  Scenario: Moves files to current folder if TARGET_FOLDER is not set
+    Given a directory named "FOLDER"
+    And empty files named:
+    | FOLDER/foto1.jpg |
+    | FOLDER/foto2.arw |
+    | FOLDER/video.mts |
+    When I run the following commands:
+    """bash
+    phls FOLDER | phmove
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | foto1.jpg |
+    | foto2.arw |
+    | video.mts |
+    And the following files should exist:
+    | foto1.jpg |
+    | foto2.arw |
+    | video.mts |
+    And the following files should not exist:
+    | FOLDER/foto1.jpg |
+    | FOLDER/foto2.arw |
+    | FOLDER/video.mts |
+
+  #@announce:
   Scenario: Moves and arranges files in TARGET_FOLDER
     Given a directory named "FOLDER"
     And empty files named:
