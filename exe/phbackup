@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
 module PhTools
   tool_name = File.basename(__FILE__)
-  require "#{tool_name}"
+  require tool_name.to_s
 
   file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
   usage = <<DOCOPT
