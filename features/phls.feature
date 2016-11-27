@@ -47,10 +47,11 @@ Feature: Generate a list of phtools-friendly-files
     | video.mts       |
     | video.dv        |
     | video.mov       |
-    | video_wrong.3gp |
+    | video_wrong.xxx |
     | video.mkv       |
     | video.m2t       |
     | video.m2ts      |
+    | video.3gp       |
     When I successfully run `phls`
     Then the stdout should contain each of:
     | foto.jpeg |
@@ -70,8 +71,9 @@ Feature: Generate a list of phtools-friendly-files
     | video.mkv |
     | video.m2t |
     | video.m2ts|
+    | video.3gp |
     And the stdout should not contain "foto_wrong.psd"
-    And the stdout should not contain "video_wrong.3gp"
+    And the stdout should not contain "video_wrong.xxx"
 
   #@announce
   Scenario: Output produces file list filtered with given mask from current directory
@@ -91,7 +93,7 @@ Feature: Generate a list of phtools-friendly-files
     | video_yes_.mts  |
     | video.dv        |
     | video.mov       |
-    | video_wrong.3gp |
+    | video_wrong.xxx |
     | video.mkv       |
     | video.m2t       |
     | video.m2ts      |
@@ -113,7 +115,7 @@ Feature: Generate a list of phtools-friendly-files
     | video.mpg       |
     | video.dv        |
     | video.mov       |
-    | video_wrong.3gp |
+    | video_wrong.xxx |
     | video.mkv       |
     | video.m2t       |
     | video.m2ts      |
@@ -122,10 +124,10 @@ Feature: Generate a list of phtools-friendly-files
   Scenario: The output DOES NOT show unsupported files EVEN if I intentionally enter it as a parameter
     Given empty files named:
     | foto_wrong.psd  |
-    | video_wrong.3gp |
-    When I successfully run `phls foto_wrong.psd video_wrong.3gp`
+    | video_wrong.xxx |
+    When I successfully run `phls foto_wrong.psd video_wrong.xxx`
     Then the stdout should not contain "foto_wrong.psd"
-    And  the stdout should not contain "video_wrong.3gp"
+    And  the stdout should not contain "video_wrong.xxx"
 
   #@announce
   Scenario: The output shows files only inside directories entered as paramenets
