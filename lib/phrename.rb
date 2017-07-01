@@ -63,7 +63,7 @@ module PhTools
               tag_used = "DateCreated"
 
             elsif !tags.create_date.nil? && tags.create_date.kind_of?(DateTime)
-              # EXIF:CreateDate or XMP:CreateDate
+              # EXIF:CreateDate or XMP:CreateDate or! QuickTime:CreateDate
               dto = tags.create_date
               tag_used = "CreateDate"
 
@@ -95,7 +95,7 @@ module PhTools
             tag_used = "#{@user_tag_date}"
           end
           phfile_out.standardize!(date_time: dto, author: @author)
-          info_msg = "'#{phfile.basename + phfile.extname}' using tag '#{tag_used}' for date-time"
+          info_msg = "'#{phfile.basename + phfile.extname}' using tag '#{tag_used}' for date-time-in-the-name"
         end
 
       when :clean
