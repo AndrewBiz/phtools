@@ -26,6 +26,7 @@
 
 ### phgettags
 - [x] create phgettags (based on ftmtags)
+- [ ] support option -e --composite of exiftool
 
 ### phfixfmd
 - [x] create phfixfmd - fix FileModifyDate to get equal to date-time-in-the-name
