@@ -1,6 +1,6 @@
 # language: en
 Feature: Rename photo and video files
-  In order to have all my photo and video files (taken with my digital camera)
+  In order to have all my photo and video files (taken with my digital camera, digitized by scanner)
   get well readable and informative filenames
   As a photographer
   I want to get the given files to be renamed to the standard phtools name template
@@ -377,3 +377,52 @@ Feature: Rename photo and video files
     | 20010101-010101_ANB file1.JPG |
     | 20021212-020202_ANB file2.JPG |
     | 20030303-132333_ANB file3.JPG |
+
+  #@announce
+  Scenario: In MANUAL-RENAME mode files are renamed to phtools standard name with values set by the user
+    Given a directory named "manual"
+    And example files from "features/media/sony_jpg" copied to "manual" named:
+   | DSC03403.JPG |
+   | DSC03313.JPG |
+   | DSC03499.JPG |
+
+    When I cd to "manual"
+    When I run the following commands:
+    """bash
+    phls | phrename --manual_date '20171029-203100' -a anb
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | 20171029-203100_ANB DSC03313.JPG |
+    | 20171029-203100_ANB DSC03403.JPG |
+    | 20171029-203100_ANB DSC03499.JPG |
+    And the following files should exist:
+    | 20171029-203100_ANB DSC03313.JPG |
+    | 20171029-203100_ANB DSC03403.JPG |
+    | 20171029-203100_ANB DSC03499.JPG |
+    And the following files should not exist:
+    | ./DSC03313.JPG |
+    | ./DSC03403.JPG |
+    | ./DSC03499.JPG |
+    | 20130103-103254_ANB DSC03313.JPG |
+    | 20130103-153908_ANB DSC03403.JPG |
+    | 20130104-120745_ANB DSC03499.JPG |
+
+  #@announce
+  Scenario: In MANUAL-RENAME mode it fails if manual-date is incorrect
+    Given a directory named "manual1"
+    And example files from "features/media/sony_jpg" copied to "manual1" named:
+    | DSC03403.JPG |
+
+    When I cd to "manual1"
+    When I run the following commands:
+    """bash
+    phls | phrename --manual_date '20171341-006700' -a anb
+    """
+    Then the exit status should not be 0
+    And the stderr should contain "--manual_date value is incorrect"
+    And the stdout should not contain any of:
+    | DSC03403.JPG |
+    And the following files should exist:
+    | 00000101-000000_ANB DSC03313.JPG |

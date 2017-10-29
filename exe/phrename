@@ -44,6 +44,7 @@ module PhTools
     Usage:
       #{tool_name} -a NICK [-t TAG] [-D]
       #{tool_name} -s DELTA [-D]
+      #{tool_name} -m DT -a NICK [-D]
       #{tool_name} -c [-D]
       #{tool_name} -h | --help
       #{tool_name} -v | --version
@@ -64,6 +65,10 @@ module PhTools
                              will become yonger: e.g. 20140720-100005, DELTA = 65
                              result = 20140720-100110. If DELTA is negative the photo
                              will get DELTA seconds older.
+
+      -m DT --manual_date=DT Force program to use given date-time to rename files.
+                             DT should comply with phtools standard. Example:
+                             '20171029-204805'
 
       -c --clean             Rename file back to it's original name
 
