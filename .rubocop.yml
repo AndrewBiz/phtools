@@ -8,9 +8,9 @@ AllCops:
     - 'Guardfile'
   TargetRubyVersion: 2.3
 
-Style/Encoding:
-  EnforcedStyle: when_needed
-  Enabled: true
+# Style/Encoding:
+#   EnforcedStyle: when_needed
+#   Enabled: true
 
 #Style/FrozenStringLiteralComment:
 #  EnforcedStyle: always
@@ -39,5 +39,5 @@ Style/Documentation:
 Style/SignalException:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
