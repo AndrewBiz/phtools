@@ -16,7 +16,8 @@ module PhTools
       @dirs_to_scan.each do |dir|
         fmask = File.join(dir, @options_cli['--recursive'] ? '**' : '', "{#{@filemasks * ','}}")
         files = Dir.glob(fmask, File::FNM_CASEFOLD)
-        files.sort.each { |f| output_file(PhFile.new(f)) if File.file?(f) }
+        files_sorted = files.sort_by { |word| word.downcase }
+        files_sorted.each { |f| output_file(PhFile.new(f)) if File.file?(f) }
       end
     rescue SignalException
       PhTools.puts_error 'EXIT on user interrupt Ctrl-C'
