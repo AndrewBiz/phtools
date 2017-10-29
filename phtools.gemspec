@@ -1,4 +1,3 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'phtools/version'
@@ -13,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.email      = ["andrew.bizyaev@gmail.com"]
   spec.license    = 'MIT'
 
-  spec.summary       = %q{A set of usefull tools to manipulate photo-video files.}
-  spec.description   = %q{A bundle of small CLI tools for arranging, renaming, tagging of the photo and video files. Helps to keep your photo-video assets in order.}
+  spec.summary       = %q(A set of usefull tools to manipulate photo-video files.)
+  spec.description   = %q(A bundle of small CLI tools for arranging, renaming, tagging of the photo and video files. Helps to keep your photo-video assets in order.)
   spec.homepage      = "https://github.com/AndrewBiz/phtools.git"
 
   spec.requirements  = %q{ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/)}
