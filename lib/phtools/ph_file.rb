@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # encoding: UTF-8
+
 # (c) ANB Andrew Bizyaev
 
 require 'phtools/error'
@@ -9,11 +10,11 @@ require 'fileutils'
 
 module PhTools
   # media type constants
-  FILE_TYPE_IMAGE_NORMAL = %w(jpg jpeg tif tiff png).freeze
-  FILE_TYPE_IMAGE_RAW = %w(orf arw dng).freeze
+  FILE_TYPE_IMAGE_NORMAL = %w[jpg jpeg tif tiff png].freeze
+  FILE_TYPE_IMAGE_RAW = %w[orf arw dng].freeze
   FILE_TYPE_IMAGE = FILE_TYPE_IMAGE_NORMAL + FILE_TYPE_IMAGE_RAW
-  FILE_TYPE_VIDEO = %w(avi mp4 mpg mts dv mov mkv m2t m2ts 3gp).freeze
-  FILE_TYPE_AUDIO = %w(wav).freeze
+  FILE_TYPE_VIDEO = %w[avi mp4 mpg mts dv mov mkv m2t m2ts 3gp].freeze
+  FILE_TYPE_AUDIO = %w[wav].freeze
 
   # phtools file name operations
   class PhFile
@@ -47,6 +48,13 @@ module PhTools
         return [false, "'#{author}' author should contain only ASCII chars"]
       end
       [true, '']
+    end
+
+    def self.get_date_time(date_string)
+      /^(?<date>\d{8})-(?<time>\d{6})/ =~ date_string
+      DateTime.parse("#{Regexp.last_match(:date)}T#{Regexp.last_match(:time)}")
+    rescue ArgumentError
+      PhFile::ZERO_DATE
     end
 
     attr_reader :filename, :dirname, :extname, :type, :basename, :basename_part,
@@ -181,7 +189,6 @@ module PhTools
 
       return ZERO_DATE if strptime_string.empty?
       DateTime.strptime(strptime_string, strptime_template)
-
     rescue ArgumentError
       return ZERO_DATE
     end
