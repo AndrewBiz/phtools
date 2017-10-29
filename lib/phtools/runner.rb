@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # encoding: UTF-8
+
 # (c) ANB Andrew Bizyaev
 
 require 'phtools/utils/ruby_version.rb'
@@ -28,11 +29,10 @@ module PhTools
       PhTools.debug = true if @options_cli['--debug']
 
       validate_options
-
     rescue Docopt::Exit => e
       STDERR.puts e.message
       exit 1
-    rescue => e
+    rescue StandardError => e
       PhTools.puts_error "FATAL: #{e.message}", e
       exit 1
     ensure
@@ -59,29 +59,25 @@ module PhTools
       end
 
       process_after
-
     rescue SignalException
       PhTools.puts_error 'EXIT on user interrupt Ctrl-C'
       exit 1
-    rescue => e
+    rescue StandardError => e
       PhTools.puts_error "FATAL: #{e.message}", e
       exit 1
     end
 
     private
 
-    def validate_options
-    end
+    def validate_options; end
 
-    def process_before
-    end
+    def process_before; end
 
     def process_file(file)
       file
     end
 
-    def process_after
-    end
+    def process_after; end
 
     def context
       instance_variables.map do |item|

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # encoding: UTF-8
+
 # (c) ANB Andrew Bizyaev
 
 module PhTools
@@ -8,68 +9,68 @@ module PhTools
   require tool_name.to_s
 
   file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
-  usage = <<DOCOPT
-***************************************************
-phtools - *Keep Your Photos In Order* (c) ANB
-***************************************************
-#{tool_name} renames the input file to Standard Name:
-  YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
-  YYYYmmdd-HHMMSS - Date-Time of photo creation,
-  AAA - the author nickname,
-  ORIGINAL.EXT - the photo name given by digital camera.
-By default date-time information will be taken from EXIF area as the 1st non-zero
-value of the tags (shown in the order the program scans values):
-  EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated ->
-  -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime ->
-  -> FileModifyDate
-Example: input file DSC03455.JPG will be renamed to 20130108-124145_ANB DSC03455.JPG
+  usage = <<~DOCOPT
+    ***************************************************
+    phtools - *Keep Your Photos In Order* (c) ANB
+    ***************************************************
+    #{tool_name} renames the input file to Standard Name:
+      YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT, where:
+      YYYYmmdd-HHMMSS - Date-Time of photo creation,
+      AAA - the author nickname,
+      ORIGINAL.EXT - the photo name given by digital camera.
+    By default date-time information will be taken from EXIF area as the 1st non-zero
+    value of the tags (shown in the order the program scans values):
+      EXIF:DateTimeOriginal -> IPTC:DateCreated + IPTC:TimeCreated -> XMP:DateCreated ->
+      -> EXIF:CreateDate -> XMP:CreateDate -> IPTC:DigitalCreationDate + IPTC:DigitalCreationTime ->
+      -> FileModifyDate
+    Example: input file DSC03455.JPG will be renamed to 20130108-124145_ANB DSC03455.JPG
 
-Input file should be one of the supported types: #{file_type * ','}.
-#{tool_name} acts as a 'filter' meaning it expects the input files to be passed
-to STDIN and after the job is done it produces STDOUT with the list of renamed
-files. In other words this command is intended to be used with other programs
-connected via pipes, e.g.:
-  phls | #{tool_name} -a anb | phmove ~/targed/folder
+    Input file should be one of the supported types: #{file_type * ','}.
+    #{tool_name} acts as a 'filter' meaning it expects the input files to be passed
+    to STDIN and after the job is done it produces STDOUT with the list of renamed
+    files. In other words this command is intended to be used with other programs
+    connected via pipes, e.g.:
+      phls | #{tool_name} -a anb | phmove ~/targed/folder
 
-The program is designed to be safe to re-run on the same file several times
-- every re-run produces the same result (idempotent behaviour).
-Once the file was renamed to Standard Name, the date-time kept in the name
-is considered as a master date-time of the photo creation and will not be
-changed by re-running #{tool_name} unless user explicitly sets '-t' or '-s' option.
+    The program is designed to be safe to re-run on the same file several times
+    - every re-run produces the same result (idempotent behaviour).
+    Once the file was renamed to Standard Name, the date-time kept in the name
+    is considered as a master date-time of the photo creation and will not be
+    changed by re-running #{tool_name} unless user explicitly sets '-t' or '-s' option.
 
-This program uses external utility ExifTool created by Phil Harvey
-(http://www.sno.phy.queensu.ca/~phil/exiftool/).
+    This program uses external utility ExifTool created by Phil Harvey
+    (http://www.sno.phy.queensu.ca/~phil/exiftool/).
 
-Usage:
-  #{tool_name} -a NICK [-t TAG] [-D]
-  #{tool_name} -s DELTA [-D]
-  #{tool_name} -c [-D]
-  #{tool_name} -h | --help
-  #{tool_name} -v | --version
+    Usage:
+      #{tool_name} -a NICK [-t TAG] [-D]
+      #{tool_name} -s DELTA [-D]
+      #{tool_name} -c [-D]
+      #{tool_name} -h | --help
+      #{tool_name} -v | --version
 
-Options:
-  -a NICK --author=NICK  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
-                         supports only latin ASCII chars (e.g. ANB).
-                         No digits, no spaces, no other non-word chars allowed.
+    Options:
+      -a NICK --author=NICK  Author nickname size should be #{PhFile::NICKNAME_SIZE} chars,
+                             supports only latin ASCII chars (e.g. ANB).
+                             No digits, no spaces, no other non-word chars allowed.
 
-  -t TAG --tag_date=TAG  Force program to use TAG as a Date-Time creation
-                         info instead of standard phtools tags.
-                         You can retreive all existing tags using command:
-                         `phls filename|phgettags -f` OR
-                         `exiftool -s filename`
+      -t TAG --tag_date=TAG  Force program to use TAG as a Date-Time creation
+                             info instead of standard phtools tags.
+                             You can retreive all existing tags using command:
+                             `phls filename|phgettags -f` OR
+                             `exiftool -s filename`
 
-  -s DELTA --shift_time=DELTA  DELTA (in seconds) will be added to Date-Time value
-                         kept in the name. If DELTA is positive the photo
-                         will become yonger: e.g. 20140720-100005, DELTA = 65
-                         result = 20140720-100110. If DELTA is negative the photo
-                         will get DELTA seconds older.
+      -s DELTA --shift_time=DELTA  DELTA (in seconds) will be added to Date-Time value
+                             kept in the name. If DELTA is positive the photo
+                             will become yonger: e.g. 20140720-100005, DELTA = 65
+                             result = 20140720-100110. If DELTA is negative the photo
+                             will get DELTA seconds older.
 
-  -c --clean             Rename file back to it's original name
+      -c --clean             Rename file back to it's original name
 
-  -D --debug    Turn on debugging (verbose) mode
-  -h --help     Show this screen.
-  -v --version  Show version.
-DOCOPT
+      -D --debug    Turn on debugging (verbose) mode
+      -h --help     Show this screen.
+      -v --version  Show version.
+  DOCOPT
 
   PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
 end

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # encoding: UTF-8
+
 # (c) ANB Andrew Bizyaev
 
 module PhTools
@@ -8,37 +9,37 @@ module PhTools
   require tool_name.to_s
 
   file_type = FILE_TYPE_IMAGE + FILE_TYPE_VIDEO + FILE_TYPE_AUDIO
-  usage = <<DOCOPT
-***************************************************
-phtools - *Keep Your Photos In Order* (c) ANB
-***************************************************
-  #{tool_name} scans given directories and generates list of files to standard
-output. In short it acts like a smart 'ls' command (or 'dir' in Windows).
-Set DIRs to be scanned as a parameters. If no DIRs are set - current dir (.)
-will be scanned. Set FILEMASKs as a parameters - and only files matching the
-masks will be processed. If no FILEMASK is set '*.*' will be used by-default.
-To avoid unnessesary mask extraction by OS - put it in ''.
-Note, #{tool_name} works only with phtools-friendly file types: #{file_type * ','}
+  usage = <<~DOCOPT
+    ***************************************************
+    phtools - *Keep Your Photos In Order* (c) ANB
+    ***************************************************
+      #{tool_name} scans given directories and generates list of files to standard
+    output. In short it acts like a smart 'ls' command (or 'dir' in Windows).
+    Set DIRs to be scanned as a parameters. If no DIRs are set - current dir (.)
+    will be scanned. Set FILEMASKs as a parameters - and only files matching the
+    masks will be processed. If no FILEMASK is set '*.*' will be used by-default.
+    To avoid unnessesary mask extraction by OS - put it in ''.
+    Note, #{tool_name} works only with phtools-friendly file types: #{file_type * ','}
 
-  #{tool_name} acts as a 'source' program meaning it does not require any input
-from STDIN, it generates list of files based on input parameters and send it
-to STDOUT.
-  In other words this command is intended to be used with other programs
-connected via pipes as a 1st command in the pipe chain, e.g.:
-  #{tool_name} abc '*aaa*' | phrename -a anb => scans 'abc' folder and
-sends all found phtools friendly files filtered with *aaa* to phrename command.
+      #{tool_name} acts as a 'source' program meaning it does not require any input
+    from STDIN, it generates list of files based on input parameters and send it
+    to STDOUT.
+      In other words this command is intended to be used with other programs
+    connected via pipes as a 1st command in the pipe chain, e.g.:
+      #{tool_name} abc '*aaa*' | phrename -a anb => scans 'abc' folder and
+    sends all found phtools friendly files filtered with *aaa* to phrename command.
 
-Usage:
-  #{tool_name} [-D] [-R] [DIR_OR_FILEMASK...]
-  #{tool_name} -h | --help
-  #{tool_name} -v | --version
+    Usage:
+      #{tool_name} [-D] [-R] [DIR_OR_FILEMASK...]
+      #{tool_name} -h | --help
+      #{tool_name} -v | --version
 
-Options:
-  -D --debug      Turn on debugging (verbose) mode
-  -R --recursive  Recursively scan directories
-  -h --help       Show this screen.
-  -v --version    Show version.
-DOCOPT
+    Options:
+      -D --debug      Turn on debugging (verbose) mode
+      -R --recursive  Recursively scan directories
+      -h --help       Show this screen.
+      -v --version    Show version.
+  DOCOPT
 
   PhTools.const_get(tool_name.capitalize).new(usage, file_type).run!
 end
