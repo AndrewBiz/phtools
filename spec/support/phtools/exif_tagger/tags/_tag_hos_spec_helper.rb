@@ -44,14 +44,14 @@ shared_examples_for 'any hash_of_strings tag' do
       expect(tag.to_write_script).to be_empty
     end
 
-    example 'with wrong type (Fixnum)' do
+    example 'with wrong type (Integer)' do
       val_nok = 1
       tag = described_class.new(val_nok)
       expect(tag.value).to be_empty
       expect(tag).not_to be_valid
       expect(tag.value_invalid).not_to be_empty
       expect(tag.value_invalid).to match_array([val_nok])
-      expect(tag.errors.inspect).to include("wrong type (Fixnum)")
+      expect(tag.errors.inspect).to include("wrong type (Integer)")
       expect(tag.to_write_script).to be_empty
     end
 

@@ -1,10 +1,9 @@
-#!/usr/bin/env ruby
-# encoding: UTF-8
+# frozen_string_literal: true
+
 # (c) ANB Andrew Bizyaev
-#
-# require 'fileutils'
 
 require 'date'
+require 'time'
 
 Given(/^I still work on this feature$/) do
   raise 'This feature needs to be done'
