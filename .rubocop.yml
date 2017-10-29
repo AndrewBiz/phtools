@@ -24,6 +24,9 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Enabled: false
 
+Metrics/BlockNesting:
+  Enabled: false
+
 Metrics/CyclomaticComplexity:
   Enabled: false
 
@@ -37,6 +40,9 @@ Style/Documentation:
   Enabled: false
 
 Style/SignalException:
+  Enabled: false
+
+Style/DateTime:
   Enabled: false
 
 Naming/AccessorMethodName:
