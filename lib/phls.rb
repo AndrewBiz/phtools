@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # encoding: UTF-8
+
 # (c) ANB Andrew Bizyaev
 
 require 'phtools/runner'
@@ -14,13 +15,13 @@ module PhTools
     def run!
       @dirs_to_scan.each do |dir|
         fmask = File.join(dir, @options_cli['--recursive'] ? '**' : '', "{#{@filemasks * ','}}")
-        Dir.glob(fmask, File::FNM_CASEFOLD).each { |f| output_file(PhFile.new(f)) if File.file?(f) }
+        files = Dir.glob(fmask, File::FNM_CASEFOLD)
+        files.sort.each { |f| output_file(PhFile.new(f)) if File.file?(f) }
       end
-
     rescue SignalException
       PhTools.puts_error 'EXIT on user interrupt Ctrl-C'
       exit 1
-    rescue => e
+    rescue StandardError => e
       PhTools.puts_error "FATAL: #{e.message}", e
       exit 1
     end
