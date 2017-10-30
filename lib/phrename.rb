@@ -117,7 +117,12 @@ module PhTools
         phfile_out.standardize!(date_time: phfile_out.date_time + @shift_seconds * (1.0 / 86_400))
 
       when :manual_rename
-        phfile_out.standardize!(date_time: @manual_date, author: @author)
+        if phfile_out.basename_is_standard?
+          # keeping date-time safe
+          info_msg = "'#{phfile.basename + phfile.extname}' already standard name. Keeping date-time-in-name unchanged"
+        else # renaming
+          phfile_out.standardize!(date_time: @manual_date, author: @author)
+        end
       end
 
       FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out

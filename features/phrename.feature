@@ -426,3 +426,38 @@ Feature: Rename photo and video files
     | DSC03403.JPG |
     And the following files should exist:
     | 00000101-000000_ANB DSC03313.JPG |
+
+  #@announce
+  Scenario: In MANUAL_RENAME mode running phrename on the files previously renamed to Standard phtools Name will not change the date-time-in-the-name
+
+    Given a directory named "manual3"
+    And example files from "features/media/dates_renamed" copied to "manual3" named:
+    | 20010101-010101_XXX file1.JPG |
+    | 20021212-020202_ANB file2.JPG |
+    | 20030303-132333_YYY file3.JPG |
+
+    When I cd to "manual3"
+    When I run the following commands:
+    """bash
+    phls | phrename --manual_date '20171030-210119' -a nat
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | 20010101-010101_XXX file1.JPG |
+    | 20021212-020202_ANB file2.JPG |
+    | 20030303-132333_YYY file3.JPG |
+
+    And the following files should exist:
+    | 20010101-010101_XXX file1.JPG |
+    | 20021212-020202_ANB file2.JPG |
+    | 20030303-132333_YYY file3.JPG |
+
+    And the following files should not exist:
+    | 20171030-210119_NAT file1.JPG |
+    | 20171030-210119_NAT file2.JPG |
+    | 20171030-210119_NAT file3.JPG |
+
+    And the stderr should contain each of:
+    | already standard name.|
+    | Keeping date-time-in-name unchanged|
