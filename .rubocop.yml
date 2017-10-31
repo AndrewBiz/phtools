@@ -45,5 +45,8 @@ Style/SignalException:
 Style/DateTime:
   Enabled: false
 
+Style/UnneededInterpolation:
+  Enabled: false
+
 Naming/AccessorMethodName:
   Enabled: false
