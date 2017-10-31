@@ -25,7 +25,7 @@ module PhTools
         ok, msg = PhFile.validate_author(@author)
         fail PhTools::Error, msg unless ok
         @shift_seconds = @options_cli['--shift_time'].to_i
-        @header = @options_cli['--header'].to_s.chomp
+        @header = @options_cli['--header'].to_s.strip
 
       elsif @options_cli['--author']
         @mode = :rename
@@ -36,6 +36,7 @@ module PhTools
 
       elsif @options_cli['--clean']
         @mode = :clean
+        @header = @options_cli['--header'].to_s.strip
 
       elsif @options_cli['--shift_time']
         @mode = :shift_time
@@ -112,7 +113,7 @@ module PhTools
         end
 
       when :clean
-        phfile_out.cleanse!
+        phfile_out.cleanse!(basename_clean: phfile_out.basename_clean.sub(/^#{@header}/, ''))
 
       when :shift_time
         fail PhTools::Error, 'non-standard file name' unless phfile_out.basename_is_standard?

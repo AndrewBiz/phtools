@@ -45,7 +45,7 @@ module PhTools
       #{tool_name} -a NICK [-t TAG] [-D]
       #{tool_name} -s DELTA [-D]
       #{tool_name} -m DT -a NICK [-s DELTA] [-H HEADER][-D]
-      #{tool_name} -c [-D]
+      #{tool_name} -c [-H HEADER][-D]
       #{tool_name} -h | --help
       #{tool_name} -v | --version
 
@@ -72,7 +72,10 @@ module PhTools
                              DT should comply with phtools standard. Example:
                              '20171029-204805'
 
-      -H HEADER --header=HEADER Add HEADER to the begining of the original basename.
+      -H HEADER --header=HEADER In manual_date mode adds HEADER to the begining
+                             of the original basename.
+                             In clean mode removes HEADER from the beginning of
+                             the original basename.
 
       -c --clean             Rename file back to it's original name
 

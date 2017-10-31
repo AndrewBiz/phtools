@@ -208,6 +208,32 @@ Feature: Rename photo and video files
     | DSC00004.JPG |
 
   #@announce
+  Scenario: Files are with HEADER renamed back to original names
+    Given empty files named:
+    | 20130101-005311_ANB FLM101-01.JPG    |
+    | 20130102-005311_ANB FLM101-02.JPG   |
+    | FLM101-03.JPG  |
+    | 20130104-005311_ANB XX-FLM101-04.JPG |
+    | FLM102-05.JPG  |
+    When I run the following commands:
+    """bash
+    phls | phrename --clean --header 'FLM101-'
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | 01.JPG |
+    | 02.JPG |
+    | 03.JPG |
+    | XX-FLM101-04.JPG |
+    | FLM102-05.JPG |
+    And the following files should exist:
+    | 01.JPG |
+    | 02.JPG |
+    | 03.JPG |
+    | XX-FLM101-04.JPG |
+    | FLM102-05.JPG |
+
+  #@announce
   Scenario: Non-Standard named files are renamed back to original names as well
     Given empty files named:
     | 20130101-105311_ANB[12345678-dfdfdfdf]{flags}DSC10001.JPG |
