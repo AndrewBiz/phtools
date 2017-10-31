@@ -1,5 +1,13 @@
 # RELEASED
 
+## [v0.14.0](https://github.com/andrewbiz/phtools/compare/v0.10.0...v0.14.0)
+* ruby version required >= 2.4.0
+* phmove: now default TARGET_FOLDER is '.'
+* added 3gp video files support
+* phls: sort files in alphabet order
+* phrename: added new mode - manual rename. User sets date-time-in-the-name, increment and header to generate filename
+* code refactor (code optimizations, ruby 2.4.2 adaptation, new rubocop rules)
+
 ## [v0.10.0](https://github.com/andrewbiz/phtools/compare/v0.8.0...v0.10.0)
 * phgettags added to the bundle
 * phfixdto added to the bundle
