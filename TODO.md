@@ -22,9 +22,9 @@
 - [x] phrename: add -s --shift_time option (based on ftfixdate functionality)
 - [x] phrename: by-default read tags for DateTime in this order: DateTimeOriginal, DateCreated, CreateDate, DigitalCreationDate, FileModifyDate (eqv to File::mtime). 1st non-zero value will be taken as a master photo creation timestamp. It means no longer names like '00000101-000000_ANB IMG_0183.PNG' will appear.
 - [x] phrename: make it safe and smart. Once the file was renamed to PHTOOL standard, re-run of phrename should not change the date-time info unless options -t or -s are used. If user wants to reset file name using exif tag - 1st clean it `phrename --clean`, then rename `phrename -a anb`
+- [x] phrename: new mode 'manual rename' renames files using given date-time template, author name and prefix. Good for mass renaming of the scanned films and photos (when date-time is not set in the tags and only human knows the real date-time)
 - [ ] phrename: make new usage mode: `phrename -t TAG`. Useful if user wants to re-set date-time using TAG keeping author-nickname unchanged
 - [ ] phrename: add QuickTime.CreationDate into analysis when calculate date-time-in-the-name (useful for iOS mov files). In iOS QuickTime.CreateDate is wrong (always in Grinvich zone), while QuickTime.CreationDate is Ok
-- [ ] phrename: new mode 'manual rename' renames files using given date-time template, author name and prefix. Good for mass renaming of the scanned films and photos (when date-time is not set in the tags and only human knows the real date-time)
 
 ### phgettags
 - [x] create phgettags (based on ftmtags)
