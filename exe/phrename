@@ -44,7 +44,7 @@ module PhTools
     Usage:
       #{tool_name} -a NICK [-t TAG] [-D]
       #{tool_name} -s DELTA [-D]
-      #{tool_name} -m DT -a NICK [-s DELTA][-D]
+      #{tool_name} -m DT -a NICK [-s DELTA] [-H HEADER][-D]
       #{tool_name} -c [-D]
       #{tool_name} -h | --help
       #{tool_name} -v | --version
@@ -71,6 +71,8 @@ module PhTools
       -m DT --manual_date=DT Force program to use given date-time to rename files.
                              DT should comply with phtools standard. Example:
                              '20171029-204805'
+
+      -H HEADER --header=HEADER Add HEADER to the begining of the original basename.
 
       -c --clean             Rename file back to it's original name
 

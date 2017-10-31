@@ -25,6 +25,7 @@ module PhTools
         ok, msg = PhFile.validate_author(@author)
         fail PhTools::Error, msg unless ok
         @shift_seconds = @options_cli['--shift_time'].to_i
+        @header = @options_cli['--header'].to_s.chomp
 
       elsif @options_cli['--author']
         @mode = :rename
@@ -122,7 +123,8 @@ module PhTools
           # keeping date-time safe
           info_msg = "'#{phfile.basename + phfile.extname}' already standard name. Keeping date-time-in-name unchanged"
         else # renaming
-          phfile_out.standardize!(date_time: @manual_date, author: @author)
+          basename_clean = (@header.empty? ? '' : @header) + phfile_out.basename_clean
+          phfile_out.standardize!(date_time: @manual_date, author: @author, basename_clean: basename_clean)
           @manual_date += @shift_seconds * (1.0 / 86_400)
         end
       end

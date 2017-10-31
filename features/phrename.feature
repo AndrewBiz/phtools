@@ -492,3 +492,19 @@ Feature: Rename photo and video files
     | 20130103-103254_ANB DSC03313.JPG |
     | 20130103-153908_ANB DSC03403.JPG |
     | 20130104-120745_ANB DSC03499.JPG |
+
+  Scenario: In MANUAL-RENAME mode with --header parameter files are renamed to standard name and HEADER is added to the beginning of the original name
+    Given empty files named:
+    | 01.JPG |
+    | 02.JPG |
+    When I run the following commands:
+    """bash
+    phls | phrename --manual_date '20171031-215318' -a anb --header 'FLM99-'
+    """
+    Then the exit status should be 0
+    And the stdout should contain each of:
+    | 20171031-215318_ANB FLM99-01.JPG |
+    | 20171031-215318_ANB FLM99-02.JPG |
+    And the following files should exist:
+    | 20171031-215318_ANB FLM99-01.JPG |
+    | 20171031-215318_ANB FLM99-02.JPG |
