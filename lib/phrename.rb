@@ -24,6 +24,7 @@ module PhTools
         @author = @options_cli['--author'].upcase
         ok, msg = PhFile.validate_author(@author)
         fail PhTools::Error, msg unless ok
+        @shift_seconds = @options_cli['--shift_time'].to_i
 
       elsif @options_cli['--author']
         @mode = :rename
@@ -66,36 +67,36 @@ module PhTools
             if !tags.date_time_original.nil? && tags.date_time_original.is_a?(DateTime)
               # EXIF:DateTimeOriginal or IPTC:DateCreated + IPTC:TimeCreated
               dto = tags.date_time_original
-              tag_used = "DateTimeOriginal"
+              tag_used = 'DateTimeOriginal'
 
             elsif !tags.date_created.nil? && tags.date_created.is_a?(DateTime)
               # XMP:DateCreated
               dto = tags.date_created
-              tag_used = "DateCreated"
+              tag_used = 'DateCreated'
 
             elsif !tags.create_date.nil? && tags.create_date.is_a?(DateTime)
               # EXIF:CreateDate or XMP:CreateDate or! QuickTime:CreateDate
               dto = tags.create_date
-              tag_used = "CreateDate"
+              tag_used = 'CreateDate'
 
             elsif !tags.digital_creation_date.nil? &&
                   !tags.digital_creation_time.nil? &&
                   tags.digital_creation_date.is_a?(String) &&
                   tags.digital_creation_time.is_a?(String)
               # IPTC:DigitalCreationDate + IPTC:DigitalCreationTime
-              dcdt = tags.digital_creation_date + " " + tags.digital_creation_time
+              dcdt = tags.digital_creation_date + ' ' + tags.digital_creation_time
               begin
                 s = dcdt.sub(/^(\d+):(\d+):/, '\1-\2-')
                 dto = DateTime.parse(s)
               rescue ArgumentError
                 dto = PhFile::ZERO_DATE
               end
-              tag_used = "DigitalCreationDate + DigitalCreationTime"
+              tag_used = 'DigitalCreationDate + DigitalCreationTime'
 
             else
               # FileModifyDate
               dto = File.mtime(phfile.filename).to_datetime
-              tag_used = "FileModifyDate"
+              tag_used = 'FileModifyDate'
             end
 
           else
@@ -122,13 +123,14 @@ module PhTools
           info_msg = "'#{phfile.basename + phfile.extname}' already standard name. Keeping date-time-in-name unchanged"
         else # renaming
           phfile_out.standardize!(date_time: @manual_date, author: @author)
+          @manual_date += @shift_seconds * (1.0 / 86_400)
         end
       end
 
       FileUtils.mv(phfile.filename, phfile_out.filename, verbose: PhTools.debug) unless phfile == phfile_out
       PhTools.puts_error info_msg unless info_msg.empty?
       phfile_out
-    rescue => e
+    rescue StandardError => e
       raise PhTools::Error, 'file renaming - ' + e.message
     end
   end

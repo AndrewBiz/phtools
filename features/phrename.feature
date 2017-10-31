@@ -461,3 +461,34 @@ Feature: Rename photo and video files
     And the stderr should contain each of:
     | already standard name.|
     | Keeping date-time-in-name unchanged|
+
+  #@announce
+  Scenario: In MANUAL-RENAME mode with --shift-time parameter files are renamed to standard name, every next file has date-time-in-name = previus value + shift_time seconds
+    Given a directory named "manual4"
+    And example files from "features/media/sony_jpg" copied to "manual4" named:
+   | DSC03403.JPG |
+   | DSC03313.JPG |
+   | DSC03499.JPG |
+
+    When I cd to "manual4"
+    When I run the following commands:
+    """bash
+    phls | phrename --manual_date '20171030-230400' -a anb --shift_time 10
+    """
+    Then the exit status should be 0
+
+    Then the stdout should contain each of:
+    | 20171030-230400_ANB DSC03313.JPG |
+    | 20171030-230410_ANB DSC03403.JPG |
+    | 20171030-230420_ANB DSC03499.JPG |
+    And the following files should exist:
+    | 20171030-230400_ANB DSC03313.JPG |
+    | 20171030-230410_ANB DSC03403.JPG |
+    | 20171030-230420_ANB DSC03499.JPG |
+    And the following files should not exist:
+    | ./DSC03313.JPG |
+    | ./DSC03403.JPG |
+    | ./DSC03499.JPG |
+    | 20130103-103254_ANB DSC03313.JPG |
+    | 20130103-153908_ANB DSC03403.JPG |
+    | 20130104-120745_ANB DSC03499.JPG |
