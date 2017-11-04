@@ -161,7 +161,7 @@ Feature: Generate a list of phtools-friendly-files
     | video_wrong.jpg |
 
   #@announce
-  Scenario: The output DOES NOT show usopported files inside directories entered as paramenets
+  Scenario: The output DOES NOT show usupported files inside directories entered as paramenets
     Given a directory named "fotos"
     And empty files named:
     | ./fotos/f5_wrong.ppp  |
@@ -257,3 +257,22 @@ Feature: Generate a list of phtools-friendly-files
     | video.DV  |
     | video.MOV |
     | video1.mov |
+
+  #@announce
+  Scenario: The output shows only files included in the given RANGE
+    And empty files named:
+    | DSC3198.jpg       |
+    | DSC3199.jpg       |
+    | DSC3200.jpg       |
+    | DSC3201.jpg       |
+    | DSC3202.jpg       |
+    | DSC3203.jpg       |
+    When I successfully run `phls --range '199..201'`
+    Then the stdout should contain each of:
+    | DSC3199.jpg       |
+    | DSC3200.jpg       |
+    | DSC3201.jpg       |
+    And the stdout should not contain any of:
+    | DSC3198.jpg       |
+    | DSC3202.jpg       |
+    | DSC3203.jpg       |

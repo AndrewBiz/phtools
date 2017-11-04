@@ -6,8 +6,9 @@
 ### phls
 - [x] phls: use init method to initialize variables
 - [x] phls: change -r to -R
-- [ ] phls: make it work with .folders (like ftls did)
 - [x] phls: sort files in alphabet order
+- [x] phls: support --range parameter to filter files which belong to the range
+- [ ] phls: make it work with .folders (like ftls did)
 
 ### phmove
 - [x] phmove: create phmove tool based on ftarrange code (see ftools repo)

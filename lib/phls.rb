@@ -14,7 +14,7 @@ module PhTools
 
     def run!
       @dirs_to_scan.each do |dir|
-        fmask = File.join(dir, @options_cli['--recursive'] ? '**' : '', "{#{@filemasks * ','}}")
+        fmask = File.join(dir, @recursive ? '**' : '', "{#{@filemasks * ','}}")
         files = Dir.glob(fmask, File::FNM_CASEFOLD)
         files_sorted = files.sort_by(&:downcase)
         files_sorted.each { |f| output_file(PhFile.new(f)) if File.file?(f) }
@@ -37,10 +37,21 @@ module PhTools
       end
       @dirs_to_scan = ['.'] if @dirs_to_scan.empty?
       @filemasks = ['*.*'] if @filemasks.empty?
+      @recursive = @options_cli['--recursive']
+      @range = @options_cli['--range']
+      return unless @range
+      /^(?<_range1>[[:alnum:]]+)\.\.(?<_range2>[[:alnum:]]+)/ =~ @range
+      @range_start = Regexp.last_match(:_range1)
+      @range_end = Regexp.last_match(:_range2)
+      @ending_size = [@range_start.size, @range_end.size].max
     end
 
     def output_file(phfile)
-      @os.output(phfile) if @file_type.include?(phfile.type)
+      return unless @file_type.include?(phfile.type)
+      if @range
+        return unless (@range_start..@range_end).cover?(phfile.basename_clean.slice(-@ending_size, @ending_size))
+      end
+      @os.output(phfile)
     end
   end
 end

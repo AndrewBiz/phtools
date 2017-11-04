@@ -30,14 +30,18 @@ module PhTools
     sends all found phtools friendly files filtered with *aaa* to phrename command.
 
     Usage:
-      #{tool_name} [-D] [-R] [DIR_OR_FILEMASK...]
+      #{tool_name} [-D] [-R] [DIR_OR_FILEMASK...] [-r RANGE]
       #{tool_name} -h | --help
       #{tool_name} -v | --version
 
     Options:
       -D --debug      Turn on debugging (verbose) mode
       -R --recursive  Recursively scan directories
-      -h --help       Show this screen.
+      -r RANGE --range=RANGE  Sets the range of filename endings to be included
+                      into the output. Example: -r '05..07' will take only files
+                      with the filename endings 05, 06, 07 and will not take
+                      any other files
+      -h --help       Show this screen
       -v --version    Show version.
   DOCOPT
 
