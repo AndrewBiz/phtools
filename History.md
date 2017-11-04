@@ -1,5 +1,8 @@
 # RELEASED
 
+## [v0.15.0](https://github.com/andrewbiz/phtools/compare/v0.14.0...v0.15.0)
+* phls now supports --range parameter allowing the user to filter files which name endings are not in the given range
+
 ## [v0.14.0](https://github.com/andrewbiz/phtools/compare/v0.10.0...v0.14.0)
 * ruby version required >= 2.4.0
 * phmove: now default TARGET_FOLDER is '.'
