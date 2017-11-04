@@ -50,3 +50,6 @@ Style/UnneededInterpolation:
 
 Naming/AccessorMethodName:
   Enabled: false
+
+Performance/RangeInclude:
+  Enabled: false

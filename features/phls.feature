@@ -276,3 +276,21 @@ Feature: Generate a list of phtools-friendly-files
     | DSC3198.jpg       |
     | DSC3202.jpg       |
     | DSC3203.jpg       |
+
+  #@announce
+  Scenario: The output shows nothing if RANGE is incorrect
+    And empty files named:
+    | DSC3198.jpg       |
+    | DSC3199.jpg       |
+    | DSC3200.jpg       |
+    | DSC3201.jpg       |
+    | DSC3202.jpg       |
+    | DSC3203.jpg       |
+    When I successfully run `phls --range '199..20'`
+    And the stdout should not contain any of:
+    | DSC3198.jpg       |
+    | DSC3199.jpg       |
+    | DSC3200.jpg       |
+    | DSC3201.jpg       |
+    | DSC3202.jpg       |
+    | DSC3203.jpg       |

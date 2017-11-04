@@ -49,7 +49,7 @@ module PhTools
     def output_file(phfile)
       return unless @file_type.include?(phfile.type)
       if @range
-        return unless (@range_start..@range_end).cover?(phfile.basename_clean.slice(-@ending_size, @ending_size))
+        return unless (@range_start..@range_end).include?(phfile.basename_clean.slice(-@ending_size, @ending_size))
       end
       @os.output(phfile)
     end
