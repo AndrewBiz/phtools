@@ -1,5 +1,8 @@
 # RELEASED
 
+## [v0.16.0](https://github.com/andrewbiz/phtools/compare/v0.15.0...v0.16.0)
+* phtools now support Apple HEIC image file format (as exiftool it can only read tags)
+
 ## [v0.15.0](https://github.com/andrewbiz/phtools/compare/v0.14.0...v0.15.0)
 * phls now supports --range parameter allowing the user to filter files which name endings are not in the given range
 

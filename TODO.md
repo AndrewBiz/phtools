@@ -2,7 +2,7 @@
 - [x] core - runner.rb: print class instance variables in debug mode
 - [x] get rid of nesty
 - [x] switch to fresh MiniExiftool gem
-- [ ] support of Apple HEIC files
+- [x] support of Apple HEIC files
 
 ### phls
 - [x] phls: use init method to initialize variables
