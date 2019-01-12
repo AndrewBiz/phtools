@@ -40,6 +40,7 @@ Feature: Generate a list of phtools-friendly-files
     | foto.arw        |
     | foto.png        |
     | foto.dng        |
+    | foto.heic       |
     | foto_wrong.psd  |
     | video.avi       |
     | video.mp4       |
@@ -62,6 +63,7 @@ Feature: Generate a list of phtools-friendly-files
     | foto.arw  |
     | foto.png  |
     | foto.dng  |
+    | foto.heic |
     | video.avi |
     | video.mp4 |
     | video.mpg |
