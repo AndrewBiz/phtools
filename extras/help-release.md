@@ -6,3 +6,11 @@
 5. Update History.md
 6. Update README.md
 7. `rake release`
+
+
+# Manual gem release
+1. Develop, test, document
+2. gem build phtools.gemspec
+3. install locally (if needed): gem install phtools
+4. publish to rubygems.org: gem push phtools-x.xx.x.gem
+5. don't forget to remove local phtools-x.xx.x.gem file
