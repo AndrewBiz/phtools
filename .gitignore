@@ -67,7 +67,6 @@ packer_cache/
 *.box
 
 # *** emacs
-*~
 \#*
 .\#*
 
@@ -78,7 +77,7 @@ packer_cache/
 *.un~
 Session.vim
 .netrwhist
-*~
+# *~
 
 # *** ruby
 *.gem
@@ -116,4 +115,5 @@ rerun.txt
 
 ## gem development with bundle
 /Gemfile.lock
-/pkg/
+
+/.idea/
