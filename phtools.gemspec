@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'guard-cucumber'
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'bigdecimal', '1.3.5'
 
   if RbConfig::CONFIG['target_os'] =~ /darwin/i
     spec.add_development_dependency 'terminal-notifier-guard'
@@ -49,6 +50,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'mini_exiftool', '~> 2.8'
   spec.add_runtime_dependency 'activesupport', '~> 3.2'
   spec.add_runtime_dependency 'i18n'
+  spec.add_runtime_dependency 'bigdecimal', '1.3.5'
 
   spec.post_install_message = %Q{***\n Thanks for installing phtools! Don't forget to get the ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/) installed on your system.\n***}
 end
