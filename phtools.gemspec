@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '>= 3.0.0'
 
   spec.add_development_dependency 'bundler'#, '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
@@ -31,11 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'cucumber', '~> 2.0'
   spec.add_development_dependency 'aruba', '~> 0.14'
   spec.add_development_dependency 'fuubar'
-  spec.add_development_dependency 'guard'
-  spec.add_development_dependency 'guard-rspec'
-  spec.add_development_dependency 'guard-cucumber'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'bigdecimal', '1.3.5'
 
   if RbConfig::CONFIG['target_os'] =~ /darwin/i
     spec.add_development_dependency 'terminal-notifier-guard'
@@ -48,9 +44,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'docopt', '~> 0.5'
   spec.add_runtime_dependency 'mini_exiftool', '~> 2.8'
-  spec.add_runtime_dependency 'activesupport', '~> 3.2'
+  spec.add_runtime_dependency 'activesupport', '~> 5.0'
   spec.add_runtime_dependency 'i18n'
-  spec.add_runtime_dependency 'bigdecimal', '1.3.5'
 
   spec.post_install_message = %Q{***\n Thanks for installing phtools! Don't forget to get the ExifTool by Phil Harvey (http://www.sno.phy.queensu.ca/~phil/exiftool/) installed on your system.\n***}
 end

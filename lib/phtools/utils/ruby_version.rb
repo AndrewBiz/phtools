@@ -4,7 +4,7 @@
 
 # (c) ANB Andrew Bizyaev
 
-RUBY_VERSION_WANTED = '2.4.0'
+RUBY_VERSION_WANTED = '3.0.0'
 
 begin
   fail "Ruby version must be >= #{RUBY_VERSION_WANTED}" if

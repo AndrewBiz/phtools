@@ -3,7 +3,8 @@
 # encoding: UTF-8
 # (c) ANB Andrew Bizyaev
 
-require 'active_support/core_ext'
+require 'active_support/core_ext/string/inflections'
+
 require 'mini_exiftool'
 
 module ExifTagger

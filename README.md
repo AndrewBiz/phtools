@@ -8,14 +8,14 @@ A bundle of small CLI tools for arranging, renaming, tagging of the photo and vi
 
 PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 
-* own tons of photo-video files and want to keep it in order
-* really don't like the way how digital cameras name the files: P1193691.JPG, IMP\_1409.JPG, \_DSC1459.ARW etc.
-* for photo storage prefer usage of traditional File System \(folder structure\) instead of "black box" databases of media managers \(like iPhoto, Photoshop etc.\)
-* would like to have date-time-original info in the name of the file
-* expects that sorting folder content "by name" will arrange photo-video assets in chronological order
-* for some events \(wedding, holydays etc.\) have photos from different authors and would like to keep visible author name \(nik\) in the file name
-* appreciate the use of internal metadata \(EXIF, XMP etc.\) beleiving it is the best way to keep context info of the picture
-* are Ok with the use of Command Line tools
+- own tons of photo-video files and want to keep it in order
+- really don't like the way how digital cameras name the files: P1193691.JPG, IMP_1409.JPG, \_DSC1459.ARW etc.
+- for photo storage prefer usage of traditional File System \(folder structure\) instead of "black box" databases of media managers \(like iPhoto, Photoshop etc.\)
+- would like to have date-time-original info in the name of the file
+- expects that sorting folder content "by name" will arrange photo-video assets in chronological order
+- for some events \(wedding, holydays etc.\) have photos from different authors and would like to keep visible author name \(nik\) in the file name
+- appreciate the use of internal metadata \(EXIF, XMP etc.\) beleiving it is the best way to keep context info of the picture
+- are Ok with the use of Command Line tools
 
 ---
 
@@ -23,7 +23,7 @@ PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 
 ### Install for usage
 
-1. Get the latest [ruby](https://www.ruby-lang.org/) \(&gt;= 2.4\) installed.
+1. Get the latest [ruby](https://www.ruby-lang.org/) \(&gt;= 3.0\) installed.
 2. Install ExifTool by Phil Harvey \([http://www.sno.phy.queensu.ca/~phil/exiftool/](http://www.sno.phy.queensu.ca/~phil/exiftool/)\).
 3. `gem install phtools`
 4. Get list of phtools: `phtools`
@@ -32,17 +32,17 @@ PHTOOLS is an instrument intended for photographers\photo enthusiasts who:
 ### Install for development
 
 1. Fork or download from GitHub.
-2. Install dependencies: `bundle install`
+2. Install dependencies:
+
+   ```sh
+   bundle install
+   ```
+
 3. Develop.
 4. Test:
    ```sh
    bundle exec rspec
    bundle exec cucumber
-   ```
-
-   ... or do testing automatically to get real Test Driven Development:
-   ```sh
-   bundle exec guard
    ```
 
 ---
@@ -191,4 +191,3 @@ PHTOOLS standard file name looks like this: `YYYYmmdd-HHMMSS_AAA ORIGINAL.EXT`, 
 
 For example, the digital camera photo file `P1193691.JPG`, taken by AndrewBiz \(aka ANB\), after PHTOOLS processing will look like:  
 `20160902-174939_ANB P1193691.JPG`
-
